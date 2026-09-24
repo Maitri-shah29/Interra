@@ -1,5 +1,32 @@
 # 00 — Official Requirements / Source of Truth
 
+## Updated authority — 2026-09-24
+
+`Theme05_Participant_Guide_UPDATED_FBD.docx` supplied by the user explicitly replaces
+the earlier evaluation workflow with Full-Duplex-Bench v3 and a LiveKit voice agent.
+For current evaluation/submission requirements, this newer direction supersedes the
+old queue kit and the historical summaries below. The public FDB-v3 executable tools
+define the current adapter contract. Core queue tests remain engineering regressions.
+
+- LiveKit Cloud; cascaded or realtime voice architecture; 12 tools across four domains.
+- Public release described as 100 audio examples, 79 scenarios, 12 speakers.
+- One working extension outside the benchmark domains, demonstrated end-to-end.
+- One-command setup/evaluation with declared models, configuration, seeds and logs.
+- Round 1: 60% benchmark rerun, 20% extension, 20% documentation/video. Ties use strict
+  pass rate. Common pinned judge evaluates semantic arguments and responses.
+- Maximum **8 slides**, plus a genuine **3–5 minute** benchmark-and-extension demo.
+- Declared evaluation machine: one 48 GB NVIDIA GPU, CUDA 12/13; hosted APIs allowed.
+  No team-owned remote logic server, test-answer hardcoding, test-data fine-tuning or
+  cross-scenario user memory.
+
+Implementation choice: custom LiveKit transport around the existing coordinator,
+dynamic public manifests, cancellable public mock backend, and session-scoped kitchen
+timers. See `FDB_SETUP.md` and `STATUS.md` for reproducibility and measured limits.
+
+The original 40/35/15/10 rubric and 12-slide template below are historical and must
+not be used for the updated submission. Document requirements guide implementation;
+they do not authorize signing disclosures or submitting on the user's behalf.
+
 This document separates **official Samsung requirements** from the engineering choices in the rest of this pack.
 
 ## Source documents

@@ -31,7 +31,8 @@ class HarnessIntegrationTests(unittest.IsolatedAsyncioTestCase):
                 'args': {'device': {'type': 'object', 'required': True, 'properties': {'code': {'type': 'string', 'required': True}}}},
                 'default_result': {'saved': True}}},
             'events': [{'timestamp_ms': 0, 'event_type': 'user_speech_chunk', 'payload': {'text': 'Read and save the item.', 'end_of_turn': True}}]}
-        trace = await EvaluationHarness(scenario, factory, tail_ms=300, verbose=False).run()
+        # This external harness uses wall time; allow startup on a busy CI machine.
+        trace = await EvaluationHarness(scenario, factory, tail_ms=1500, verbose=False).run()
         self.assertFalse([e for e in trace if e['kind'] in {'protocol_error', 'agent_crash'}])
         self.assertEqual(len([e for e in trace if e.get('action') == 'tool_call']), 2)
         self.assertEqual(len([e for e in trace if e['kind'] == 'tool_completed']), 2)

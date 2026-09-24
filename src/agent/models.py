@@ -23,6 +23,7 @@ class Event(Envelope):
 
 class Action(Envelope):
     action_id: str = Field(min_length=1)
+    generation: int = Field(default=0, ge=0)
     type: Literal["SPEAK", "CLARIFY", "TOOL_CALL", "CANCEL_TOOL_CALL", "FINAL"]
     payload: dict[str, JsonValue]
 

@@ -1,75 +1,52 @@
-# Submission deck source
+# Submission deck source — maximum 8 slides
 
-This is reviewable slide content for export to PPT/PDF. Team names and measured official
-results must be completed by the submitters; placeholders must not be presented as final.
+Updated Theme05 guide governs this outline. Export only after replacing team/link
+placeholders and adding genuine measurements. This is not a completed submission deck.
 
-## Slide 1 — Interra / Theme 05
+## 1. Interra / Theme 05
+- Interruptible real-time voice agents.
+- Team and college: TODO — provided by submitters.
+- Repository, commit and demo link: TODO — verified final links.
 
-- Interruptible Real-Time Agents
-- Samsung PRISM GenAI Hackathon 2026–27
-- Team: **TODO: submitter-provided team details**
+## 2. Problem and evaluation
+- Users correct slots or change goals during reasoning, tools and speech.
+- Late results and duplicate writes threaten correctness.
+- Current benchmark: Full-Duplex-Bench v3; LiveKit voice interface.
+- Round 1: 60% benchmark, 20% extension, 20% documentation/video.
 
-## Slide 2 — The problem
+## 3. Architecture
+- Speech → LiveKit STT → session mailbox → validated planner proposals.
+- Fast acknowledgments; asynchronous reasoning and tool execution.
+- Versioned state, dependency checks, cancellation acknowledgments and write ledger.
+- Current speech actions → LiveKit TTS; generation checks suppress obsolete output.
 
-- Real users interrupt, hesitate and correct themselves while work is running.
-- Tool and perception results can arrive out of order.
-- Cancellation alone is insufficient: late callbacks can still corrupt state.
-- Writes introduce duplicate side-effect risk.
+## 4. Interruption evidence
+- VAD immediately fences queued output before the coordinator consumes interruption.
+- Cancellable async tool delays preserve event-loop responsiveness.
+- Cancellation before dispatch, during a call and late results have regression coverage.
+- Insert an actual benchmark trace/audio segment; label deterministic tests separately.
 
-## Slide 3 — Evaluation-driven requirements
+## 5. FDB-v3 results
+- Declared planner/STT/TTS/judge and pinned upstream revision from config/fdb.json.
+- TODO: completed input count, tool/argument accuracy, strict pass and latency.
+- Include run configuration and report links; explain any failures.
+- No current FDB score exists. The old 48.9 queue-kit score is not an FDB result.
 
-- Two asynchronous queues with typed, timestamped events/actions.
-- Fast substantive response plus non-blocking reasoning and tools.
-- 40% completion, 35% interruption recovery, 15% latency, 10% safety/protocol.
-- Hidden multimodal scenarios carry additional weight.
+## 6. Extension: kitchen timers
+- New domain: real session-owned timer start/list/cancel, plus expiry notification.
+- Correct a timer through cancel-and-replace; no state shared across sessions.
+- Automated trace covers chained tools, truthful final and timed notification.
+- TODO: genuine voice demo of start → correction → cancellation → replacement expiry.
 
-## Slide 4 — Architecture
+## 7. Reproduction and deployment
+- One command: python3.11 scripts/reproduce_fdb.py --data-dir <released-data>.
+- LiveKit project and hosted API credentials kept outside Git.
+- Python 3.11, Linux NVIDIA evaluation environment, dependency/model/source pins.
+- Input hashes, configuration, commands, recordings and traces retained per run.
+- Judge pin and fail-closed exception adaptations explicitly disclosed.
 
-- Fast Path: truthful acknowledgment and floor management.
-- Slow Path: validated provider proposals and asynchronous multimodal understanding.
-- Coordination: versioned state, task ownership, cancellation, stale gates and idempotency.
-- Use the diagram in `docs/ARCHITECTURE.md`.
-
-## Slide 5 — Interruption lifecycle
-
-- Calls capture intent, state snapshot and slot dependencies.
-- A localized correction preserves unrelated slots.
-- Incompatible calls emit cancellation immediately after validated semantic change.
-- Every result passes one lifecycle/dependency acceptance gate.
-
-## Slide 6 — Safe dynamic tools
-
-- Tool names and schemas come only from manifests.
-- JSON Schema validation precedes dispatch.
-- `call_id` identifies an attempt; `operation_key` identifies a logical write.
-- Unknown write outcomes block blind retries.
-
-## Slide 7 — Multimodal, one runtime
-
-- WAV and PNG are asynchronous input events, not separate agents.
-- Audio and vision tasks can run concurrently.
-- Source event, timestamp and epoch provenance prevents delayed override.
-- Ambiguous evidence produces targeted clarification, never speculative writes.
-
-## Slide 8 — Adversarial evidence
-
-- Deterministic virtual clock and FIFO same-timestamp tie breaking.
-- Boundary tests around interruption/result order.
-- Exact trace assertions cover state, cancellation, stale rejection and final snapshots.
-- Local full-suite result: **update from `docs/STATUS.md` before export**.
-
-## Slide 9 — Actual-runtime demo
-
-- Delhi lookup dispatched.
-- User barges in and changes destination to Mumbai.
-- Delhi call canceled; late Delhi result visibly rejected.
-- Mumbai call accepted; final state retains Chennai origin.
-- Safety metrics show zero duplicate logical operations in the demo.
-
-## Slide 10 — Limitations and next evidence
-
-- Official Samsung evaluation kit/schema is not yet present; no official score is claimed.
-- Live model/audio/vision quality remains provider-dependent and unbenchmarked.
-- External write rollback requires tool-specific semantics.
-- TODO before submission: team details, official public results, PPT/PDF export and <=5-minute
-  recorded demo.
+## 8. Limits and next work
+- Current proof: offline correctness and real SDK import/transcript handoff.
+- Pending: GPU clean install, live voice/benchmark quality, full release rerun.
+- Cascaded endpointing and local small-model latency need measurement.
+- Submitters must complete identities, demo link and reviewed AI disclosure.

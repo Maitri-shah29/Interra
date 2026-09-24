@@ -1,0 +1,14 @@
+{
+  "search_flights": "READ_ONLY",
+  "book_flight": "STATE_MODIFYING",
+  "update_identity_doc": "STATE_MODIFYING",
+  "get_card_benefits": "READ_ONLY",
+  "get_exchange_rate": "READ_ONLY",
+  "modify_autopay": "STATE_MODIFYING",
+  "search_apartments": "READ_ONLY",
+  "calculate_commute": "READ_ONLY",
+  "update_search_filter": "STATE_MODIFYING",
+  "track_order": "READ_ONLY",
+  "search_products": "READ_ONLY",
+  "add_to_cart": "STATE_MODIFYING"
+}

@@ -1,0 +1,14 @@
+{
+  "repository": "https://github.com/DanielLin94144/Full-Duplex-Bench.git",
+  "revision": "3e799c45a045256f47d5f1c9cda90157e2d2ec9e",
+  "dataset_drive_id": "1SO_4MTazWQ_jvCx0dtmpQ-t40bdd07yz",
+  "provider": "interra",
+  "seed": 17,
+  "planner": "openai",
+  "planner_model": "gpt-4o-2024-08-06",
+  "stt_model": "whisper-1",
+  "tts_model": "tts-1",
+  "tts_voice": "nova",
+  "judge_model": "gpt-4o-2024-08-06",
+  "asr_model": "nvidia/parakeet-tdt-0.6b-v2"
+}

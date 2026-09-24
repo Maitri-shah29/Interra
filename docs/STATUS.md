@@ -1,10 +1,10 @@
 # Implementation status
 
 ## Current phase
-Core phase gates 4–10 revalidated after shared-workspace commits (2026-09-19).
-The full suite passes 61 tests. Phase 11 is the next gate and has NOT passed: the kit is absent.
-Later-phase artifacts already exist from other workspace commits; they are retained, but their
-presence does not waive the ordered evaluator gate or establish release readiness.
+Updated Theme 05 guide (2026-09-24) scores Full-Duplex-Bench v3, not the older queue kit.
+Queue-kit integration is committed. The LiveKit/FDB adapter and kitchen extension pass
+offline tests (84 tests). No FDB-v3 benchmark score, live voice recording, GPU rerun,
+team identity, video, or release tag exists.
 
 ## Repository baseline
 Read AGENTS.md, all twelve numbered specifications, STATUS.md and root context pack.
@@ -18,13 +18,14 @@ Phase gates 1-10 and available local Phases 12-14 have recorded evidence. README
 architecture, demo guide and reviewable deck source exist. Official evaluator integration, recorded demo video, exported PPT/PDF and the
 final release tag remain open. Docker Desktop 4.91.0 image build/run is now verified.
 The definition-of-done audit marks only test/build/scan-backed items complete.
-Official public-kit validation awaits Samsung's release (confirmed by the user).
+The 2026-09-24 FBD guide supersedes the queue kit for scoring. Offline FDB adapter tests
+passed; a scored FDB-v3 rerun has not been executed.
 
 ## Exact next tasks
-1. Once Samsung releases its official kit/schema, implement its adapter and run all nine public cases.
-2. Add submitter team details, export the reviewed deck to PPT/PDF and record the <=5-minute demo.
-3. Re-run all local and official gates, review the final commit and only then create
-   `PRISM_GENAI_HACKATHON_Y2026`.
+1. Configure LiveKit and OpenAI in ignored `.env.local`, then run the microphone kitchen flow.
+2. On a Linux NVIDIA 48 GB GPU machine, run `scripts/reproduce_fdb.py` against the released dataset.
+3. Fill team identity, export the 8-slide deck with those measured results, and record a 3–5 minute video.
+4. Only then create `PRISM_GENAI_HACKATHON_Y2026`. Do not invent an FDB score.
 
 ## Decisions
 - Documented local envelopes are provisional; official schema compatibility is not claimed.
@@ -297,3 +298,14 @@ Docker engine is stopped, so the updated Dockerfile has not been built in this p
 The team must supply identities/links, finish the prescribed deck and genuine demo
 video, and review/sign the AI disclosure. submission.yaml deliberately contains a team
 placeholder. No signatures, release tag, publication, or submission were fabricated.
+
+## FDB-v3 adapter - offline gate passed (2026-09-24)
+The updated participant guide replaces scored evaluation with LiveKit plus Full-Duplex-Bench v3.
+Implemented a custom LiveKit transport around SessionRuntime, dynamic loading of the 12 public
+tool declarations, cancellable mock execution, stale-speech fencing, and a session-scoped kitchen
+timer extension. `scripts/reproduce_fdb.py` is the one-command evaluator and refuses a non-Linux
+or non-CUDA machine for the full run.
+Full suite: `.venv/Scripts/python -m unittest discover -q`: 84 tests passed in 4.488 seconds.
+This does not include a credentialed microphone session, the released 100-example dataset, or an
+organizer-style GPU rerun. No FDB tool-F1, argument accuracy, strict pass rate, or latency number
+is claimed. The historical 48.9 queue-kit result is not an FDB score.

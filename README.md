@@ -1,5 +1,22 @@
 # Interra
 
+**Current evaluation: Full-Duplex-Bench v3 via LiveKit**, per the updated Theme05 guide.
+Start with [beginner voice/model setup](docs/FDB_SETUP.md). The new adapter connects
+speech to the session runtime, dynamically loads the 12 public tools, and includes
+a real kitchen-timer extension. Live benchmark and microphone results are still pending
+credentials and the evaluation GPU. The earlier 48.9 queue-kit result is historical.
+
+After configuring credentials and downloading the released dataset, the evaluation
+machine entrypoint is:
+
+```bash
+python3.11 scripts/reproduce_fdb.py --data-dir /absolute/path/fdb_v3_data_released
+```
+
+Use `--prepare-only` for Windows voice development, or `--check` for prerequisites.
+The original core/queue-adapter instructions below remain useful for offline regression
+tests; they are not the updated official submission workflow.
+
 Interra is a provider-agnostic, interruptible real-time agent runtime for Samsung PRISM
 Theme 05. Its core contribution is deterministic coordination under concurrent user input,
 reasoning, multimodal perception and tool results—not a chatbot persona or UI.

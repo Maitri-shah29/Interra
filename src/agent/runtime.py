@@ -73,9 +73,10 @@ class SessionRuntime:
         task.add_done_callback(self.tasks.discard)
         return task
 
-    def emit(self, kind, **payload):
+    def emit(self, kind, *, generation=None, **payload):
         action = Action(action_id=self.ids.new("action"), session_id=self.session_id,
-                        timestamp=self.clock.now(), type=kind, payload=payload)
+                        timestamp=self.clock.now(), type=kind, payload=payload,
+                        generation=self.epoch if generation is None else generation)
         self.protocol.encode(action)
         self.trace.record("ACTION_EMITTED", action=action.model_dump(mode="json"))
         self.output.put_nowait(action)
@@ -146,7 +147,11 @@ class SessionRuntime:
             self.latest_user_timestamp = event.timestamp
         acknowledgment = self.floor.acknowledge(event)
         if acknowledgment:
-            self.emit("SPEAK", text=acknowledgment)
+            advances = (event.type == "INTERRUPTION" or
+                        (event.type == "TEXT_CHUNK" and not self.chunks) or
+                        (event.type == "AUDIO_CLIP" and self.retain_frame_context and
+                         not self.perception.audio_turn_open))
+            self.emit("SPEAK", text=acknowledgment, generation=self.epoch + int(advances))
             self.trace.record("FIRST_RESPONSE_LATENCY", event_id=event.event_id,
                               source_timestamp=event.timestamp, latency=self.clock.now() - event.timestamp)
         if event.type == "TOOL_MANIFEST":

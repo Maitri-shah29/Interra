@@ -1,5 +1,26 @@
 # Demo guide
 
+## Current submission recording — 3–5 minutes
+
+Use `FDB_SETUP.md` to configure real voice and run FDB-v3 first. A recording remains
+pending: the offline timeline below does not replace the requested live voice demo.
+
+1. 0:00–0:30: show the declared models, source revision and architecture. Explain that
+   LiveKit transports speech while the coordinator owns state and tool execution.
+2. 0:30–2:00: show an actual benchmark interaction with a correction/interruption.
+   Show its recording and trace together, including cancellation/stale-result evidence.
+   Use a genuine run; do not script a pretend successful transcript.
+3. 2:00–3:30: demonstrate the kitchen extension with a real microphone. Start a timer,
+   ask which timers run, cancel it and create a shorter replacement. Show one expiry
+   notification, timer IDs, accepted results and no notification from the canceled one.
+4. 3:30–4:30: show report counts, tool/argument accuracy, strict pass and latency from
+   the saved run. State observed limitations and the one-command reproduction path.
+
+The extension has automated runtime-to-tool-to-final trace coverage, but its real voice
+recording and benchmark quality remain unverified until credentialed execution.
+
+## Historical offline engineering demo
+
 ## Run
 
 From an installed development environment:
