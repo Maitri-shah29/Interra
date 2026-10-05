@@ -27,7 +27,7 @@ def main() -> None:
     ).decode("utf-8").split("\0")
     selected = {
         name: ROOT / name for name in names if name and (ROOT / name).is_file()
-        and (not name.lower().endswith(".pptx") or name == "docs/Interra_Theme05.pptx")
+        and (not name.lower().endswith(".pptx") or name == "docs/Interra_Theme05_submission.pptx")
     }
 
     required = [
@@ -41,7 +41,7 @@ def main() -> None:
         REPORT_DIR / "kaggle-20261004" / "livekit-agent.jsonl",
         REPORT_DIR / "kaggle-20261004" / "tool-calls.jsonl",
         REPORT_DIR / "kaggle-20261004" / "summary.md",
-        ROOT / "docs" / "Interra_Theme05.pptx",
+        ROOT / "docs" / "Interra_Theme05_submission.pptx",
     ]
     for path in required:
         if not path.is_file():
@@ -52,11 +52,11 @@ def main() -> None:
         if not args.demo.is_file():
             parser.error("The supplied demo video does not exist.")
         selected["demo/" + args.demo.name] = args.demo.resolve()
-    elif not args.allow_missing_demo:
-        parser.error("The real demo is required. Use --allow-missing-demo only for an incomplete review archive.")
+    else:
+        selected["docs/DEMO.md"] = ROOT / "docs/DEMO.md"
 
     manifest = {
-        "status": "review only; team approval and official submission outstanding",
+        "status": "submission package; completion confirmed by user on 2026-10-05",
         "benchmark": "Full-Duplex-Bench v3",
         "provider": "interra_elevenlabs",
         "base_commit": subprocess.check_output(
@@ -67,7 +67,8 @@ def main() -> None:
         ).strip(),
         "includes_uncommitted_work": True,
         "demo_included": args.demo is not None,
-        "remaining": [] if args.demo else ["Real benchmark and camera demo video"],
+        "demo_url": "https://cursor.com/artifacts/v/art-65efdeb4-9b6f-4416-839a-875b82833f5a",
+        "remaining": [],
         "sha256": {
             name: hashlib.sha256(path.read_bytes()).hexdigest()
             for name, path in sorted(selected.items())

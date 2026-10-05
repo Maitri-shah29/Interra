@@ -29,7 +29,7 @@ The repository must provide:
 3. FDB-v3 results and logs including seeds and model configuration.
 4. One working extension beyond the benchmark domains.
 5. Demo video: [Interra demo](https://cursor.com/artifacts/v/art-65efdeb4-9b6f-4416-839a-875b82833f5a).
-6. The 12-slide organizer deck, per explicit user instruction (2026-10-05).
+6. The 8-slide organizer deck, per explicit user instruction (2026-10-05).
 
 Round 1 weighting is 60 percent official normalized benchmark score, 20 percent
 extension, and 20 percent documentation, architecture, and video. Ties use the
