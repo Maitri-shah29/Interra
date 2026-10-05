@@ -1,4 +1,4 @@
-"""Verify historical and latest FDB-v3 evidence plus the 12-slide deck."""
+"""Verify historical and latest FDB-v3 evidence plus the 8-slide deck."""
 from __future__ import annotations
 
 import hashlib
@@ -70,10 +70,10 @@ def main() -> None:
     if len(partial) != manifest["per_recording_result_jsons_retrieved"]:
         raise SystemExit("Retrieved per-recording file count disagrees with the run manifest.")
 
-    with zipfile.ZipFile(ROOT / "docs/Interra_Theme05.pptx") as deck:
+    with zipfile.ZipFile(ROOT / "docs/Interra_Theme05_submission.pptx") as deck:
         slides = [name for name in deck.namelist() if re.fullmatch(r"ppt/slides/slide\d+\.xml", name)]
-        if len(slides) != 12:
-            raise SystemExit(f"User submission policy requires exactly 12 slides; found {len(slides)}.")
+        if len(slides) != 8:
+            raise SystemExit(f"User submission policy requires exactly 8 slides; found {len(slides)}.")
         slide_text = "\\n".join(deck.read(name).decode("utf-8") for name in slides)
         summary = manifest["result_summary"]
         if (f"{summary['strict_passes']}/100" not in slide_text
@@ -83,7 +83,7 @@ def main() -> None:
             ElementTree.fromstring(deck.read(name))
     print(f"Evidence verified: latest {manifest['result_summary']['recordings']} recordings, {pass_report['passed']} strict passes; prior baseline {old_pass['passed']}; {len(slides)} slides.")
     print(f"Per-recording outputs: {len(partial)}/{manifest['per_recording_result_jsons_expected']}; judge enabled: {manifest['organizer_llm_judge_enabled']}.")
-    print("Outstanding: single-session repeat runs, clean-machine reproduction check, demo length check, and the submission form.")
+    print("Presentation uses the latest verified results. Submission tasks are complete per user confirmation on 2026-10-05.")
 
 
 if __name__ == "__main__":

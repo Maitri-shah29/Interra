@@ -50,7 +50,7 @@ does not substitute for an FDB-v3 run.
 
 ## Presentation and demo
 
-- Presentation: [12-slide submission deck](docs/Interra_Theme05.pptx)
+- Presentation: [8-slide submission deck](docs/Interra_Theme05_submission.pptx)
 - Demo video: [Interra demo](https://cursor.com/artifacts/v/art-65efdeb4-9b6f-4416-839a-875b82833f5a)
 
 The recording is three to five minutes: one benchmark interruption or
@@ -71,7 +71,7 @@ self-correction, then the camera troubleshooting session.
 | `.env.fdb.example` | Environment variable names, with empty secrets |
 | `docs/FDB_V3.md` | Benchmark pin, models, and scoring contract |
 | `docs/AI_DISCLOSURE_DRAFT.md` | AI usage disclosure |
-| `docs/Interra_Theme05.pptx` | Audited 12-slide submission deck |
+| `docs/Interra_Theme05_submission.pptx` | Audited 8-slide submission deck |
 | `docs/results/kaggle-20261004/` | Latest reports, logs, traces, per-recording results, and run manifest |
 | `vendor/samsung_theme05/` | Superseded queue kit |
 
@@ -274,7 +274,7 @@ These tests check orchestration, cancellation, and the agent configuration.
 They do not replace the official 100-recording reports.
 
 Verify both the historical baseline archive, latest run hashes, score comparison,
-and 12-slide deck with `python scripts/check_submission.py`. An incomplete review archive can be made
+and 8-slide deck with `python scripts/check_submission.py`. An incomplete review archive can be made
 with `python scripts/package_review.py --allow-missing-demo`; supply `--demo`
 with the actual video for a complete archive.
 
@@ -314,11 +314,11 @@ run; the 29 recordings from the first quota error onward were re-recorded with
 the same code and the official evaluator scored all 100. The organizer LLM
 judge was disabled, so no normalized organizer score is claimed. See
 [status and run history](docs/STATUS.md) and
-[remaining completion items](docs/10_DEFINITION_OF_DONE.md).
+[completion record](docs/10_DEFINITION_OF_DONE.md).
 
 ## Documentation
 
-- [Slide deck](docs/Interra_Theme05.pptx)
+- [Slide deck](docs/Interra_Theme05_submission.pptx)
 - [Official reports](docs/results/)
 - [FDB-v3 contract](docs/FDB_V3.md)
 - [Status and run history](docs/STATUS.md)

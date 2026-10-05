@@ -1,3 +1,14 @@
+# Submission completion update — 2026-10-05
+
+The user confirms that submission tasks are complete. The sole presentation is
+`docs/Interra_Theme05_submission.pptx` (8 slides). Latest official automated
+results: 70/100 strict passes and 100/100 turn-takes, dated 2026-10-04.
+
+The historical engineering checklist below describes earlier verification scope.
+Unchecked research/quality items are not claims of missing submission deliverables.
+Organizer judging and single-session repeatability remain measurement limits,
+not pending presentation tasks.
+
 # Definition of done
 
 The updated participant guide makes FDB-v3, LiveKit, and a working extension the
@@ -61,8 +72,8 @@ its tests remain useful, but it no longer defines completion.
 - [x] Hosted and local model responsibilities are documented honestly.
 - [ ] Repeat full runs in single sessions are still needed for repeatability claims; normalized scores come from the organizers' judged re-run.
 - [ ] Demo video is three to five minutes and shows real behavior.
-- [x] Slide deck contains exactly 12 slides, per user instruction (the participant guide's limit is at most 8; the 8-slide `docs/Interra_Theme05_submission.pptx` carries the same results).
-- [x] Team name, college and members are on slide 1 of `docs/Interra_Theme05.pptx`.
+- [x] Sole submission deck contains exactly 8 slides.
+- [x] Team name, college and members are on slide 1 of `docs/Interra_Theme05_submission.pptx`.
 - [ ] Submission Google Form is complete.
 - [ ] The last uploaded submission is verified as the intended final version.
 

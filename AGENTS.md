@@ -177,6 +177,8 @@ The Cloud Agent image provides Python 3.12 as `python3`. Use the project virtual
 
 The environment install is `pip install -e ".[voice]"` (LiveKit Agents 1.8.3 and RTC 1.1.18). The `fdb` extra and `requirements.txt` pull the CUDA scorer (`nemo_toolkit`) and are outside this environment. `ffmpeg` is on `PATH`. The Cloud Agent environment injects `LIVEKIT_URL`, `LIVEKIT_API_KEY`, and `LIVEKIT_API_SECRET` for hosted FDB-v3 and the camera worker. Read them from the process environment. Do not write them into `.env`, logs, or the repository. The recorded interruption demo is [Interra demo](https://cursor.com/artifacts/v/art-65efdeb4-9b6f-4416-839a-875b82833f5a). The unit tests and `agent.demo` run without calling LiveKit. A hosted readiness check can list rooms with `livekit.api.LiveKitAPI`; the full 100-recording benchmark still needs the pinned checkout and released audio, which this environment does not download.
 
-## Presentation policy — user instruction, 2026-10-05
+## Presentation policy — latest user instruction, 2026-10-05
 
-The sole presentation is `docs/Interra_Theme05.pptx`, exactly 12 slides. All links and submission archives must use it. Do not generate or restore shortened presentation variants. This user instruction overrides older slide-limit guidance.
+The sole presentation is `docs/Interra_Theme05_submission.pptx`, exactly 8 slides.
+All links and submission archives must use it. Do not recreate the retired 12-slide
+presentation. This replaces the earlier request to keep 12 slides.

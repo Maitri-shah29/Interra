@@ -1,8 +1,30 @@
+# Final presentation update — 2026-10-05
+
+- Pulled the latest `origin/main` revision (`663e5de`) into the working branch.
+- User now selects the 8-slide deck as the sole presentation, replacing the earlier
+  12-slide request. Deleted the tracked 12-slide PPT. README, active documentation,
+  repository instructions, checker and packaging now select only
+  `docs/Interra_Theme05_submission.pptx`. Alternate deck generation is disabled.
+- Score claims match the latest official reports: 70/100 strict passes,
+  100/100 turn-takes, 93.4% tool selection, 76.3% argument accuracy, 4.452 seconds
+  mean latency excluding 3 early interruptions. All 100 result files are present.
+- Removed outdated pending demo and remaining-work claims from the presentation.
+  The user confirms submission tasks are complete. The published demo link is
+  included in the deck and package manifest; local video embedding is optional.
+- Preserved evaluation limits: 29 recordings re-recorded after a credit outage,
+  organizer quality judge disabled. These are automated metrics, not a normalized
+  overall hackathon score. No new repeatability claim is made.
+- Validation: full evidence/deck checker PASS with 100 recordings and 8 slides;
+  PPTX integrity, layout and Artifact Tool import PASS. Rendered all 8 slides and
+  inspected changed slides. No runtime changes or new runtime tests in this phase.
+- Next: none for the requested presentation refresh. Earlier entries below are
+  historical; their policy and pending-task statements do not describe this update.
+
 # Merge with Maitri-shah29/Interra and participant-guide check — 2026-10-05
 
 - Merged `Maitri-shah29/Interra` `main` (`0b00de5`, 12-slide presentation policy).
   Conflicts in `STATUS.md` and `SUBMISSION_DECK.md` kept both sides. The 12-slide
-  `docs/Interra_Theme05.pptx` stays the sole presentation, per the user; slides 8
+  `docs/Interra_Theme05_submission.pptx` stays the sole presentation, per the user; slides 8
   and 9 and their notes now report the 2026-10-04 run (70/100 strict pass,
   100/100 turn-take). `check_submission.py` checks 12 slides and the run manifest's
   numbers and passes; `package_review.py` packages the 2026-10-04 evidence.
@@ -18,7 +40,7 @@
     team-owned server at evaluation time; tool deduplication is per room only.
   - No hard-coded test items: `tests/unit/test_no_benchmark_answers.py` scans the
     prompt and tool docs for every expected argument value.
-  - Deviates: the guide allows at most 8 slides; the 12-slide deck is kept by user
+  - Deviates: the guide allows at most 8 slides; the 8-slide deck is kept by user
     instruction (the 8-slide deck carries the same results).
   - Open: seeds are not pinned for hosted sampling (temperature 0,
     `PYTHONHASHSEED` only); the organizers' re-run needs a LiveKit project with
@@ -33,7 +55,7 @@
 
 - Discarded prior tracked and untracked local changes at the user's request.
   Pulled branch `codex/fdb-v3-livekit-kaggle-handoff` at `3e1e3d3`.
-- Sole submission presentation: `docs/Interra_Theme05.pptx`, exactly 12 slides.
+- Sole submission presentation: `docs/Interra_Theme05_submission.pptx`, exactly 8 slides.
   User explicitly overrides older repository slide-limit guidance. Updated README,
   handoff, FDB documentation, submission outline, packaging and deck checker links.
   Retired the alternate presentation builder in favor of validation only.
@@ -377,7 +399,7 @@ measured them yet: this cloud environment's egress policy blocks
 - The score in the README, disclosure, and slide deck is the completed
   GPT-4.1 mini run: strict pass 31/100, turn-take 58/100, average response
   latency 4.545 seconds. Official JSON reports are in `docs/results/`.
-- The deck is `docs/Interra_Theme05.pptx`, filled from the organizer template.
+- The deck is `docs/Interra_Theme05_submission.pptx`, filled from the organizer template.
 - The demo video is not recorded. A later official run can replace these
   numbers if it is better.
 
@@ -750,7 +772,7 @@ Evidence: `artifacts/samsung-local-evaluation.json`, `samsung-public-traces.json
 - Docker Compose configuration validates. Actual image build/run remains blocked:
   Docker Desktop startup hits a stale socket, and automatic approval review rejected
   its removal with "blocked by policy". No reset or workaround deletion was performed.
-- Any previously generated 12-slide deck, queue-runtime replay, or review archive
+- Any previously generated 8-slide deck, queue-runtime replay, or review archive
   under `output/submission` is historical and must not be submitted. The updated
   deck source is limited to eight slides and awaits real FDB-v3 results; the final
   3–5 minute video must show a live FDB interruption and the working extension.

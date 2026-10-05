@@ -4,7 +4,7 @@ This document separates **official Samsung requirements** from the engineering c
 
 ## User presentation override — 2026-10-05
 
-Use the full 12-slide organizer template at `docs/Interra_Theme05.pptx` as the
+Use the 8-slide submission deck at `docs/Interra_Theme05_submission.pptx` as the
 only submission presentation, per explicit user instruction. This overrides older
 repository slide-limit guidance. See `docs/STATUS.md` for the conflict resolution.
 
