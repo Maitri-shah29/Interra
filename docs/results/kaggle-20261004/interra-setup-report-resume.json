@@ -1,0 +1,13 @@
+{
+  "llm_provider": "livekit",
+  "llm_model": "openai/gpt-4.1-mini",
+  "project": "/kaggle/working/Interra",
+  "venv": "/kaggle/temp/interra-fdb-venv",
+  "livekit_ready": true,
+  "missing_secret_names": [],
+  "full_benchmark_run": true,
+  "run_environment": {
+    "INTERRA_FDB_SEED_RESULTS": "fdb-seed"
+  },
+  "next_command": "python scripts/fdb_v3.py all --force"
+}

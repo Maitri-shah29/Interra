@@ -42,7 +42,7 @@ class FdbToolArgumentTests(unittest.IsolatedAsyncioTestCase):
         self.executor.call.assert_awaited_once_with("add_to_cart", product_id="R8", quantity=2)
 
     async def test_literal_identifiers_preserve_punctuation(self):
-        for identifier in ["SKU-42", "order_123", "Example Product", "a-b-c"]:
+        for identifier in ["SKU-42", "order_123", "Example Product", "555-0100", "v777"]:
             self.assertEqual(normalize_identifier(identifier), identifier)
 
     async def test_invalid_number_never_reaches_backend(self):

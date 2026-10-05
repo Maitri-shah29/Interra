@@ -13,6 +13,7 @@ COPY Dockerfile ./Dockerfile
 COPY vendor ./vendor
 COPY interra_submission.py submission.yaml ./
 COPY scripts ./scripts
+COPY kaggle ./kaggle
 
 RUN apt-get update && apt-get install -y --no-install-recommends ffmpeg libgomp1 \
     && rm -rf /var/lib/apt/lists/* \

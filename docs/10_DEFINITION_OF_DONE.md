@@ -12,7 +12,7 @@ its tests remain useful, but it no longer defines completion.
 - [x] Tool calls use the room identifier and benchmark telemetry format.
 - [x] LiveKit Inference STT and TTS model IDs and voice are pinned by configuration.
 - [x] LiveKit Inference LLM is the default; Ollama remains an optional backend.
-- [ ] Clean environment installation of the FDB dependency profile passes.
+- [x] Clean environment installation of the FDB dependency profile passes (`.[fdb]` in a fresh Kaggle venv on 2026-10-04; the `.[voice]` worker image builds from a clean checkout on 2026-10-05).
 - [x] LiveKit Cloud credentials and dispatch are validated by the 100-case run.
 - [ ] Every released recording completes without agent or protocol crashes.
 
@@ -22,10 +22,10 @@ its tests remain useful, but it no longer defines completion.
 - [x] Reproduction runner can bootstrap the benchmark and published data.
 - [x] Runner starts the agent, runs inference, and invokes the tool and pass evaluators;
   optional LLM-assisted latency analysis requires `--use-llm`.
-- [x] A baseline run covers all 100 recordings; aggregate reports are archived (15 of 100 per-recording JSONs were retrievable for the latest run).
+- [x] The latest run covers all 100 recordings; aggregate reports and all 100 per-recording results are archived (`docs/results/kaggle-20261004/`).
 - [x] Official tool-selection report is saved.
-- [ ] Semantic argument and response report is saved with the LLM judge enabled.
-- [x] Strict pass-rate report is saved for the latest run (43/100; previous main baseline 31/100).
+- [ ] Semantic argument and response report is saved with the LLM judge enabled. The organizers run the pinned judge in their own re-run; a self-check (`--use-llm`) needs `OPENAI_API_KEY` and is optional.
+- [x] Strict pass-rate report is saved for the latest run (70/100 on 2026-10-04; 43/100 on 2026-10-01; previous main baseline 31/100).
 - [ ] First-response, tool-call, and task-completion latency report is saved.
 - [x] Model versions, provider configuration, measured source, recording results
   and logs are archived with hashes in `docs/results/`. The original sampling
@@ -41,7 +41,7 @@ its tests remain useful, but it no longer defines completion.
 - [ ] A real FDB recording proves the latest correction reaches tool arguments.
 - [ ] A real live interruption stops obsolete speech and work.
 - [ ] Multi-step tool chains use returned identifiers rather than guessed values.
-- [ ] No benchmark scenario is hard-coded, memorized, or used for fine-tuning.
+- [x] No benchmark scenario is hard-coded, memorized, or used for fine-tuning (`tests/unit/test_no_benchmark_answers.py` scans the prompt and tool docs for every expected argument).
 - [ ] No scenario state is cached across conversations.
 
 ## Extension use case
@@ -59,10 +59,11 @@ its tests remain useful, but it no longer defines completion.
 - [x] README identifies FDB-v3 as the current benchmark.
 - [x] Exact environment-variable names are documented without secret values.
 - [x] Hosted and local model responsibilities are documented honestly.
-- [ ] Two additional quota-restored runs and the organizer LLM judge report are still needed for repeatable normalized scores.
+- [ ] Repeat full runs in single sessions are still needed for repeatability claims; normalized scores come from the organizers' judged re-run.
 - [ ] Demo video is three to five minutes and shows real behavior.
-- [x] Slide deck contains exactly 12 slides, per user instruction.
-- [ ] Team identities and submission form are complete.
+- [x] Slide deck contains exactly 12 slides, per user instruction (the participant guide's limit is at most 8; the 8-slide `docs/Interra_Theme05_submission.pptx` carries the same results).
+- [x] Team name, college and members are on slide 1 of `docs/Interra_Theme05.pptx`.
+- [ ] Submission Google Form is complete.
 - [ ] The last uploaded submission is verified as the intended final version.
 
 Only mark a box complete when a report, trace, test, or recorded run proves it.

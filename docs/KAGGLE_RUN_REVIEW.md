@@ -1,10 +1,44 @@
-# Kaggle hosted run review — 2026-10-01
+# Kaggle hosted run review — 2026-10-04
+
+Kernel: `adityavardhankochar/interra-fdb-v3-benchmark`, started from the Kaggle
+editor. Models: LiveKit Inference Deepgram Nova-3, GPT-4.1 mini (temperature 0),
+Cartesia Sonic-3. Benchmark pin: `3e799c45a045256f47d5f1c9cda90157e2d2ec9e`.
+
+## Latest measured results
+
+| Metric | Result |
+| --- | ---: |
+| Strict pass | **70/100** (43/100 on 2026-10-01; main baseline 31/100) |
+| Wrong tools | 13 |
+| Wrong arguments | 17 |
+| Turn-taken recordings | 100/100 |
+| Silent recordings | 0 |
+| Completed tool calls | 152/152 |
+| Cleanup / completed cooldown events | 100 / 100 |
+| Session errors in the final trace | 0 |
+| Tool selection, all recordings | 93.4% |
+| Argument accuracy, all recordings | 76.3% |
+| Early interruptions | 3/100 |
+| Average response latency, excluding interruptions | 4.452 seconds |
+
+Evidence, hashes and verification commands are in
+[`results/kaggle-20261004/`](results/kaggle-20261004/) (`summary.md`,
+`run-manifest.json`). All 100 per-recording results are archived; the official
+evaluator and `agent.fdb_offline rescore` both reproduce 70/100. The LiveKit
+project ran out of Inference credits partway through, so the 29 recordings from
+the first quota error onward were re-recorded with the same code. The optional
+organizer LLM judge was disabled, so no normalized overall hackathon score is
+claimed.
+
+Weakest areas: housing and travel argument accuracy (69.9% and 68.3%).
+
+# Previous Kaggle hosted run review — 2026-10-01
 
 Latest kernel: `adityavardhankochar/interra-fdb-v3-benchmark`, version 3.
 Models: LiveKit Inference Deepgram Nova-3, GPT-4.1 mini, Cartesia Sonic-3.
 Benchmark pin: `3e799c45a045256f47d5f1c9cda90157e2d2ec9e`.
 
-## Latest measured results
+## Measured results
 
 | Metric | Result |
 | --- | ---: |

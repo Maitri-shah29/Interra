@@ -35,12 +35,12 @@ def main() -> None:
         REPORT_DIR / "interra_elevenlabs_pass_rate_report.json",
         REPORT_DIR / "run-manifest.json",
         REPORT_DIR / "best-run-evidence.zip",
-        REPORT_DIR / "kaggle-20261001" / "interra_elevenlabs_evaluation_report.json",
-        REPORT_DIR / "kaggle-20261001" / "interra_elevenlabs_pass_rate_report.json",
-        REPORT_DIR / "kaggle-20261001" / "run-manifest.json",
-        REPORT_DIR / "kaggle-20261001" / "livekit-agent.jsonl",
-        REPORT_DIR / "kaggle-20261001" / "tool-calls.jsonl",
-        REPORT_DIR / "kaggle-20261001" / "summary.md",
+        REPORT_DIR / "kaggle-20261004" / "interra_elevenlabs_evaluation_report.json",
+        REPORT_DIR / "kaggle-20261004" / "interra_elevenlabs_pass_rate_report.json",
+        REPORT_DIR / "kaggle-20261004" / "run-manifest.json",
+        REPORT_DIR / "kaggle-20261004" / "livekit-agent.jsonl",
+        REPORT_DIR / "kaggle-20261004" / "tool-calls.jsonl",
+        REPORT_DIR / "kaggle-20261004" / "summary.md",
         ROOT / "docs" / "Interra_Theme05.pptx",
     ]
     for path in required:

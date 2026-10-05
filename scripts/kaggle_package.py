@@ -14,8 +14,15 @@ BENCHMARK_KERNEL_ID = "adityavardhankochar/interra-fdb-v3-benchmark"
 BENCHMARK_TITLE = "interra fdb v3 benchmark"
 
 
-def _source_archive() -> bytes:
-    """Zip the working tree, so an uncommitted agent fix is what Kaggle runs."""
+SEED_FOLDER = "fdb-seed"
+
+
+def _source_archive(seed: Path | None = None) -> bytes:
+    """Zip the working tree, so an uncommitted agent fix is what Kaggle runs.
+
+    ``seed`` adds a folder from ``agent.fdb_offline outage-seed`` as
+    ``fdb-seed/``; the worker places those results before the benchmark.
+    """
     import io
     import zipfile
 
@@ -28,16 +35,38 @@ def _source_archive() -> bytes:
                 if "__pycache__" in item.parts or item.suffix == ".pyc":
                     continue
                 bundle.write(item, item.relative_to(ROOT).as_posix())
+        if seed is not None:
+            if not (seed / "seed-manifest.json").is_file():
+                raise FileNotFoundError(f"{seed} has no seed-manifest.json")
+            for item in sorted(path for path in seed.rglob("*") if path.is_file()):
+                bundle.write(item, (Path(SEED_FOLDER) / item.relative_to(seed)).as_posix())
     return buffer.getvalue()
 
 
-def _worker_source() -> str:
-    archive = _source_archive()
+def parse_settings(pairs: list[str]) -> dict[str, str]:
+    """Parse ``NAME=VALUE`` experiment settings; only non-secret INTERRA_* names."""
+    settings: dict[str, str] = {}
+    for pair in pairs:
+        name, separator, value = pair.partition("=")
+        if not separator or not name.startswith("INTERRA_"):
+            raise ValueError(f"Expected INTERRA_NAME=VALUE, got {pair!r}")
+        settings[name] = value
+    return settings
+
+
+def _worker_source(settings: dict[str, str] | None = None, seed: Path | None = None) -> str:
+    archive = _source_archive(seed)
     payload = base64.b64encode(archive).decode("ascii")
     source = (ROOT / "scripts" / "kaggle_setup.py").read_text(encoding="utf-8")
     source = source.replace("RUN_FULL_BENCHMARK = False", "RUN_FULL_BENCHMARK = True", 1)
     source = source.replace('EMBEDDED_SOURCE_B64 = ""', f'EMBEDDED_SOURCE_B64 = "{payload}"', 1)
-    if "RUN_FULL_BENCHMARK = True" not in source or f'EMBEDDED_SOURCE_B64 = "{payload}"' not in source:
+    environment = f"RUN_ENVIRONMENT: dict[str, str] = {json.dumps(settings or {}, sort_keys=True)}"
+    source = source.replace("RUN_ENVIRONMENT: dict[str, str] = {}", environment, 1)
+    if (
+        "RUN_FULL_BENCHMARK = True" not in source
+        or f'EMBEDDED_SOURCE_B64 = "{payload}"' not in source
+        or environment not in source
+    ):
         raise RuntimeError("Kaggle setup source has changed; packaging substitutions failed")
     return source
 
@@ -79,9 +108,14 @@ def notebook_document(source: str) -> dict[str, object]:
     }
 
 
-def package(destination: Path, *, kernel_id: str = BENCHMARK_KERNEL_ID, title: str = BENCHMARK_TITLE) -> Path:
+def package(
+    destination: Path, *, kernel_id: str = BENCHMARK_KERNEL_ID, title: str = BENCHMARK_TITLE,
+    settings: dict[str, str] | None = None, seed: Path | None = None,
+) -> Path:
     destination.mkdir(parents=True, exist_ok=True)
-    source = _worker_source()
+    if seed is not None:
+        settings = {**(settings or {}), "INTERRA_FDB_SEED_RESULTS": SEED_FOLDER}
+    source = _worker_source(settings, seed)
     (destination / "interra_setup.py").write_text(source, encoding="utf-8")
     notebook = notebook_document(source)
     (destination / "interra_setup.ipynb").write_text(
@@ -103,5 +137,10 @@ if __name__ == "__main__":
     parser.add_argument("destination", type=Path)
     parser.add_argument("--kernel-id", default=BENCHMARK_KERNEL_ID)
     parser.add_argument("--title", default=BENCHMARK_TITLE)
+    parser.add_argument("--set", dest="settings", action="append", default=[],
+                        metavar="INTERRA_NAME=VALUE", help="Non-secret setting exported for this run")
+    parser.add_argument("--seed", type=Path,
+                        help="Results folder from `agent.fdb_offline outage-seed`; only the other recordings run")
     args = parser.parse_args()
-    package(args.destination, kernel_id=args.kernel_id, title=args.title)
+    package(args.destination, kernel_id=args.kernel_id, title=args.title,
+            settings=parse_settings(args.settings), seed=args.seed)

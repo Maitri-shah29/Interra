@@ -1,0 +1,4481 @@
+{
+  "mode": "llm",
+  "archived": {
+    "passed": 47,
+    "total": 100,
+    "pass_rate": 0.47
+  },
+  "current": {
+    "passed": 77,
+    "total": 100,
+    "pass_rate": 0.77
+  },
+  "errors": 0,
+  "recordings": [
+    {
+      "room": "eval-1db0fad4",
+      "scenario_id": "ecommerce_01",
+      "speaker": "65e8cf8f",
+      "turns": [
+        "Like, you know, well, I ordered something last week, and I haven't received it yet. Could you track it for me? The order ID is a b c one two three."
+      ],
+      "replies": [
+        "Your order ABC123 is currently out for delivery. It should arrive soon."
+      ],
+      "error": null,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "abc123"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "ABC123"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-146f48ea",
+      "scenario_id": "ecommerce_01",
+      "speaker": "69a9cf80",
+      "turns": [
+        "Like, uh, you know, I haven't received it yet. Could you track it for me?",
+        "The order ID is a b c one two three"
+      ],
+      "replies": [
+        "I can help track your order. Please provide me with the order number or code so I can look it up for you.",
+        "Your order ABC123 is currently out for delivery. It should arrive soon."
+      ],
+      "error": null,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "abc123"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "ABC123"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-15cbca79",
+      "scenario_id": "ecommerce_02",
+      "speaker": "5f4a4da1",
+      "turns": [
+        "I'm looking for a pair of wireless headphones and I'd like, um, to track it under a hundred dollars possible. What do you have?"
+      ],
+      "replies": [
+        "I found wireless headphones under $100. There is a pair called \"wireless headphones Premium\" priced at $90. Would you like to add it to your cart or need more options?"
+      ],
+      "error": null,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "search_products",
+          "args": {
+            "query": "wireless headphones",
+            "max_price": 100.0
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "search_products",
+          "args": {
+            "query": "wireless headphones",
+            "max_price": 100.0,
+            "category": "headphones"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-3ce2c3cd",
+      "scenario_id": "ecommerce_04",
+      "speaker": "6998abd7",
+      "turns": [
+        "You know, where is my package? Let me find the order number here. Door number is x y z eight eight. Uh, could you check what's going on with it?"
+      ],
+      "replies": [
+        "Your package with order number XYZ88 is currently out for delivery."
+      ],
+      "error": null,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Missing tools: ['track_order']"
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [],
+      "current_calls": [
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "XYZ88"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-23ede670",
+      "scenario_id": "ecommerce_05",
+      "speaker": "695bd157",
+      "turns": [
+        "So, like, I'm looking for for a new",
+        "A desk. Yes. Something under three hundred dollars. If you have an option like that, that would be great."
+      ],
+      "replies": [
+        "Hello! It seems like you started to say you're looking for something new. Could you please complete your request?",
+        "I found a desk called \"desk Premium\" priced at $290. Would you like to add it to your cart or need more options?"
+      ],
+      "error": null,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Unexpected tools: ['add_to_cart', 'search_products', 'add_to_cart']"
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "search_products",
+          "args": {
+            "query": "desk"
+          }
+        },
+        {
+          "function": "add_to_cart",
+          "args": {
+            "product_id": "PROD1",
+            "quantity": 1
+          }
+        },
+        {
+          "function": "search_products",
+          "args": {
+            "query": "desk",
+            "max_price": 300.0
+          }
+        },
+        {
+          "function": "add_to_cart",
+          "args": {
+            "product_id": "PROD1",
+            "quantity": 1
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "search_products",
+          "args": {
+            "query": "desk",
+            "max_price": 300.0
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-ee4c1b24",
+      "scenario_id": "ecommerce_06",
+      "speaker": "66c4f3cb",
+      "turns": [
+        "Uh, so I'd like could you add two item two of the items, k two, to my cart? I I need one for me and and one as a gift for my friend."
+      ],
+      "replies": [
+        "I have added two of the item K2 to your cart, one for you and one as a gift for your friend. Let me know if you need anything else."
+      ],
+      "error": null,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Unexpected tools: ['search_products']"
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "search_products",
+          "args": {
+            "query": "k2"
+          }
+        },
+        {
+          "function": "add_to_cart",
+          "args": {
+            "product_id": "PROD1",
+            "quantity": 2
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "add_to_cart",
+          "args": {
+            "product_id": "K2",
+            "quantity": 2
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-6211e24c",
+      "scenario_id": "ecommerce_07",
+      "speaker": "66f59c76",
+      "turns": [
+        "So could you I I wanted to search for a new product. Actually... No. Never mind. Never mind. Forget that for now. Could you just track my order instead? The ID is f a s t nine nine."
+      ],
+      "replies": [
+        "Your order FAST99 is currently out for delivery."
+      ],
+      "error": null,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "fast99"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "FAST99"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-30445907",
+      "scenario_id": "ecommerce_08",
+      "speaker": "5ff07b5e",
+      "turns": [
+        "You know, I want a mechanical keyboard, and I'm trying. To keep my budget under two hundred dollars. You have anything like that?"
+      ],
+      "replies": [
+        "I found a mechanical keyboard called \"mechanical keyboard Premium\" priced at $190, which fits your budget under two hundred dollars. Would you like to add it to your cart or need more options?"
+      ],
+      "error": null,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['search_products']"
+      },
+      "current": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['search_products']"
+      },
+      "archived_calls": [
+        {
+          "function": "search_products",
+          "args": {
+            "query": "mechanical keyboard",
+            "max_price": 200.0
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "search_products",
+          "args": {
+            "query": "mechanical keyboard",
+            "max_price": 200.0,
+            "category": "mechanical keyboard"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-c1acb97c",
+      "scenario_id": "ecommerce_08",
+      "speaker": "61517db6",
+      "turns": [
+        "Yeah. You know, I want a mechanical keyboard, and I'm trying to keep my budget under two hundred dollars. Do you have anything like that?"
+      ],
+      "replies": [
+        "I found a mechanical keyboard called \"mechanical keyboard Premium\" priced at $190, which fits your budget under two hundred dollars. Would you like to add it to your cart or need more options?"
+      ],
+      "error": null,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['search_products']"
+      },
+      "current": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['search_products']"
+      },
+      "archived_calls": [
+        {
+          "function": "search_products",
+          "args": {
+            "query": "mechanical keyboard",
+            "max_price": 200.0
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "search_products",
+          "args": {
+            "query": "mechanical keyboard",
+            "max_price": 200.0,
+            "category": "mechanical keyboard"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-eaa23b95",
+      "scenario_id": "ecommerce_09",
+      "speaker": "695bd157",
+      "turns": [
+        "Like, well, could you search for running shoes Actually, no. Um, I just remembered I already have running shoes. Search for hiking boots instead. That's what I actually need."
+      ],
+      "replies": [
+        "I found hiking boots for you, including a premium pair priced at 99.99. Would you like to add the hiking boots to your cart or need more options?"
+      ],
+      "error": null,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "search_products",
+          "args": {
+            "query": "hiking boots"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "search_products",
+          "args": {
+            "query": "hiking boots"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-81a2d504",
+      "scenario_id": "ecommerce_10",
+      "speaker": "6998abd7",
+      "turns": [
+        "Like, uh, like, first, can you track my order? The ID is one two three a b c. And then while we're at it, could you also search for winter jackets on the hundred fifty dollars? I need one for my trip."
+      ],
+      "replies": [
+        "Your order 123ABC is currently out for delivery. I also found a winter jacket within your budget of 150 dollars: the \"winter jackets Premium\" priced at 140 dollars. Would you like to add it to your cart?"
+      ],
+      "error": null,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "123abc"
+          }
+        },
+        {
+          "function": "search_products",
+          "args": {
+            "query": "winter jackets",
+            "max_price": 150.0
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "123ABC"
+          }
+        },
+        {
+          "function": "search_products",
+          "args": {
+            "query": "winter jackets",
+            "max_price": 150.0
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-bf281b32",
+      "scenario_id": "ecommerce_11",
+      "speaker": "62a885d5",
+      "turns": [
+        "You know, like, we'll go ahead and add the product b seven to my cart. Make it three of them. No. No. Wait. That's too many. Just do one for now. I'll order more later if if I need to."
+      ],
+      "replies": [
+        "I added one of product B7 to your cart. Let me know if you want to add more later."
+      ],
+      "error": null,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "add_to_cart",
+          "args": {
+            "product_id": "B7",
+            "quantity": 1
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "add_to_cart",
+          "args": {
+            "product_id": "B7",
+            "quantity": 1
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-b311cff1",
+      "scenario_id": "ecommerce_12",
+      "speaker": "6998abd7",
+      "turns": [
+        "Look. You know, I'm thinking something in the... Let me think. Electronic section would be great. He's really into catches and text stuff."
+      ],
+      "replies": [
+        "It sounds like you are interested in something in the electronics section related to \"catches and text stuff.\" Could you please clarify or specify what kind of electronic product you are looking for? For example, are you interested in gadgets related to communication, texting devices, or something else? This will help me find the best options for you."
+      ],
+      "error": null,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['search_products']"
+      },
+      "current": {
+        "passed": false,
+        "failure_reason": "Missing tools: ['search_products']"
+      },
+      "archived_calls": [
+        {
+          "function": "search_products",
+          "args": {
+            "query": "electronic catches and text stuff"
+          }
+        }
+      ],
+      "current_calls": []
+    },
+    {
+      "room": "eval-851dc11d",
+      "scenario_id": "ecommerce_13",
+      "speaker": "5ff07b5e",
+      "turns": [
+        "Well, so, well, first, could you add item k dash two to my cart? Just one of them, And then can you check on my last order too? The order ID is d dash e dash l dash I dash v."
+      ],
+      "replies": [
+        "I have added one item K2 to your cart. Your last order with ID DELIV is currently out for delivery."
+      ],
+      "error": null,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['add_to_cart', 'track_order']"
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "add_to_cart",
+          "args": {
+            "product_id": "k-2",
+            "quantity": 1
+          }
+        },
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "d-e-l-i-v"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "add_to_cart",
+          "args": {
+            "product_id": "K2",
+            "quantity": 1
+          }
+        },
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "DELIV"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-8e34bfec",
+      "scenario_id": "ecommerce_13",
+      "speaker": "61517db6",
+      "turns": [
+        "So... Well, could you add item k two to my card? Just one of them. Then can you check on my last order too? The order is the order ID is d e l I v."
+      ],
+      "replies": [
+        "I added one of item K2 to your cart. Your last order with ID DELIV is currently out for delivery."
+      ],
+      "error": null,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "add_to_cart",
+          "args": {
+            "product_id": "K2",
+            "quantity": 1
+          }
+        },
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "DELIV"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "add_to_cart",
+          "args": {
+            "product_id": "K2",
+            "quantity": 1
+          }
+        },
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "DELIV"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-21dbb2dc",
+      "scenario_id": "ecommerce_14",
+      "speaker": "5ff07b5e",
+      "turns": [
+        "Well, um, so, uh, yeah. So I already found what I want. Can you add, like, two of them? P dash five dash two to my card? I want to get one for myself and one as a gift."
+      ],
+      "replies": [
+        "I have added two of the product P52 to your cart, one for yourself and one as a gift. Let me know if you need anything else."
+      ],
+      "error": null,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['add_to_cart']"
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "add_to_cart",
+          "args": {
+            "product_id": "p-5-2",
+            "quantity": 2
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "add_to_cart",
+          "args": {
+            "product_id": "P52",
+            "quantity": 2
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-de4e4190",
+      "scenario_id": "ecommerce_14",
+      "speaker": "61517db6",
+      "turns": [
+        "Well, yeah. So what? Can you add, like, two of item p five two to my card. I wanna get one for myself and one as a gift."
+      ],
+      "replies": [
+        "I added two of item P52 to your cart, one for yourself and one as a gift. Let me know if you need anything else."
+      ],
+      "error": null,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "add_to_cart",
+          "args": {
+            "product_id": "p52",
+            "quantity": 2
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "add_to_cart",
+          "args": {
+            "product_id": "P52",
+            "quantity": 2
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-ec79cb0e",
+      "scenario_id": "ecommerce_15",
+      "speaker": "56780a5a",
+      "turns": [
+        "So, well, can can you track order b o b one two for me? I ordered it a few days ago, and it should be arriving soon, uh, but I just wanted to make sure."
+      ],
+      "replies": [
+        "Your order BOB12 is currently out for delivery. It should be arriving soon."
+      ],
+      "error": null,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "bob12"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "BOB12"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-cbfb0f99",
+      "scenario_id": "ecommerce_15",
+      "speaker": "66c4f3cb",
+      "turns": [
+        "So, well, can you track order b o b one two for me? I ordered a few days ago, and it should be arrive soon, but I just want to make sure"
+      ],
+      "replies": [
+        "Your order BOB12 is out for delivery and should arrive soon."
+      ],
+      "error": null,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "bob12"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "BOB12"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-f1e15740",
+      "scenario_id": "ecommerce_16",
+      "speaker": "695bd157",
+      "turns": [
+        "Um, like, uh, I need a new A coffee maker. Yeah. I'm looking for a new coffee maker. That's what it's called. Something under fifty dollars would be ideal."
+      ],
+      "replies": [
+        "I found a coffee maker called \"coffee maker Premium\" priced at 40 dollars. Would you like to add it to your cart?"
+      ],
+      "error": null,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "search_products",
+          "args": {
+            "query": "coffee maker",
+            "max_price": 50.0
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "search_products",
+          "args": {
+            "query": "coffee maker",
+            "max_price": 50.0
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-1d3bec5c",
+      "scenario_id": "ecommerce_17",
+      "speaker": "5f4a4da1",
+      "turns": [
+        "Can you cancel my actually, never mind the cancellation. I changed my mind about that. Can you just track order g g five for me instead? I wanna see where it is."
+      ],
+      "replies": [
+        "Your order GG5 is currently out for delivery. Let me know if you need any more help!"
+      ],
+      "error": null,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "GG5"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "GG5"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-9523f0eb",
+      "scenario_id": "ecommerce_18",
+      "speaker": "62a885d5",
+      "turns": [
+        "So, like, first search for gaming mouse. I wanna see what you have. Then add the cheapest option in my cart so I can buy it later. And while you're at it, could you also track my order? P o nine nine nine. I've been waiting on that one."
+      ],
+      "replies": [
+        "I found a gaming mouse priced at 99.99 and added the cheapest option to your cart. Also, your order PO999 is out for delivery."
+      ],
+      "error": null,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['track_order']"
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "search_products",
+          "args": {
+            "query": "gaming mouse"
+          }
+        },
+        {
+          "function": "add_to_cart",
+          "args": {
+            "product_id": "PROD1",
+            "quantity": 1
+          }
+        },
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "P0999"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "search_products",
+          "args": {
+            "query": "gaming mouse"
+          }
+        },
+        {
+          "function": "add_to_cart",
+          "args": {
+            "product_id": "PROD1",
+            "quantity": 1
+          }
+        },
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "PO999"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-c8ea9d3e",
+      "scenario_id": "ecommerce_19",
+      "speaker": "66f59c76",
+      "turns": [
+        "Okay. So search for a laptop. Wait. No. No. Actually, I need a tablet. A laptop. A tablet. And add two of them to the cart. Actually, no. No. Just one. Just one. I only have, uh, the budget for one right now."
+      ],
+      "replies": [
+        "I found a tablet laptop and added one of it to your cart as you requested. Let me know if you need anything else."
+      ],
+      "error": null,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Unexpected tools: ['search_products']"
+      },
+      "current": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['search_products']"
+      },
+      "archived_calls": [
+        {
+          "function": "search_products",
+          "args": {
+            "query": "laptop"
+          }
+        },
+        {
+          "function": "search_products",
+          "args": {
+            "query": "tablet"
+          }
+        },
+        {
+          "function": "add_to_cart",
+          "args": {
+            "product_id": "PROD1",
+            "quantity": 1
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "search_products",
+          "args": {
+            "query": "tablet laptop"
+          }
+        },
+        {
+          "function": "add_to_cart",
+          "args": {
+            "product_id": "PROD1",
+            "quantity": 1
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-f4227d5f",
+      "scenario_id": "ecommerce_20",
+      "speaker": "66c4f3cb",
+      "turns": [
+        "So, um, you know, you find one that's under fifty dollars, go ahead and add two, um, to the cart because they make great gifts. But if everything's over fifty, I just forget the coffee maker and track order w w w for me instead."
+      ],
+      "replies": [
+        "I found coffee makers under fifty dollars and added two of them to your cart as gifts. Also, your order with code WWW is out for delivery."
+      ],
+      "error": null,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Missing tools: ['search_products', 'add_to_cart']"
+      },
+      "current": {
+        "passed": false,
+        "failure_reason": "Unexpected tools: ['track_order']"
+      },
+      "archived_calls": [],
+      "current_calls": [
+        {
+          "function": "search_products",
+          "args": {
+            "query": "coffee maker",
+            "max_price": 50.0,
+            "category": "coffee maker"
+          }
+        },
+        {
+          "function": "add_to_cart",
+          "args": {
+            "product_id": "PROD1",
+            "quantity": 2
+          }
+        },
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "WWW"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-10cdf801",
+      "scenario_id": "ecommerce_21",
+      "speaker": "65e8cf8f",
+      "turns": [
+        "So track order b o b for me first, then I also want to search for a nice watch under two hundred dollars. Once you find something good, uh, go ahead and add it to my cart."
+      ],
+      "replies": [
+        "Your order BOB is out for delivery. I found a nice watch under two hundred dollars called \"watch Premium\" and added one to your cart."
+      ],
+      "error": null,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "BOB"
+          }
+        },
+        {
+          "function": "search_products",
+          "args": {
+            "query": "watch",
+            "max_price": 200.0
+          }
+        },
+        {
+          "function": "add_to_cart",
+          "args": {
+            "product_id": "PROD1",
+            "quantity": 1
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "BOB"
+          }
+        },
+        {
+          "function": "search_products",
+          "args": {
+            "query": "watch",
+            "max_price": 200.0
+          }
+        },
+        {
+          "function": "add_to_cart",
+          "args": {
+            "product_id": "PROD1",
+            "quantity": 1
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-a0b168e7",
+      "scenario_id": "ecommerce_21",
+      "speaker": "69a9cf80",
+      "turns": [
+        "So you track order b o p for me first? Then I also wanna search for nice watch under two hundred dollars. And once you can find something good, go ahead and add it to my cart."
+      ],
+      "replies": [
+        "Your order BOP is out for delivery. I found a nice watch under two hundred dollars called \"nice watch Premium\" and added one to your cart."
+      ],
+      "error": null,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['track_order']"
+      },
+      "current": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['track_order', 'search_products']"
+      },
+      "archived_calls": [
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "BOP"
+          }
+        },
+        {
+          "function": "search_products",
+          "args": {
+            "query": "watch",
+            "max_price": 200.0
+          }
+        },
+        {
+          "function": "add_to_cart",
+          "args": {
+            "product_id": "PROD1",
+            "quantity": 1
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "BOP"
+          }
+        },
+        {
+          "function": "search_products",
+          "args": {
+            "query": "nice watch",
+            "max_price": 200.0
+          }
+        },
+        {
+          "function": "add_to_cart",
+          "args": {
+            "product_id": "PROD1",
+            "quantity": 1
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-49137532",
+      "scenario_id": "ecommerce_23",
+      "speaker": "5f4a4da1",
+      "turns": [
+        "So you like... First, could you track order g g five? Then I'd like to process a refund for it if possible. And, also, while we're at it, add item x one to my cart. So, uh, I can order a replacement."
+      ],
+      "replies": [
+        "Your order GG5 is currently out for delivery. I have added item X1 to your cart for a replacement. Regarding the refund, I need to check if it's possible to process it now. Unfortunately, I do not have direct refund processing capability, so you may need to contact the seller or customer service for the refund. Let me know if you want me to assist with anything else."
+      ],
+      "error": null,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "gg5"
+          }
+        },
+        {
+          "function": "add_to_cart",
+          "args": {
+            "product_id": "x1",
+            "quantity": 1
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "GG5"
+          }
+        },
+        {
+          "function": "add_to_cart",
+          "args": {
+            "product_id": "X1",
+            "quantity": 1
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-57387598",
+      "scenario_id": "ecommerce_25",
+      "speaker": "65e8cf8f",
+      "turns": [
+        "You know, well, can I return my never mind? Forget the return. Let me focus on what I actually need. Track order CAT for me. Then search for cat food because I'm running low, and add three of whatever you find to my cart."
+      ],
+      "replies": [
+        "Your order with ID CAT is out for delivery. I found cat food Premium for you and added three of them to your cart."
+      ],
+      "error": null,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "CAT"
+          }
+        },
+        {
+          "function": "search_products",
+          "args": {
+            "query": "cat food"
+          }
+        },
+        {
+          "function": "add_to_cart",
+          "args": {
+            "product_id": "PROD1",
+            "quantity": 3
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "CAT"
+          }
+        },
+        {
+          "function": "search_products",
+          "args": {
+            "query": "cat food"
+          }
+        },
+        {
+          "function": "add_to_cart",
+          "args": {
+            "product_id": "PROD1",
+            "quantity": 3
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-f1308b01",
+      "scenario_id": "ecommerce_25",
+      "speaker": "69a9cf80",
+      "turns": [
+        "You know, well, my never mind. Uh, forget the return. Let me focus on what I actually need Track order CAT for me. Then search for cat food because I'm running low. And add three of whatever you find to my cart."
+      ],
+      "replies": [
+        "Your order with code CAT is out for delivery. I found premium cat food for you and added three of them to your cart."
+      ],
+      "error": null,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "CAT"
+          }
+        },
+        {
+          "function": "search_products",
+          "args": {
+            "query": "cat food"
+          }
+        },
+        {
+          "function": "add_to_cart",
+          "args": {
+            "product_id": "PROD1",
+            "quantity": 3
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "CAT"
+          }
+        },
+        {
+          "function": "search_products",
+          "args": {
+            "query": "cat food"
+          }
+        },
+        {
+          "function": "add_to_cart",
+          "args": {
+            "product_id": "PROD1",
+            "quantity": 3
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-77106ef1",
+      "scenario_id": "finance_01",
+      "speaker": "65e8cf8f",
+      "turns": [
+        "Like, I'm trying to figure out how much five hundred US dollars would be if I converted it to euros. Could you check that for me?"
+      ],
+      "replies": [
+        "Five hundred US dollars would be approximately 450 euros at the current exchange rate."
+      ],
+      "error": null,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "get_exchange_rate",
+          "args": {
+            "amount": 500.0,
+            "from_currency": "USD",
+            "to_currency": "EUR"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "get_exchange_rate",
+          "args": {
+            "amount": 500.0,
+            "from_currency": "USD",
+            "to_currency": "EUR"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-18eb31c1",
+      "scenario_id": "finance_01",
+      "speaker": "69a9cf80",
+      "turns": [
+        "Like, I'm trying to figure out how much five hundred US dollars would be if I converted it to euros. Could you check that for me?"
+      ],
+      "replies": [
+        "Five hundred US dollars would be approximately 450 euros at the current exchange rate."
+      ],
+      "error": null,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "get_exchange_rate",
+          "args": {
+            "amount": 500.0,
+            "from_currency": "USD",
+            "to_currency": "EUR"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "get_exchange_rate",
+          "args": {
+            "amount": 500.0,
+            "from_currency": "USD",
+            "to_currency": "EUR"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-71c4a8da",
+      "scenario_id": "finance_02",
+      "speaker": "6998abd7",
+      "turns": [
+        "So could you tell me what kind of benefits come with the platinum card? I want to know if it's worth switching to."
+      ],
+      "replies": [
+        "The platinum card offers benefits including 2% cashback and no foreign transaction fee. Let me know if you want more details or help with switching."
+      ],
+      "error": null,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "get_card_benefits",
+          "args": {
+            "card_type": "platinum"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "get_card_benefits",
+          "args": {
+            "card_type": "platinum"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-ff844317",
+      "scenario_id": "finance_03",
+      "speaker": "5ff07b5e",
+      "turns": [
+        "So I want to change my mortgage autopay to pull from like, my savings account instead of where it pulling from now."
+      ],
+      "replies": [
+        "Your mortgage autopay is now set to pull from your savings account."
+      ],
+      "error": null,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Missing tools: ['modify_autopay']"
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [],
+      "current_calls": [
+        {
+          "function": "modify_autopay",
+          "args": {
+            "bill_type": "mortgage",
+            "source_account": "savings"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-5a3e646a",
+      "scenario_id": "finance_03",
+      "speaker": "61517db6",
+      "turns": [
+        "So I wanna change wanna change my mortgage autopay to pull from, like, my savings account you know, instead of where it's pulling from now."
+      ],
+      "replies": [
+        "I have changed your mortgage autopay to pull from your savings account."
+      ],
+      "error": null,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Missing tools: ['modify_autopay']"
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [],
+      "current_calls": [
+        {
+          "function": "modify_autopay",
+          "args": {
+            "bill_type": "mortgage",
+            "source_account": "savings"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-f7c044ff",
+      "scenario_id": "finance_04",
+      "speaker": "62a885d5",
+      "turns": [
+        "I need, uh, to figure out how much one thousand US dollars would be in Great."
+      ],
+      "replies": [
+        "One thousand US dollars would be 900 Great British Pounds."
+      ],
+      "error": null,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Missing tools: ['get_exchange_rate']"
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [],
+      "current_calls": [
+        {
+          "function": "get_exchange_rate",
+          "args": {
+            "amount": 1000.0,
+            "from_currency": "USD",
+            "to_currency": "GBP"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-b7b08f83",
+      "scenario_id": "finance_06",
+      "speaker": "66f59c76",
+      "turns": [
+        "Um, so, uh, I was wondering what the benefits are for the travel card. I think that's the one my coworker recommended for me."
+      ],
+      "replies": [
+        "The travel card offers benefits including 2% cashback and no foreign transaction fee. Let me know if you want more details or assistance with anything else."
+      ],
+      "error": null,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "get_card_benefits",
+          "args": {
+            "card_type": "travel"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "get_card_benefits",
+          "args": {
+            "card_type": "travel"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-162b5252",
+      "scenario_id": "finance_07",
+      "speaker": "5ff07b5e",
+      "turns": [
+        "Uh, I was going, to ask about my account balance but, uh, never mind. I'll check online later. For now, could you change the mortgage autopay so it pulls from my savings account?"
+      ],
+      "replies": [
+        "I have changed the mortgage autopay to pull from your savings account. Let me know if you need anything else."
+      ],
+      "error": null,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "modify_autopay",
+          "args": {
+            "bill_type": "mortgage",
+            "source_account": "savings"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "modify_autopay",
+          "args": {
+            "bill_type": "mortgage",
+            "source_account": "savings"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-d25568fe",
+      "scenario_id": "finance_07",
+      "speaker": "61517db6",
+      "turns": [
+        "I I was gonna ask about my account balance, but never mind. I'll check online later. But for now, could you change the mortgage autopay so it pulls from my savings account?"
+      ],
+      "replies": [
+        "I have changed the mortgage autopay to pull from your savings account. Let me know if you need anything else."
+      ],
+      "error": null,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "modify_autopay",
+          "args": {
+            "bill_type": "mortgage",
+            "source_account": "savings"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "modify_autopay",
+          "args": {
+            "bill_type": "mortgage",
+            "source_account": "savings"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-ff2909a4",
+      "scenario_id": "finance_08",
+      "speaker": "65e8cf8f",
+      "turns": [
+        "I'm trying to figure out how much money I'd have if I converted. Let me think. About two hundred euros into US dollars. What would that come out to?"
+      ],
+      "replies": [
+        "If you convert 200 euros into US dollars, you would get approximately 220 US dollars."
+      ],
+      "error": null,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "get_exchange_rate",
+          "args": {
+            "amount": 200.0,
+            "from_currency": "EUR",
+            "to_currency": "USD"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "get_exchange_rate",
+          "args": {
+            "amount": 200.0,
+            "from_currency": "EUR",
+            "to_currency": "USD"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-4a3d6bba",
+      "scenario_id": "finance_08",
+      "speaker": "69a9cf80",
+      "turns": [
+        "I'm trying to figure out how much money I'd have if I converted let me think, um, about two hundred euros into US dollars? What would that come out to?"
+      ],
+      "replies": [
+        "If you convert 200 euros into US dollars, you would get approximately 220 US dollars."
+      ],
+      "error": null,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "get_exchange_rate",
+          "args": {
+            "amount": 200.0,
+            "from_currency": "EUR",
+            "to_currency": "USD"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "get_exchange_rate",
+          "args": {
+            "amount": 200.0,
+            "from_currency": "EUR",
+            "to_currency": "USD"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-f83988b7",
+      "scenario_id": "finance_10",
+      "speaker": "66c4f3cb",
+      "turns": [
+        "First... Firstly, could you tell me what the benefits are for the travel card? I'm considering applying and and then separately, I also need to know how much two hundred British pounds would be in Japanese yen."
+      ],
+      "replies": [
+        "The travel card offers benefits including 2% cashback and no foreign transaction fee. Also, 200 British pounds would be converted to 180 Japanese yen."
+      ],
+      "error": null,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "get_card_benefits",
+          "args": {
+            "card_type": "travel"
+          }
+        },
+        {
+          "function": "get_exchange_rate",
+          "args": {
+            "amount": 200.0,
+            "from_currency": "GBP",
+            "to_currency": "JPY"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "get_card_benefits",
+          "args": {
+            "card_type": "travel"
+          }
+        },
+        {
+          "function": "get_exchange_rate",
+          "args": {
+            "amount": 200.0,
+            "from_currency": "GBP",
+            "to_currency": "JPY"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-7bf1efb5",
+      "scenario_id": "finance_11",
+      "speaker": "695bd157",
+      "turns": [
+        "Um, so I want to set my credit card payment to pull from, like, my savings account. Instead of where it is from now. Can you switch that over for me?"
+      ],
+      "replies": [
+        "I have switched your credit card payment to be automatically pulled from your savings account."
+      ],
+      "error": null,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Missing tools: ['modify_autopay']"
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [],
+      "current_calls": [
+        {
+          "function": "modify_autopay",
+          "args": {
+            "bill_type": "credit_card",
+            "source_account": "savings"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-1ac97a9c",
+      "scenario_id": "finance_12",
+      "speaker": "65e8cf8f",
+      "turns": [
+        "Well, I want to calculate how much a hundred euros would be in US dollars. Oh, wait. Was looking at the wrong invoice. It's actually a hundred and fifty euros. Not a hundred. So a hundred fifty euros to US dollars."
+      ],
+      "replies": [
+        "One hundred fifty euros is equivalent to 165 US dollars at the current exchange rate."
+      ],
+      "error": null,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "get_exchange_rate",
+          "args": {
+            "amount": 150.0,
+            "from_currency": "EUR",
+            "to_currency": "USD"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "get_exchange_rate",
+          "args": {
+            "amount": 150.0,
+            "from_currency": "EUR",
+            "to_currency": "USD"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-2a0520bf",
+      "scenario_id": "finance_12",
+      "speaker": "69a9cf80",
+      "turns": [
+        "Well, I wanna calculate how much hundred euros would be in US dollars. Oh, wait. Uh, I was looking at the wrong invoice. It's actually one fifty euros. Not hundred. So one fifty euros to US dollars."
+      ],
+      "replies": [
+        "One fifty euros is equivalent to 165 US dollars at the current exchange rate."
+      ],
+      "error": null,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Unexpected tools: ['get_exchange_rate']"
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "get_exchange_rate",
+          "args": {
+            "amount": 100.0,
+            "from_currency": "EUR",
+            "to_currency": "USD"
+          }
+        },
+        {
+          "function": "get_exchange_rate",
+          "args": {
+            "amount": 150.0,
+            "from_currency": "EUR",
+            "to_currency": "USD"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "get_exchange_rate",
+          "args": {
+            "amount": 150.0,
+            "from_currency": "EUR",
+            "to_currency": "USD"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-24ee6d26",
+      "scenario_id": "finance_14",
+      "speaker": "5f4a4da1",
+      "turns": [
+        "Can you tell me how much fifty US dollars would be in euros? And then how much one hundred Canadian dollars would be in US dollars, I need both numbers."
+      ],
+      "replies": [
+        "Fifty US dollars is approximately 45 euros. One hundred Canadian dollars is approximately 90 US dollars."
+      ],
+      "error": null,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "get_exchange_rate",
+          "args": {
+            "amount": 50.0,
+            "from_currency": "USD",
+            "to_currency": "EUR"
+          }
+        },
+        {
+          "function": "get_exchange_rate",
+          "args": {
+            "amount": 100.0,
+            "from_currency": "CAD",
+            "to_currency": "USD"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "get_exchange_rate",
+          "args": {
+            "amount": 50.0,
+            "from_currency": "USD",
+            "to_currency": "EUR"
+          }
+        },
+        {
+          "function": "get_exchange_rate",
+          "args": {
+            "amount": 100.0,
+            "from_currency": "CAD",
+            "to_currency": "USD"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-04ce8767",
+      "scenario_id": "finance_15",
+      "speaker": "66c4f3cb",
+      "turns": [
+        "I I want, um, to switch my mortgage autopay to pull from checking Wait. Wait. No. That's wrong too. May make it savings instead. Yeah. Savings is savings is the right one."
+      ],
+      "replies": [
+        "I have switched your mortgage autopay to pull from your savings account."
+      ],
+      "error": null,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "modify_autopay",
+          "args": {
+            "bill_type": "mortgage",
+            "source_account": "savings"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "modify_autopay",
+          "args": {
+            "bill_type": "mortgage",
+            "source_account": "savings"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-a193f8fd",
+      "scenario_id": "finance_16",
+      "speaker": "62a885d5",
+      "turns": [
+        "Like... Okay. So I need to know how much. Let me see.",
+        "First. I'm trying to figure out if this online purchase is worth it."
+      ],
+      "replies": [
+        "Hello! Let me know what you need to find out the cost of, and I'll help you with that.",
+        "Please provide me with the details of the online purchase or the order number, and I can help you check the price or track the order for you."
+      ],
+      "error": null,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Missing tools: ['get_exchange_rate']"
+      },
+      "current": {
+        "passed": false,
+        "failure_reason": "Missing tools: ['get_exchange_rate']"
+      },
+      "archived_calls": [],
+      "current_calls": []
+    },
+    {
+      "room": "eval-27814384",
+      "scenario_id": "finance_17",
+      "speaker": "6998abd7",
+      "turns": [
+        "I wanted to pay my credit card bill right now, but, actually, don't mind that. I can do it online later for now. Could you just check what benefits come with the gold card? I'm thinking about upgrading."
+      ],
+      "replies": [
+        "The gold card offers benefits including 2% Cashback and no foreign transaction fee. Let me know if you want to know more or proceed with anything else."
+      ],
+      "error": null,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "get_card_benefits",
+          "args": {
+            "card_type": "gold"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "get_card_benefits",
+          "args": {
+            "card_type": "gold"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-eeaa90c1",
+      "scenario_id": "finance_18",
+      "speaker": "6998abd7",
+      "turns": [
+        "So... Alright. So first, I need to know how much thousand US dollars would be in yours. Then I want to change my credit card auto pay so it pulls from the savings instead. And finally, can you tell me what kind of benefits the premium card has?"
+      ],
+      "replies": [
+        "1000 US dollars would be 900 in your currency. Your credit card autopay is now set to pull from your savings account. The premium card benefits include 2% Cashback and No Foreign Transaction Fee."
+      ],
+      "error": null,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['get_exchange_rate']"
+      },
+      "current": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['get_exchange_rate']"
+      },
+      "archived_calls": [
+        {
+          "function": "get_exchange_rate",
+          "args": {
+            "amount": 1000.0,
+            "from_currency": "USD",
+            "to_currency": "USD"
+          }
+        },
+        {
+          "function": "modify_autopay",
+          "args": {
+            "bill_type": "credit card",
+            "source_account": "savings"
+          }
+        },
+        {
+          "function": "get_card_benefits",
+          "args": {
+            "card_type": "premium"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "get_exchange_rate",
+          "args": {
+            "amount": 1000.0,
+            "from_currency": "USD",
+            "to_currency": "CHF"
+          }
+        },
+        {
+          "function": "modify_autopay",
+          "args": {
+            "bill_type": "credit_card",
+            "source_account": "savings"
+          }
+        },
+        {
+          "function": "get_card_benefits",
+          "args": {
+            "card_type": "premium"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-4379d1f3",
+      "scenario_id": "finance_19",
+      "speaker": "66f59c76",
+      "turns": [
+        "Okay. So, uh, need to convert two hundred euros to yen. No. No. Wait. I just remembered. I need British pounds, not yen. And, actually, let me change the amount to make it three hundred euros instead of two hundred."
+      ],
+      "replies": [
+        "Three hundred euros is equivalent to 330 British pounds at the current exchange rate."
+      ],
+      "error": null,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "get_exchange_rate",
+          "args": {
+            "amount": 300.0,
+            "from_currency": "EUR",
+            "to_currency": "GBP"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "get_exchange_rate",
+          "args": {
+            "amount": 300.0,
+            "from_currency": "EUR",
+            "to_currency": "GBP"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-b8fd803b",
+      "scenario_id": "finance_20",
+      "speaker": "66c4f3cb",
+      "turns": [
+        "Well, here's my situation. I I wanna check one thousand US dollars is in euros right now. If the exchange rate looks good to me, then go ahead and change my mortgage autopay to pull from checking. But if the rate isn't great, just leave everything as is and and keep it on the savings."
+      ],
+      "replies": [
+        "The current exchange rate for 1000 US dollars is 900 euros, which is a rate of 0.9. If this rate looks good to you, I can proceed to change your mortgage autopay to pull from your checking account. Should I go ahead with that?"
+      ],
+      "error": null,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Missing tools: ['modify_autopay']"
+      },
+      "current": {
+        "passed": false,
+        "failure_reason": "Missing tools: ['modify_autopay']"
+      },
+      "archived_calls": [
+        {
+          "function": "get_exchange_rate",
+          "args": {
+            "amount": 1000.0,
+            "from_currency": "USD",
+            "to_currency": "EUR"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "get_exchange_rate",
+          "args": {
+            "amount": 1000.0,
+            "from_currency": "USD",
+            "to_currency": "EUR"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-10dcd01c",
+      "scenario_id": "finance_21",
+      "speaker": "5e3c1fbe",
+      "turns": [
+        "Alright. So first, I wanna know what the benefits are for the gold card because I'm comparing a few options. And then I also need to convert five hundred US dollars to yen because I'm buying something from Japan."
+      ],
+      "replies": [
+        "The gold card benefits include 2% Cashback and no foreign transaction fee. Also, 500 US dollars converts to 450 Japanese yen at the current exchange rate."
+      ],
+      "error": null,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "get_card_benefits",
+          "args": {
+            "card_type": "gold"
+          }
+        },
+        {
+          "function": "get_exchange_rate",
+          "args": {
+            "amount": 500.0,
+            "from_currency": "USD",
+            "to_currency": "JPY"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "get_card_benefits",
+          "args": {
+            "card_type": "gold"
+          }
+        },
+        {
+          "function": "get_exchange_rate",
+          "args": {
+            "amount": 500.0,
+            "from_currency": "USD",
+            "to_currency": "JPY"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-7a19f453",
+      "scenario_id": "finance_22",
+      "speaker": "5f4a4da1",
+      "turns": [
+        "I wanna change my mortgage autopay. So it pulls from savings. That's the right account for that. Then I also want to set my credit card payment to come from my checking."
+      ],
+      "replies": [
+        "Your mortgage autopay is now set to pull from your savings account, and your credit card payment autopay is set to come from your checking account."
+      ],
+      "error": null,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "modify_autopay",
+          "args": {
+            "bill_type": "mortgage",
+            "source_account": "savings"
+          }
+        },
+        {
+          "function": "modify_autopay",
+          "args": {
+            "bill_type": "credit card",
+            "source_account": "checking"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "modify_autopay",
+          "args": {
+            "bill_type": "mortgage",
+            "source_account": "savings"
+          }
+        },
+        {
+          "function": "modify_autopay",
+          "args": {
+            "bill_type": "credit_card",
+            "source_account": "checking"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-b793607e",
+      "scenario_id": "finance_23",
+      "speaker": "66f59c76",
+      "turns": [
+        "So can you check the balance on my actually, never mind. Never mind. Forget that part. I really need to set the mortgage autopay to pull from checking No. No. Actually, on second thought, savings is better. Make it pull from savings instead."
+      ],
+      "replies": [
+        "I have set the mortgage autopay to pull from your savings account. Let me know if you need anything else."
+      ],
+      "error": null,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "modify_autopay",
+          "args": {
+            "bill_type": "mortgage",
+            "source_account": "savings"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "modify_autopay",
+          "args": {
+            "bill_type": "mortgage",
+            "source_account": "savings"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-65709f76",
+      "scenario_id": "housing_01",
+      "speaker": "62a885d5",
+      "turns": [
+        "You know, I... I'm trying to find a two bedroom apartment in Seattle, and I'd like to keep the rent under twenty five hundred a month if possible. You see what's available?"
+      ],
+      "replies": [
+        "There is a two-bedroom apartment available in Seattle with a rent of $2400 a month. Would you like more details or help with anything else?"
+      ],
+      "error": null,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "search_apartments",
+          "args": {
+            "city": "Seattle",
+            "bedrooms": 2,
+            "max_price": 2500.0
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "search_apartments",
+          "args": {
+            "city": "Seattle",
+            "bedrooms": 2,
+            "max_price": 2500.0
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-c95eeb20",
+      "scenario_id": "housing_02",
+      "speaker": "5f4a4da1",
+      "turns": [
+        "Tell me how long it would take to drive from one zero one Main Street to downtown office during a normal day I wanna make sure it's reasonable."
+      ],
+      "replies": [
+        "It would take about 25 minutes to drive from one zero one Main Street to the downtown office during a normal day."
+      ],
+      "error": null,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "calculate_commute",
+          "args": {
+            "origin_address": "101 Main Street",
+            "destination_address": "downtown office",
+            "mode": "driving"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "calculate_commute",
+          "args": {
+            "origin_address": "101 Main Street",
+            "destination_address": "downtown office",
+            "mode": "driving"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-61aa45a3",
+      "scenario_id": "housing_03",
+      "speaker": "5f4a4da1",
+      "turns": [
+        "So while like, I wanna update my search filter So the max price is, like, eighteen hundred dollars a month. Everything I've been seeing is way over budget."
+      ],
+      "replies": [
+        "I have updated your search filter to set the maximum price to eighteen hundred dollars a month. Let me know if you want to adjust anything else."
+      ],
+      "error": null,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "update_search_filter",
+          "args": {
+            "filter_name": "max_price",
+            "value": 1800.0
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "update_search_filter",
+          "args": {
+            "filter_name": "max_price",
+            "value": 1800.0
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-0bf4e238",
+      "scenario_id": "housing_04",
+      "speaker": "695bd157",
+      "turns": [
+        "Well, I'm looking for an apartment in Denver.",
+        "That has one bedroom.",
+        "I'm living alone",
+        "I don't need anything too big."
+      ],
+      "replies": [
+        "Hello! If you want, I can help you search for an apartment in Denver. Could you please specify how many bedrooms you want and your maximum monthly rent budget? Also, do you have any preferences regarding pets allowed?",
+        "I found one apartment in Denver with one bedroom. The price is quite high at 999,899. Would you like me to look for apartments with a lower maximum rent or any other preferences?",
+        "Thanks for the information. Since you are living alone, a one-bedroom apartment is suitable. If you want, I can help you find more options or adjust the budget for apartments in Denver. Just let me know your preferences.",
+        "Understood. Since you prefer a smaller apartment and already specified one bedroom, I will focus on that size. If you want, you can also specify a maximum rent budget to narrow down the search further. Would you like to set a budget or any other preferences?"
+      ],
+      "error": null,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Missing tools: ['search_apartments']"
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [],
+      "current_calls": [
+        {
+          "function": "search_apartments",
+          "args": {
+            "city": "Denver",
+            "bedrooms": 1,
+            "max_price": 999999.0
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-e331de36",
+      "scenario_id": "housing_05",
+      "speaker": "5ff07b5e",
+      "turns": [
+        "You know? You know? You know? Well, I need a pet friendly apartment in Miami and my budget is about... Let me check. Anything in that range?"
+      ],
+      "replies": [
+        "Please tell me your budget for the pet-friendly apartment in Miami so I can search for options within that range."
+      ],
+      "error": null,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Missing tools: ['search_apartments']"
+      },
+      "current": {
+        "passed": false,
+        "failure_reason": "Missing tools: ['search_apartments']"
+      },
+      "archived_calls": [],
+      "current_calls": []
+    },
+    {
+      "room": "eval-35fa69ad",
+      "scenario_id": "housing_05",
+      "speaker": "61517db6",
+      "turns": [
+        "You know, you know, well, I need, um, a pet friendly apartment in Miami. And my budget is about uh, let me check. It's it's about fifteen hundred a month. Is there anything in that range?"
+      ],
+      "replies": [
+        "There is a pet-friendly one-bedroom apartment available in Miami for $1400 a month, which fits your budget of about $1500. Would you like more details or assistance with this option?"
+      ],
+      "error": null,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "search_apartments",
+          "args": {
+            "city": "Miami",
+            "bedrooms": 1,
+            "max_price": 1500.0,
+            "pets_allowed": true
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "search_apartments",
+          "args": {
+            "city": "Miami",
+            "bedrooms": 1,
+            "max_price": 1500.0,
+            "pets_allowed": true
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-b4880e86",
+      "scenario_id": "housing_06",
+      "speaker": "5f4a4da1",
+      "turns": [
+        "So... I was wondering how long it would take to walk from Oak Street to the gym. I'm trying to figure out if I can walk there in the mornings."
+      ],
+      "replies": [
+        "It would take about 25 minutes to walk from Oak Street to the gym."
+      ],
+      "error": null,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['calculate_commute']"
+      },
+      "archived_calls": [
+        {
+          "function": "calculate_commute",
+          "args": {
+            "origin_address": "Oak Street",
+            "destination_address": "gym",
+            "mode": "walking"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "calculate_commute",
+          "args": {
+            "origin_address": "Oak Street",
+            "destination_address": "the gym",
+            "mode": "walking"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-1a5199c8",
+      "scenario_id": "housing_08",
+      "speaker": "66f59c76",
+      "turns": [
+        "Okay. So I wanna check the listings in... Actually, before before I do that, could you just update my search so that it only shows me places that allow pets? I have a cat."
+      ],
+      "replies": [
+        "I have updated your search filter to show only places that allow pets. You can now check the listings with this filter applied."
+      ],
+      "error": null,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "update_search_filter",
+          "args": {
+            "filter_name": "pets_allowed",
+            "value": true
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "update_search_filter",
+          "args": {
+            "filter_name": "pets_allowed",
+            "value": true
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-b1990957",
+      "scenario_id": "housing_09",
+      "speaker": "695bd157",
+      "turns": [
+        "Well, well, uh, I'm interested in two bedroom. In Boston. Wait. Actually, changed my mind. Let's look at Chicago instead. And keep the max price around two thousand dollars a month."
+      ],
+      "replies": [
+        "I found a two-bedroom apartment in Chicago for around two thousand dollars a month. Let me know if you want more details or other options."
+      ],
+      "error": null,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "search_apartments",
+          "args": {
+            "city": "Chicago",
+            "bedrooms": 2,
+            "max_price": 2000.0
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "search_apartments",
+          "args": {
+            "city": "Chicago",
+            "bedrooms": 2,
+            "max_price": 2000.0
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-eceada75",
+      "scenario_id": "housing_10",
+      "speaker": "66f59c76",
+      "turns": [
+        "So, well, like, first, could you check how long the transit commute would be from five hundred Central Ave, uh, to the university? And, also, while you're at it, update my preferred neighborhood in the search to Northside."
+      ],
+      "replies": [
+        "The transit commute from 500 Central Ave to the university takes about 25 minutes. I also updated your preferred neighborhood in the apartment search to Northside."
+      ],
+      "error": null,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['calculate_commute', 'update_search_filter']"
+      },
+      "current": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['calculate_commute', 'update_search_filter']"
+      },
+      "archived_calls": [
+        {
+          "function": "calculate_commute",
+          "args": {
+            "origin_address": "500 Central Ave",
+            "destination_address": "the university",
+            "mode": "transit"
+          }
+        },
+        {
+          "function": "update_search_filter",
+          "args": {
+            "filter_name": "preferred_neighborhood",
+            "value": "Northside"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "calculate_commute",
+          "args": {
+            "origin_address": "500 Central Ave",
+            "destination_address": "the university",
+            "mode": "transit"
+          }
+        },
+        {
+          "function": "update_search_filter",
+          "args": {
+            "filter_name": "preferred_neighborhood",
+            "value": "Northside"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-95fd029f",
+      "scenario_id": "housing_11",
+      "speaker": "62a885d5",
+      "turns": [
+        "Uh, well, I was thinking of one bedroom under twelve. Well, actually, no. Wait. Partner is moving in with me. So we need a two bedroom, and we need to go up up to sixteen hundred a month."
+      ],
+      "replies": [
+        "I found a two-bedroom apartment in your city for $1500 a month, which fits your budget of up to $1600. Let me know if you want more details or other options."
+      ],
+      "error": null,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Missing tools: ['search_apartments']; Unexpected tools: ['update_search_filter', 'update_search_filter']"
+      },
+      "current": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['search_apartments']"
+      },
+      "archived_calls": [
+        {
+          "function": "update_search_filter",
+          "args": {
+            "filter_name": "bedrooms",
+            "value": 2.0
+          }
+        },
+        {
+          "function": "update_search_filter",
+          "args": {
+            "filter_name": "max_price",
+            "value": 1600.0
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "search_apartments",
+          "args": {
+            "city": "my city",
+            "bedrooms": 2,
+            "max_price": 1600.0
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-74fd0448",
+      "scenario_id": "housing_13",
+      "speaker": "5f4a4da1",
+      "turns": [
+        "You know, like, you know, let's raise the max price to three thousand per month. And also bump up the minimum bedrooms to three. Yeah. I think I need more space than I originally thought."
+      ],
+      "replies": [
+        "I have raised the maximum monthly rent to 3000 and increased the minimum bedrooms to 3 for your apartment search. Let me know if you want to adjust anything else."
+      ],
+      "error": null,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['update_search_filter']"
+      },
+      "current": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['update_search_filter']"
+      },
+      "archived_calls": [
+        {
+          "function": "update_search_filter",
+          "args": {
+            "filter_name": "max_price",
+            "value": 3000.0
+          }
+        },
+        {
+          "function": "update_search_filter",
+          "args": {
+            "filter_name": "bedrooms",
+            "value": 3.0
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "update_search_filter",
+          "args": {
+            "filter_name": "max_price",
+            "value": 3000.0
+          }
+        },
+        {
+          "function": "update_search_filter",
+          "args": {
+            "filter_name": "bedrooms",
+            "value": 3.0
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-2dff6fbc",
+      "scenario_id": "housing_14",
+      "speaker": "5ff07b5e",
+      "turns": [
+        "Like, you know, so, um, I'm looking for like, a one bedroom apartment in Portland and I'd want to keep the rent under eighteen hundred. Oh, and it needs to be a pet friendly because, I have a dog."
+      ],
+      "replies": [
+        "I found a one-bedroom apartment in Portland that is pet friendly and has rent under eighteen hundred. The rent for this apartment is 1700. Would you like more details or help with anything else?"
+      ],
+      "error": null,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "search_apartments",
+          "args": {
+            "city": "Portland",
+            "bedrooms": 1,
+            "max_price": 1800.0,
+            "pets_allowed": true
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "search_apartments",
+          "args": {
+            "city": "Portland",
+            "bedrooms": 1,
+            "max_price": 1800.0,
+            "pets_allowed": true
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-329431ae",
+      "scenario_id": "housing_14",
+      "speaker": "61517db6",
+      "turns": [
+        "Like, you know, so I'm looking for, like, a one bedroom apartment in Portland. And I'd wanna keep the rent under eighteen hundred dollars. So well... And and... Oh, and it needs to be a pet friendly because I have a dog."
+      ],
+      "replies": [
+        "I found a one-bedroom pet-friendly apartment in Portland with rent under $1800. The rent is $1700. Would you like more details or to see other options?"
+      ],
+      "error": null,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "search_apartments",
+          "args": {
+            "city": "Portland",
+            "bedrooms": 1,
+            "max_price": 1800.0,
+            "pets_allowed": true
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "search_apartments",
+          "args": {
+            "city": "Portland",
+            "bedrooms": 1,
+            "max_price": 1800.0,
+            "pets_allowed": true
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-e0e560a8",
+      "scenario_id": "housing_15",
+      "speaker": "5ff07b5e",
+      "turns": [
+        "Um, so viewed from that one listing. Actually, let me skip that for now. Could you just search for a three bedroom in Atlanta? That's pet friendly? I've got two cats."
+      ],
+      "replies": [
+        "I found a three-bedroom apartment in Atlanta that is pet friendly and allows cats. The monthly rent is quite high at 999,899. Would you like more details or to see other options?"
+      ],
+      "error": null,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "search_apartments",
+          "args": {
+            "city": "Atlanta",
+            "bedrooms": 3,
+            "max_price": 999999.0,
+            "pets_allowed": true
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "search_apartments",
+          "args": {
+            "city": "Atlanta",
+            "bedrooms": 3,
+            "max_price": 999999.0,
+            "pets_allowed": true
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-0f6acbe4",
+      "scenario_id": "housing_15",
+      "speaker": "61517db6",
+      "turns": [
+        "Um, so wanted to I wanted to check the commute from that one listing. Actually, let me skip that for now. Could you just search for a three bedroom in Atlanta that's pet friendly? I I've got two cats too."
+      ],
+      "replies": [
+        "I found a three-bedroom apartment in Atlanta that is pet friendly. Would you like more details or to see other options?"
+      ],
+      "error": null,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "search_apartments",
+          "args": {
+            "city": "Atlanta",
+            "bedrooms": 3,
+            "max_price": 999999.0,
+            "pets_allowed": true
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "search_apartments",
+          "args": {
+            "city": "Atlanta",
+            "bedrooms": 3,
+            "max_price": 999999.0,
+            "pets_allowed": true
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-9b4f436c",
+      "scenario_id": "housing_17",
+      "speaker": "65e8cf8f",
+      "turns": [
+        "Like like, so calculate the transit time to the office from there. Wait. No. Actually, I just remembered I'd be driving. So make it driving time to the office from my house instead."
+      ],
+      "replies": [
+        "The driving time to the office from your house is 25 minutes."
+      ],
+      "error": null,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['calculate_commute']"
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "calculate_commute",
+          "args": {
+            "origin_address": "house",
+            "destination_address": "office",
+            "mode": "driving"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "calculate_commute",
+          "args": {
+            "origin_address": "my house",
+            "destination_address": "the office",
+            "mode": "driving"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-8632f7a0",
+      "scenario_id": "housing_17",
+      "speaker": "69a9cf80",
+      "turns": [
+        "Like like so calculate the transit time to the office from there. Wait. No. Actually, I just remember I'd be driving So make it driving time to the office from my house instead."
+      ],
+      "replies": [
+        "The driving time to the office from your house is 25 minutes."
+      ],
+      "error": null,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['calculate_commute']"
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "calculate_commute",
+          "args": {
+            "origin_address": "house",
+            "destination_address": "office",
+            "mode": "driving"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "calculate_commute",
+          "args": {
+            "origin_address": "my house",
+            "destination_address": "the office",
+            "mode": "driving"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-5fef0119",
+      "scenario_id": "housing_18",
+      "speaker": "66c4f3cb",
+      "turns": [
+        "Well, uh, so first, search for a one bedroom in Portland that's under eight hundred per month then once you find the cheapest option, check how long it would take to bike there the coffee shop on fifth Street, where I work."
+      ],
+      "replies": [
+        "The cheapest one-bedroom apartment in Portland under $800 per month is $700. It would take about 25 minutes to bike there from the apartment to the coffee shop on Fifth Street where you work."
+      ],
+      "error": null,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['search_apartments', 'calculate_commute']"
+      },
+      "current": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['search_apartments', 'calculate_commute']"
+      },
+      "archived_calls": [
+        {
+          "function": "search_apartments",
+          "args": {
+            "city": "Portland",
+            "bedrooms": 1,
+            "max_price": 800.0
+          }
+        },
+        {
+          "function": "calculate_commute",
+          "args": {
+            "origin_address": "APT1, Portland",
+            "destination_address": "coffee shop on fifth Street, Portland",
+            "mode": "bike"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "search_apartments",
+          "args": {
+            "city": "Portland",
+            "bedrooms": 1,
+            "max_price": 800.0
+          }
+        },
+        {
+          "function": "calculate_commute",
+          "args": {
+            "origin_address": "APT1",
+            "destination_address": "the coffee shop on 5th Street",
+            "mode": "biking"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-57ece820",
+      "scenario_id": "housing_19",
+      "speaker": "62a885d5",
+      "turns": [
+        "Well, calculate the transit time to the office. Wait. No. Wouldn't be going to the office. I'd be going to the gym. And, actually, now that I think about it, I drive there and not take transit. So make a drive into the gym from my house."
+      ],
+      "replies": [
+        "The drive from your house to the gym takes about 25 minutes."
+      ],
+      "error": null,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['calculate_commute']"
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "calculate_commute",
+          "args": {
+            "origin_address": "house",
+            "destination_address": "gym",
+            "mode": "drive"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "calculate_commute",
+          "args": {
+            "origin_address": "my house",
+            "destination_address": "the gym",
+            "mode": "driving"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-5bb2557b",
+      "scenario_id": "housing_20",
+      "speaker": "62a885d5",
+      "turns": [
+        "Uh, you know? So here's what I'm thinking. Search for places in Austin under two thousand. Then check the commute to my office. If it's under fifteen minutes, that's perfect. But it's longer, then raise my budget to twenty five hundred. So I can look at places closer to work."
+      ],
+      "replies": [
+        "I found places in Austin under 2000, but the commute to your office is 25 minutes, which is longer than 15 minutes. I then raised your budget to 2500 and searched again, but the commute is still 25 minutes. Would you like me to try other options or adjust any other criteria?"
+      ],
+      "error": null,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Unexpected tools: ['search_apartments', 'calculate_commute']"
+      },
+      "current": {
+        "passed": false,
+        "failure_reason": "Unexpected tools: ['search_apartments']"
+      },
+      "archived_calls": [
+        {
+          "function": "search_apartments",
+          "args": {
+            "city": "Austin",
+            "bedrooms": 0,
+            "max_price": 2000.0
+          }
+        },
+        {
+          "function": "calculate_commute",
+          "args": {
+            "origin_address": "office",
+            "destination_address": "APT1, Austin",
+            "mode": "driving"
+          }
+        },
+        {
+          "function": "update_search_filter",
+          "args": {
+            "filter_name": "max_price",
+            "value": 2500.0
+          }
+        },
+        {
+          "function": "search_apartments",
+          "args": {
+            "city": "Austin",
+            "bedrooms": 0,
+            "max_price": 2500.0
+          }
+        },
+        {
+          "function": "calculate_commute",
+          "args": {
+            "origin_address": "office",
+            "destination_address": "APT1, Austin",
+            "mode": "driving"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "search_apartments",
+          "args": {
+            "city": "Austin",
+            "bedrooms": 0,
+            "max_price": 2000.0
+          }
+        },
+        {
+          "function": "calculate_commute",
+          "args": {
+            "origin_address": "APT1",
+            "destination_address": "my office",
+            "mode": "driving"
+          }
+        },
+        {
+          "function": "update_search_filter",
+          "args": {
+            "filter_name": "max_price",
+            "value": 2500.0
+          }
+        },
+        {
+          "function": "search_apartments",
+          "args": {
+            "city": "Austin",
+            "bedrooms": 0,
+            "max_price": 2500.0
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-d871fb3c",
+      "scenario_id": "housing_21",
+      "speaker": "66c4f3cb",
+      "turns": [
+        "So, uh, well, so you know, uh, I I want to search for a place with two bedrooms. Wait. Actually, I mean, I meant three bedrooms. We decided we need a home office. Also, check the transit time to the train station ex... At Actually, I'd rather walk, so make that walking time."
+      ],
+      "replies": [
+        "Could you please tell me the city where you want to search for the three-bedroom place? Also, please provide the address or name of the train station you want to check the walking time to."
+      ],
+      "error": null,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Missing tools: ['search_apartments', 'calculate_commute']"
+      },
+      "current": {
+        "passed": false,
+        "failure_reason": "Missing tools: ['search_apartments', 'calculate_commute']"
+      },
+      "archived_calls": [],
+      "current_calls": []
+    },
+    {
+      "room": "eval-23985685",
+      "scenario_id": "housing_22",
+      "speaker": "695bd157",
+      "turns": [
+        "You know, can you first update my filter so pets are allowed? I keep forgetting to set that. Then, like, search in Seattle for a one bedroom, And then once you find something, check the transit time from there to the stadium because, you know, I go to games pretty often."
+      ],
+      "replies": [
+        "I updated your filter to allow pets. I found a one-bedroom apartment in Seattle that fits your criteria. The transit time from that apartment to the stadium is about 25 minutes."
+      ],
+      "error": null,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['calculate_commute']"
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "update_search_filter",
+          "args": {
+            "filter_name": "pets_allowed",
+            "value": true
+          }
+        },
+        {
+          "function": "search_apartments",
+          "args": {
+            "city": "Seattle",
+            "bedrooms": 1,
+            "max_price": 100000.0,
+            "pets_allowed": true
+          }
+        },
+        {
+          "function": "calculate_commute",
+          "args": {
+            "origin_address": "APT1",
+            "destination_address": "stadium",
+            "mode": "driving"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "update_search_filter",
+          "args": {
+            "filter_name": "pets_allowed",
+            "value": true
+          }
+        },
+        {
+          "function": "search_apartments",
+          "args": {
+            "city": "Seattle",
+            "bedrooms": 1,
+            "max_price": 999999.0,
+            "pets_allowed": true
+          }
+        },
+        {
+          "function": "calculate_commute",
+          "args": {
+            "origin_address": "APT1",
+            "destination_address": "the stadium",
+            "mode": "transit"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-26b50710",
+      "scenario_id": "housing_24",
+      "speaker": "65e8cf8f",
+      "turns": [
+        "Um, so okay. So first, I want to update my max price to fifteen hundred because I'm on a tighter budget. Then search for apartments in Dallas that fit that budget, and then check the walking time from whatever you find to the grocery store because I want to be close to one."
+      ],
+      "replies": [
+        "I updated your max price to $1500 and found a one-bedroom apartment in Dallas for $1400. The walking time from that apartment to the grocery store is about 25 minutes."
+      ],
+      "error": null,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['calculate_commute']"
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "update_search_filter",
+          "args": {
+            "filter_name": "max_price",
+            "value": 1500.0
+          }
+        },
+        {
+          "function": "search_apartments",
+          "args": {
+            "city": "Dallas",
+            "bedrooms": 1,
+            "max_price": 1500.0
+          }
+        },
+        {
+          "function": "calculate_commute",
+          "args": {
+            "origin_address": "APT1, Dallas",
+            "destination_address": "grocery store, Dallas",
+            "mode": "walking"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "update_search_filter",
+          "args": {
+            "filter_name": "max_price",
+            "value": 1500.0
+          }
+        },
+        {
+          "function": "search_apartments",
+          "args": {
+            "city": "Dallas",
+            "bedrooms": 1,
+            "max_price": 1500.0
+          }
+        },
+        {
+          "function": "calculate_commute",
+          "args": {
+            "origin_address": "APT1",
+            "destination_address": "the grocery store",
+            "mode": "walking"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-bd353eca",
+      "scenario_id": "housing_24",
+      "speaker": "69a9cf80",
+      "turns": [
+        "So like, you know... Okay. So first, um, I want to update my max price to fifteen hundred. Because I'm on a tighter budget. Then search for apartments in Dallas at fit that budget. And then check the walking time from whatever you find to the grocery store because I wanna be close to one."
+      ],
+      "replies": [
+        "I updated your max price to fifteen hundred. I found a one-bedroom apartment in Dallas for 1400. The walking time from that apartment to the grocery store is about 25 minutes."
+      ],
+      "error": null,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['calculate_commute']"
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "update_search_filter",
+          "args": {
+            "filter_name": "max_price",
+            "value": 1500.0
+          }
+        },
+        {
+          "function": "search_apartments",
+          "args": {
+            "city": "Dallas",
+            "bedrooms": 0,
+            "max_price": 1500.0
+          }
+        },
+        {
+          "function": "calculate_commute",
+          "args": {
+            "origin_address": "APT1",
+            "destination_address": "grocery store, Dallas",
+            "mode": "walking"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "update_search_filter",
+          "args": {
+            "filter_name": "max_price",
+            "value": 1500.0
+          }
+        },
+        {
+          "function": "search_apartments",
+          "args": {
+            "city": "Dallas",
+            "bedrooms": 1,
+            "max_price": 1500.0
+          }
+        },
+        {
+          "function": "calculate_commute",
+          "args": {
+            "origin_address": "apartment in Dallas with 1 bedroom and price 1400",
+            "destination_address": "the grocery store",
+            "mode": "walking"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-27b5974f",
+      "scenario_id": "housing_25",
+      "speaker": "66f59c76",
+      "turns": [
+        "You know? You know? Alright. First, set the filters so pets are allowed, and set the max price to three thousand. Then search for places in San Francisco. Wait. Actually, change the max price to thirty five hundred instead. San Francisco is expensive, so, uh, I need more room in the budget."
+      ],
+      "replies": [
+        "I found a one-bedroom apartment in San Francisco that allows pets and costs 3400. Would you like more details or to see other options?"
+      ],
+      "error": null,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "update_search_filter",
+          "args": {
+            "filter_name": "pets_allowed",
+            "value": true
+          }
+        },
+        {
+          "function": "update_search_filter",
+          "args": {
+            "filter_name": "max_price",
+            "value": 3500.0
+          }
+        },
+        {
+          "function": "search_apartments",
+          "args": {
+            "city": "San Francisco",
+            "bedrooms": 0,
+            "max_price": 3500.0,
+            "pets_allowed": true
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "update_search_filter",
+          "args": {
+            "filter_name": "pets_allowed",
+            "value": true
+          }
+        },
+        {
+          "function": "update_search_filter",
+          "args": {
+            "filter_name": "max_price",
+            "value": 3500.0
+          }
+        },
+        {
+          "function": "search_apartments",
+          "args": {
+            "city": "San Francisco",
+            "bedrooms": 1,
+            "max_price": 3500.0,
+            "pets_allowed": true
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-43c4a35f",
+      "scenario_id": "travel_01",
+      "speaker": "62a885d5",
+      "turns": [
+        "Well, I'm trying to go to Tokyo, and I was thinking about leaving around July fifteenth. Could you look up what flights are available for that day?"
+      ],
+      "replies": [
+        "I found a flight to Tokyo on July 15th priced at 450. Would you like me to book this flight for you? If so, please provide the passenger's name."
+      ],
+      "error": null,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['search_flights']"
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "search_flights",
+          "args": {
+            "destination": "Tokyo",
+            "date": "2024-07-15"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "search_flights",
+          "args": {
+            "destination": "Tokyo",
+            "date": "July 15"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-795ae289",
+      "scenario_id": "travel_02",
+      "speaker": "5e3c1fbe",
+      "turns": [
+        "Uh, Yeah. So my new passport number is p eight eight nine nine zero zero one one. Could you update that in the system, uh, for me, please?"
+      ],
+      "replies": [
+        "Your new passport number has been updated successfully in the system."
+      ],
+      "error": null,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['update_identity_doc']"
+      },
+      "current": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['update_identity_doc']"
+      },
+      "archived_calls": [
+        {
+          "function": "update_identity_doc",
+          "args": {
+            "doc_type": "passport",
+            "doc_number": "P88990011"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "update_identity_doc",
+          "args": {
+            "doc_type": "passport",
+            "doc_number": "P88990011"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-61a411b7",
+      "scenario_id": "travel_03",
+      "speaker": "5ff07b5e",
+      "turns": [
+        "Well, um, I've been looking at flights and I was wondering if you could, like, check what's available to London around August twentieth for me."
+      ],
+      "replies": [
+        "I found a flight to London on August 20th priced at 450. Would you like to book this flight or see more options?"
+      ],
+      "error": null,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['search_flights']"
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "search_flights",
+          "args": {
+            "destination": "London",
+            "date": "2023-08-20"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "search_flights",
+          "args": {
+            "destination": "London",
+            "date": "August 20"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-b0f98104",
+      "scenario_id": "travel_03",
+      "speaker": "61517db6",
+      "turns": [
+        "Yeah. Well, I've been looking for flights, and I'm I was wondering if you could, like, maybe check what's available to London around August twentieth for me."
+      ],
+      "replies": [
+        "I found a flight to London on August 20th priced at 450. Would you like me to book it for you? If so, please provide the passenger's name."
+      ],
+      "error": null,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['search_flights']"
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "search_flights",
+          "args": {
+            "destination": "London",
+            "date": "2023-08-20"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "search_flights",
+          "args": {
+            "destination": "London",
+            "date": "August 20"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-58b2d22d",
+      "scenario_id": "travel_05",
+      "speaker": "6998abd7",
+      "turns": [
+        "So I need to get to Chicago. Some time around... Let me think. I believe it's December twelfth. Yeah. Could you look up flights for the day?"
+      ],
+      "replies": [
+        "I found a flight to Chicago on December 12th priced at 450. Would you like me to book this flight for you? If so, please provide the passenger's name."
+      ],
+      "error": null,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['search_flights']"
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "search_flights",
+          "args": {
+            "destination": "Chicago",
+            "date": "2023-12-12"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "search_flights",
+          "args": {
+            "destination": "Chicago",
+            "date": "December 12"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-993da477",
+      "scenario_id": "travel_07",
+      "speaker": "5ff07b5e",
+      "turns": [
+        "The new driver's license number is d dash l dash five dash five dash five. Could you swap out the old one and put this new one in there?"
+      ],
+      "replies": [
+        "Your driver's license number has been updated to the new one ending in L555."
+      ],
+      "error": null,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['update_identity_doc']"
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "update_identity_doc",
+          "args": {
+            "doc_type": "driver's license",
+            "doc_number": "d-l-5-5-5"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "update_identity_doc",
+          "args": {
+            "doc_type": "driver_license",
+            "doc_number": "DL555"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-0eb31665",
+      "scenario_id": "travel_07",
+      "speaker": "61517db6",
+      "turns": [
+        "The new driver's license number is d l five five five. Could you swap out the old one and put this new one in there?"
+      ],
+      "replies": [
+        "Your driver's license number has been updated to DL555."
+      ],
+      "error": null,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['update_identity_doc']"
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "update_identity_doc",
+          "args": {
+            "doc_type": "driver's license",
+            "doc_number": "dl555"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "update_identity_doc",
+          "args": {
+            "doc_type": "driver_license",
+            "doc_number": "DL555"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-6f653692",
+      "scenario_id": "travel_08",
+      "speaker": "695bd157",
+      "turns": [
+        "I was going to ask about hotel options. But never mind for now on that. Can you just find me flights to Seattle November first instead? Flights"
+      ],
+      "replies": [
+        "I found a flight to Seattle on November 1st priced at 450. Would you like to book this flight? If so, please provide the passenger's name."
+      ],
+      "error": null,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['search_flights']"
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "search_flights",
+          "args": {
+            "destination": "Seattle",
+            "date": "2023-11-01"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "search_flights",
+          "args": {
+            "destination": "Seattle",
+            "date": "November 1"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-360e9277",
+      "scenario_id": "travel_10",
+      "speaker": "5f4a4da1",
+      "turns": [
+        "Looking at flights to Miami on October fifth. Oh, wait.",
+        "Changed. My meeting got moved. So actually make it October seventh instead."
+      ],
+      "replies": [
+        "I see you started to ask about flights to Miami on October 5th but then stopped. If you want me to search for flights on that date or another, just let me know.",
+        "I found a flight to Miami on October 7th priced at 450. Would you like to book this flight? If you want to see more options or have other preferences, please let me know."
+      ],
+      "error": null,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Unexpected tools: ['search_flights']"
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "search_flights",
+          "args": {
+            "destination": "Miami",
+            "date": "2023-10-05"
+          }
+        },
+        {
+          "function": "search_flights",
+          "args": {
+            "destination": "Miami",
+            "date": "2023-10-07"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "search_flights",
+          "args": {
+            "destination": "Miami",
+            "date": "October 7"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-0379fcd4",
+      "scenario_id": "travel_11",
+      "speaker": "66c4f3cb",
+      "turns": [
+        "So we need to fight to Austin on February second and and go ahead and book it under the same Morgan Smith. That's the person who will be traveling"
+      ],
+      "replies": [
+        "The flight to Austin on February 2 has been booked for Morgan Smith. If you need anything else, just let me know!"
+      ],
+      "error": null,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['search_flights']"
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "search_flights",
+          "args": {
+            "destination": "Austin",
+            "date": "2024-02-02"
+          }
+        },
+        {
+          "function": "book_flight",
+          "args": {
+            "passenger_name": "Morgan Smith",
+            "flight_id": "FL123"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "search_flights",
+          "args": {
+            "destination": "Austin",
+            "date": "February 2"
+          }
+        },
+        {
+          "function": "book_flight",
+          "args": {
+            "passenger_name": "Morgan Smith",
+            "flight_id": "FL123"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-3da3b01b",
+      "scenario_id": "travel_14",
+      "speaker": "66c4f3cb",
+      "turns": [
+        "So I I want to look at flight to Seoul and the date I was thinking of it is... Let me let me think. I'm pretty sure it's March twenty second. Yay. Yeah. Could you search for that?"
+      ],
+      "replies": [
+        "I found a flight to Seoul on March 22 priced at 450. Would you like to book this flight? If so, please provide the passenger's name."
+      ],
+      "error": null,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['search_flights']"
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "search_flights",
+          "args": {
+            "destination": "Seoul",
+            "date": "2023-03-22"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "search_flights",
+          "args": {
+            "destination": "Seoul",
+            "date": "March 22"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-9d63a911",
+      "scenario_id": "travel_16",
+      "speaker": "66f59c76",
+      "turns": [
+        "Like, I've been thinking about it, and I need to book flights to, um, Vegas. I'm looking at going around August eighth if there's anything available."
+      ],
+      "replies": [
+        "I found a flight to Vegas on August 8th priced at 450. Would you like to book this flight? If so, please provide the passenger's name."
+      ],
+      "error": null,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['search_flights']"
+      },
+      "current": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['search_flights']"
+      },
+      "archived_calls": [
+        {
+          "function": "search_flights",
+          "args": {
+            "destination": "Las Vegas",
+            "date": "2024-08-08"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "search_flights",
+          "args": {
+            "destination": "Vegas",
+            "date": "August 8"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-90daa0b7",
+      "scenario_id": "travel_18",
+      "speaker": "66f59c76",
+      "turns": [
+        "Alright. First, uh, I need to find flights to Dubai on April tenth. Then go ahead and book the cheapest option. The name on the ticket should be Casey Lee. Oh, and I almost forgot. I need to update my pass number to e seven seven two two one one."
+      ],
+      "replies": [
+        "I found a flight to Dubai on April 10 and booked the cheapest option for Casey Lee. Also, your passport number has been updated to E772211."
+      ],
+      "error": null,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['search_flights', 'update_identity_doc']"
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "search_flights",
+          "args": {
+            "destination": "Dubai",
+            "date": "2024-04-10"
+          }
+        },
+        {
+          "function": "book_flight",
+          "args": {
+            "passenger_name": "Casey Lee",
+            "flight_id": "FL123"
+          }
+        },
+        {
+          "function": "update_identity_doc",
+          "args": {
+            "doc_type": "pass",
+            "doc_number": "e772211"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "search_flights",
+          "args": {
+            "destination": "Dubai",
+            "date": "April 10"
+          }
+        },
+        {
+          "function": "book_flight",
+          "args": {
+            "passenger_name": "Casey Lee",
+            "flight_id": "FL123"
+          }
+        },
+        {
+          "function": "update_identity_doc",
+          "args": {
+            "doc_type": "passport",
+            "doc_number": "E772211"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-760886cd",
+      "scenario_id": "travel_19",
+      "speaker": "695bd157",
+      "turns": [
+        "Um, okay. I wanna look for flights to Rome. No. Wait. I changed my mind. Let's do Milan instead. And I was thinking June first. Well, wait. But actually, June third works better for me. Sorry about that."
+      ],
+      "replies": [
+        "I found a flight to Milan on June 3rd for $450. Would you like to book it? If so, please provide the passenger's name."
+      ],
+      "error": null,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Unexpected tools: ['search_flights', 'search_flights', 'search_flights']"
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "search_flights",
+          "args": {
+            "destination": "Rome",
+            "date": ""
+          }
+        },
+        {
+          "function": "search_flights",
+          "args": {
+            "destination": "Milan",
+            "date": ""
+          }
+        },
+        {
+          "function": "search_flights",
+          "args": {
+            "destination": "Milan",
+            "date": "2024-06-01"
+          }
+        },
+        {
+          "function": "search_flights",
+          "args": {
+            "destination": "Milan",
+            "date": "2024-06-03"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "search_flights",
+          "args": {
+            "destination": "Milan",
+            "date": "June 3"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-28bb857a",
+      "scenario_id": "travel_20",
+      "speaker": "62a885d5",
+      "turns": [
+        "Hey. Here's the thing. I need to fly to Toronto on July twenty. If there happens to be a flight under three hundred dollars, go ahead and book it for Riley Kin. But if everything's too expensive, then just forget the flight and update my driver's license to d l eight eight instead."
+      ],
+      "replies": [
+        "There is a flight to Toronto on July 20, but it costs $450, which is above your $300 limit. I have updated your driver's license to DL88 as you requested."
+      ],
+      "error": null,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Missing tools: ['book_flight']"
+      },
+      "current": {
+        "passed": false,
+        "failure_reason": "Missing tools: ['book_flight']"
+      },
+      "archived_calls": [
+        {
+          "function": "search_flights",
+          "args": {
+            "destination": "Toronto",
+            "date": "2024-07-20"
+          }
+        },
+        {
+          "function": "update_identity_doc",
+          "args": {
+            "doc_type": "driver's license",
+            "doc_number": "d l 88"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "search_flights",
+          "args": {
+            "destination": "Toronto",
+            "date": "July 20"
+          }
+        },
+        {
+          "function": "update_identity_doc",
+          "args": {
+            "doc_type": "driver_license",
+            "doc_number": "DL88"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-f3d4c922",
+      "scenario_id": "travel_21",
+      "speaker": "65e8cf8f",
+      "turns": [
+        "You know, okay. So I need to find flights to Vegas. I was thinking around August eighth. And then once you find something, book it under the name Quinn Davis. Oh, and while you're at it, could you also update my Visa number to v seven seven?"
+      ],
+      "replies": [
+        "I found a flight to Vegas on August 8 and booked it under the name Quinn Davis. I also updated your Visa number to V77."
+      ],
+      "error": null,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['search_flights', 'update_identity_doc']"
+      },
+      "current": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['search_flights']"
+      },
+      "archived_calls": [
+        {
+          "function": "search_flights",
+          "args": {
+            "destination": "Las Vegas",
+            "date": "2024-08-08"
+          }
+        },
+        {
+          "function": "book_flight",
+          "args": {
+            "passenger_name": "Quinn Davis",
+            "flight_id": "FL123"
+          }
+        },
+        {
+          "function": "update_identity_doc",
+          "args": {
+            "doc_type": "Visa",
+            "doc_number": "v777"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "search_flights",
+          "args": {
+            "destination": "Vegas",
+            "date": "August 8"
+          }
+        },
+        {
+          "function": "book_flight",
+          "args": {
+            "passenger_name": "Quinn Davis",
+            "flight_id": "FL123"
+          }
+        },
+        {
+          "function": "update_identity_doc",
+          "args": {
+            "doc_type": "visa",
+            "doc_number": "V77"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-2ff7a137",
+      "scenario_id": "travel_21",
+      "speaker": "69a9cf80",
+      "turns": [
+        "So I need to find flights to And then, once you find something, book it under the name Quinn Davis. Oh, and, uh, while you're at it, could you please update my visa number to v seven seven?"
+      ],
+      "replies": [
+        "I can help with that. Could you please tell me the destination city and the date you want to fly? Also, just to confirm, the visa number you want to update to is \"V77\"?"
+      ],
+      "error": null,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Missing tools: ['search_flights', 'book_flight', 'update_identity_doc']"
+      },
+      "current": {
+        "passed": false,
+        "failure_reason": "Missing tools: ['search_flights', 'book_flight', 'update_identity_doc']"
+      },
+      "archived_calls": [],
+      "current_calls": []
+    },
+    {
+      "room": "eval-1793fc81",
+      "scenario_id": "travel_23",
+      "speaker": "65e8cf8f",
+      "turns": [
+        "So I need to, like, update my passport number to p one one two two because they just renewed it. And then I also got a new driver's license So could you change that one to d l nine zero nine zero as well?"
+      ],
+      "replies": [
+        "Your passport number has been updated to P1122 and your driver's license number has been updated to DL9090."
+      ],
+      "error": null,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['update_identity_doc']"
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "update_identity_doc",
+          "args": {
+            "doc_type": "passport",
+            "doc_number": "p1122"
+          }
+        },
+        {
+          "function": "update_identity_doc",
+          "args": {
+            "doc_type": "driver's license",
+            "doc_number": "dl9090"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "update_identity_doc",
+          "args": {
+            "doc_type": "passport",
+            "doc_number": "P1122"
+          }
+        },
+        {
+          "function": "update_identity_doc",
+          "args": {
+            "doc_type": "driver_license",
+            "doc_number": "DL9090"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-cfdb915d",
+      "scenario_id": "travel_23",
+      "speaker": "69a9cf80",
+      "turns": [
+        "So I need to, like, update my passport number to p one one two two. Because I just renewed it And then, I also got a new driver license So could you change that one to d l nine zero nine zero as well."
+      ],
+      "replies": [
+        "Your passport number has been updated to P1122 and your driver license number has been updated to DL9090."
+      ],
+      "error": null,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "update_identity_doc",
+          "args": {
+            "doc_type": "passport",
+            "doc_number": "p1122"
+          }
+        },
+        {
+          "function": "update_identity_doc",
+          "args": {
+            "doc_type": "driver license",
+            "doc_number": "dl9090"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "update_identity_doc",
+          "args": {
+            "doc_type": "passport",
+            "doc_number": "P1122"
+          }
+        },
+        {
+          "function": "update_identity_doc",
+          "args": {
+            "doc_type": "driver_license",
+            "doc_number": "DL9090"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-578771c7",
+      "scenario_id": "travel_24",
+      "speaker": "695bd157",
+      "turns": [
+        "Well, great. So first, I need to find a flight to Vancouver. On November fifth and book it under the name Skyler.",
+        "Then I was also hoping you could find hotel near the airport for a couple of nights. And then finally, I need to update my visa number to v as in Victor, dash four dash four."
+      ],
+      "replies": [
+        "I found a flight to Vancouver on November 5 and booked it under the name Skyler. Your booking reference is B789.",
+        "I found a one-bedroom apartment near the airport in Vancouver for a couple of nights. Also, your visa number has been updated to V44."
+      ],
+      "error": null,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['search_flights', 'update_identity_doc']"
+      },
+      "current": {
+        "passed": false,
+        "failure_reason": "Unexpected tools: ['search_apartments']"
+      },
+      "archived_calls": [
+        {
+          "function": "search_flights",
+          "args": {
+            "destination": "Vancouver",
+            "date": "2023-11-05"
+          }
+        },
+        {
+          "function": "book_flight",
+          "args": {
+            "passenger_name": "Skyler",
+            "flight_id": "FL123"
+          }
+        },
+        {
+          "function": "update_identity_doc",
+          "args": {
+            "doc_type": "visa",
+            "doc_number": "v-4-4"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "search_flights",
+          "args": {
+            "destination": "Vancouver",
+            "date": "November 5"
+          }
+        },
+        {
+          "function": "book_flight",
+          "args": {
+            "passenger_name": "Skyler",
+            "flight_id": "FL123"
+          }
+        },
+        {
+          "function": "search_apartments",
+          "args": {
+            "city": "Vancouver",
+            "bedrooms": 1,
+            "max_price": 1000.0
+          }
+        },
+        {
+          "function": "update_identity_doc",
+          "args": {
+            "doc_type": "visa",
+            "doc_number": "V44"
+          }
+        }
+      ]
+    }
+  ]
+}

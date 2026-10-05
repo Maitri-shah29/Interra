@@ -1,0 +1,31 @@
+{
+  "retries_allowed": 1,
+  "retried": [
+    {
+      "attempt": 1,
+      "recording": "ecommerce_17_5f4a4da1575d605c43bef871"
+    },
+    {
+      "attempt": 1,
+      "recording": "finance_14_5f4a4da1575d605c43bef871"
+    },
+    {
+      "attempt": 1,
+      "recording": "housing_06_5f4a4da1575d605c43bef871"
+    },
+    {
+      "attempt": 1,
+      "recording": "housing_17_69a9cf80f4d7668d5c815038"
+    },
+    {
+      "attempt": 1,
+      "recording": "travel_05_6998abd731d2ec50d067d5bd"
+    },
+    {
+      "attempt": 1,
+      "recording": "travel_18_66f59c766e7e22e1f90d08f6"
+    }
+  ],
+  "still_failed": [],
+  "stall_restarts": []
+}

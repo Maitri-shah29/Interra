@@ -1,0 +1,1309 @@
+{
+  "mode": "llm",
+  "archived": {
+    "passed": 17,
+    "total": 29,
+    "pass_rate": 0.586
+  },
+  "current": {
+    "passed": 24,
+    "total": 29,
+    "pass_rate": 0.828
+  },
+  "errors": 0,
+  "recordings": [
+    {
+      "room": "eval-1db0fad4",
+      "scenario_id": "ecommerce_01",
+      "speaker": "65e8cf8f",
+      "turns": [
+        "Like, you know, well, I ordered something last week, and I haven't received it yet. Could you track it for me? The order ID is a b c one two three."
+      ],
+      "replies": [
+        "Your order ABC123 is currently out for delivery. It should arrive soon."
+      ],
+      "error": null,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "abc123"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "ABC123"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-146f48ea",
+      "scenario_id": "ecommerce_01",
+      "speaker": "69a9cf80",
+      "turns": [
+        "Like, uh, you know, I haven't received it yet. Could you track it for me?",
+        "The order ID is a b c one two three"
+      ],
+      "replies": [
+        "I can help with that. Please provide me with the order number or code so I can track it for you.",
+        "Your order ABC123 is currently out for delivery."
+      ],
+      "error": null,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "abc123"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "ABC123"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-15cbca79",
+      "scenario_id": "ecommerce_02",
+      "speaker": "5f4a4da1",
+      "turns": [
+        "I'm looking for a pair of wireless headphones and I'd like, um, to track it under a hundred dollars possible. What do you have?"
+      ],
+      "replies": [
+        "I found wireless headphones under $100. There is a pair called \"wireless headphones Premium\" priced at $90. Would you like to add it to your cart or need more options?"
+      ],
+      "error": null,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "search_products",
+          "args": {
+            "query": "wireless headphones",
+            "max_price": 100.0
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "search_products",
+          "args": {
+            "query": "wireless headphones",
+            "max_price": 100.0,
+            "category": "headphones"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-3ce2c3cd",
+      "scenario_id": "ecommerce_04",
+      "speaker": "6998abd7",
+      "turns": [
+        "You know, where is my package? Let me find the order number here. Door number is x y z eight eight. Uh, could you check what's going on with it?"
+      ],
+      "replies": [
+        "Your package with order number XYZ88 is currently out for delivery."
+      ],
+      "error": null,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Missing tools: ['track_order']"
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [],
+      "current_calls": [
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "XYZ88"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-23ede670",
+      "scenario_id": "ecommerce_05",
+      "speaker": "695bd157",
+      "turns": [
+        "So, like, I'm looking for for a new",
+        "A desk. Yes. Something under three hundred dollars. If you have an option like that, that would be great."
+      ],
+      "replies": [
+        "Hello! It seems like you started to say what you're looking for but didn't finish. Whenever you're ready, just let me know what you need help with!",
+        "I found a desk option for you under three hundred dollars. It's called \"desk Premium\" and costs $290. Would you like to add it to your cart or need more options?"
+      ],
+      "error": null,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Unexpected tools: ['add_to_cart', 'search_products', 'add_to_cart']"
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "search_products",
+          "args": {
+            "query": "desk"
+          }
+        },
+        {
+          "function": "add_to_cart",
+          "args": {
+            "product_id": "PROD1",
+            "quantity": 1
+          }
+        },
+        {
+          "function": "search_products",
+          "args": {
+            "query": "desk",
+            "max_price": 300.0
+          }
+        },
+        {
+          "function": "add_to_cart",
+          "args": {
+            "product_id": "PROD1",
+            "quantity": 1
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "search_products",
+          "args": {
+            "query": "desk",
+            "max_price": 300.0
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-ee4c1b24",
+      "scenario_id": "ecommerce_06",
+      "speaker": "66c4f3cb",
+      "turns": [
+        "Uh, so I'd like could you add two item two of the items, k two, to my cart? I I need one for me and and one as a gift for my friend."
+      ],
+      "replies": [
+        "I have added two of the item K2 to your cart, one for you and one as a gift for your friend. Let me know if you need anything else."
+      ],
+      "error": null,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Unexpected tools: ['search_products']"
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "search_products",
+          "args": {
+            "query": "k2"
+          }
+        },
+        {
+          "function": "add_to_cart",
+          "args": {
+            "product_id": "PROD1",
+            "quantity": 2
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "add_to_cart",
+          "args": {
+            "product_id": "K2",
+            "quantity": 2
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-6211e24c",
+      "scenario_id": "ecommerce_07",
+      "speaker": "66f59c76",
+      "turns": [
+        "So could you I I wanted to search for a new product. Actually... No. Never mind. Never mind. Forget that for now. Could you just track my order instead? The ID is f a s t nine nine."
+      ],
+      "replies": [
+        "Your order FAST99 is currently out for delivery. Let me know if you need anything else."
+      ],
+      "error": null,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "fast99"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "FAST99"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-30445907",
+      "scenario_id": "ecommerce_08",
+      "speaker": "5ff07b5e",
+      "turns": [
+        "You know, I want a mechanical keyboard, and I'm trying. To keep my budget under two hundred dollars. You have anything like that?"
+      ],
+      "replies": [
+        "I found a mechanical keyboard called \"mechanical keyboard Premium\" priced at 190 dollars, which fits your budget under two hundred dollars. Would you like to know more about it or add it to your cart?"
+      ],
+      "error": null,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['search_products']"
+      },
+      "current": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['search_products']"
+      },
+      "archived_calls": [
+        {
+          "function": "search_products",
+          "args": {
+            "query": "mechanical keyboard",
+            "max_price": 200.0
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "search_products",
+          "args": {
+            "query": "mechanical keyboard",
+            "max_price": 200.0,
+            "category": "mechanical keyboard"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-c1acb97c",
+      "scenario_id": "ecommerce_08",
+      "speaker": "61517db6",
+      "turns": [
+        "Yeah. You know, I want a mechanical keyboard, and I'm trying to keep my budget under two hundred dollars. Do you have anything like that?"
+      ],
+      "replies": [
+        "I found a mechanical keyboard called \"mechanical keyboard Premium\" priced at $190, which fits your budget under two hundred dollars. Would you like to add it to your cart or need more options?"
+      ],
+      "error": null,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['search_products']"
+      },
+      "current": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['search_products']"
+      },
+      "archived_calls": [
+        {
+          "function": "search_products",
+          "args": {
+            "query": "mechanical keyboard",
+            "max_price": 200.0
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "search_products",
+          "args": {
+            "query": "mechanical keyboard",
+            "max_price": 200.0,
+            "category": "mechanical keyboard"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-eaa23b95",
+      "scenario_id": "ecommerce_09",
+      "speaker": "695bd157",
+      "turns": [
+        "Like, well, could you search for running shoes Actually, no. Um, I just remembered I already have running shoes. Search for hiking boots instead. That's what I actually need."
+      ],
+      "replies": [
+        "I found hiking boots for you, including a premium pair priced at 99.99. Would you like to add the hiking boots to your cart or need more options?"
+      ],
+      "error": null,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "search_products",
+          "args": {
+            "query": "hiking boots"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "search_products",
+          "args": {
+            "query": "hiking boots"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-81a2d504",
+      "scenario_id": "ecommerce_10",
+      "speaker": "6998abd7",
+      "turns": [
+        "Like, uh, like, first, can you track my order? The ID is one two three a b c. And then while we're at it, could you also search for winter jackets on the hundred fifty dollars? I need one for my trip."
+      ],
+      "replies": [
+        "Your order 123ABC is currently out for delivery. I also found a winter jacket within your budget of 150 dollars: the \"winter jackets Premium\" priced at 140 dollars. Would you like to add it to your cart?"
+      ],
+      "error": null,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "123abc"
+          }
+        },
+        {
+          "function": "search_products",
+          "args": {
+            "query": "winter jackets",
+            "max_price": 150.0
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "123ABC"
+          }
+        },
+        {
+          "function": "search_products",
+          "args": {
+            "query": "winter jackets",
+            "max_price": 150.0
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-bf281b32",
+      "scenario_id": "ecommerce_11",
+      "speaker": "62a885d5",
+      "turns": [
+        "You know, like, we'll go ahead and add the product b seven to my cart. Make it three of them. No. No. Wait. That's too many. Just do one for now. I'll order more later if if I need to."
+      ],
+      "replies": [
+        "I added one of product B7 to your cart. Let me know if you want to add more later."
+      ],
+      "error": null,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "add_to_cart",
+          "args": {
+            "product_id": "B7",
+            "quantity": 1
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "add_to_cart",
+          "args": {
+            "product_id": "B7",
+            "quantity": 1
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-b311cff1",
+      "scenario_id": "ecommerce_12",
+      "speaker": "6998abd7",
+      "turns": [
+        "Look. You know, I'm thinking something in the... Let me think. Electronic section would be great. He's really into catches and text stuff."
+      ],
+      "replies": [
+        "It sounds like you are interested in something in the electronics section, possibly related to \"catches and text stuff.\" Could you please clarify or specify what kind of electronic product you are looking for? For example, are you interested in gadgets, accessories, or something related to communication or text? This will help me find the best options for you."
+      ],
+      "error": null,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['search_products']"
+      },
+      "current": {
+        "passed": false,
+        "failure_reason": "Missing tools: ['search_products']"
+      },
+      "archived_calls": [
+        {
+          "function": "search_products",
+          "args": {
+            "query": "electronic catches and text stuff"
+          }
+        }
+      ],
+      "current_calls": []
+    },
+    {
+      "room": "eval-851dc11d",
+      "scenario_id": "ecommerce_13",
+      "speaker": "5ff07b5e",
+      "turns": [
+        "Well, so, well, first, could you add item k dash two to my cart? Just one of them, And then can you check on my last order too? The order ID is d dash e dash l dash I dash v."
+      ],
+      "replies": [
+        "I added one item K2 to your cart. Your last order with ID DELIV is currently out for delivery."
+      ],
+      "error": null,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['add_to_cart', 'track_order']"
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "add_to_cart",
+          "args": {
+            "product_id": "k-2",
+            "quantity": 1
+          }
+        },
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "d-e-l-i-v"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "add_to_cart",
+          "args": {
+            "product_id": "K2",
+            "quantity": 1
+          }
+        },
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "DELIV"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-8e34bfec",
+      "scenario_id": "ecommerce_13",
+      "speaker": "61517db6",
+      "turns": [
+        "So... Well, could you add item k two to my card? Just one of them. Then can you check on my last order too? The order is the order ID is d e l I v."
+      ],
+      "replies": [
+        "I added one of item K2 to your cart. Your last order with ID DELIV is currently out for delivery."
+      ],
+      "error": null,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "add_to_cart",
+          "args": {
+            "product_id": "K2",
+            "quantity": 1
+          }
+        },
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "DELIV"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "add_to_cart",
+          "args": {
+            "product_id": "K2",
+            "quantity": 1
+          }
+        },
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "DELIV"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-21dbb2dc",
+      "scenario_id": "ecommerce_14",
+      "speaker": "5ff07b5e",
+      "turns": [
+        "Well, um, so, uh, yeah. So I already found what I want. Can you add, like, two of them? P dash five dash two to my card? I want to get one for myself and one as a gift."
+      ],
+      "replies": [
+        "I have added two of the product P52 to your cart, one for yourself and one as a gift. Let me know if you need anything else."
+      ],
+      "error": null,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['add_to_cart']"
+      },
+      "current": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['add_to_cart']"
+      },
+      "archived_calls": [
+        {
+          "function": "add_to_cart",
+          "args": {
+            "product_id": "p-5-2",
+            "quantity": 2
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "add_to_cart",
+          "args": {
+            "product_id": "PD52",
+            "quantity": 2
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-de4e4190",
+      "scenario_id": "ecommerce_14",
+      "speaker": "61517db6",
+      "turns": [
+        "Well, yeah. So what? Can you add, like, two of item p five two to my card. I wanna get one for myself and one as a gift."
+      ],
+      "replies": [
+        "I added two of item P52 to your cart, one for yourself and one as a gift. Let me know if you need anything else."
+      ],
+      "error": null,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "add_to_cart",
+          "args": {
+            "product_id": "p52",
+            "quantity": 2
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "add_to_cart",
+          "args": {
+            "product_id": "P52",
+            "quantity": 2
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-ec79cb0e",
+      "scenario_id": "ecommerce_15",
+      "speaker": "56780a5a",
+      "turns": [
+        "So, well, can can you track order b o b one two for me? I ordered it a few days ago, and it should be arriving soon, uh, but I just wanted to make sure."
+      ],
+      "replies": [
+        "Your order BOB12 is currently out for delivery. It should be arriving soon."
+      ],
+      "error": null,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "bob12"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "BOB12"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-cbfb0f99",
+      "scenario_id": "ecommerce_15",
+      "speaker": "66c4f3cb",
+      "turns": [
+        "So, well, can you track order b o b one two for me? I ordered a few days ago, and it should be arrive soon, but I just want to make sure"
+      ],
+      "replies": [
+        "Your order BOB12 is out for delivery and should arrive soon."
+      ],
+      "error": null,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "bob12"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "BOB12"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-f1e15740",
+      "scenario_id": "ecommerce_16",
+      "speaker": "695bd157",
+      "turns": [
+        "Um, like, uh, I need a new A coffee maker. Yeah. I'm looking for a new coffee maker. That's what it's called. Something under fifty dollars would be ideal."
+      ],
+      "replies": [
+        "I found a coffee maker called \"coffee maker Premium\" priced at 40 dollars. Would you like to add it to your cart?"
+      ],
+      "error": null,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "search_products",
+          "args": {
+            "query": "coffee maker",
+            "max_price": 50.0
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "search_products",
+          "args": {
+            "query": "coffee maker",
+            "max_price": 50.0
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-1d3bec5c",
+      "scenario_id": "ecommerce_17",
+      "speaker": "5f4a4da1",
+      "turns": [
+        "Can you cancel my actually, never mind the cancellation. I changed my mind about that. Can you just track order g g five for me instead? I wanna see where it is."
+      ],
+      "replies": [
+        "Your order GG5 is currently out for delivery. Let me know if you need any more help!"
+      ],
+      "error": null,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "GG5"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "GG5"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-9523f0eb",
+      "scenario_id": "ecommerce_18",
+      "speaker": "62a885d5",
+      "turns": [
+        "So, like, first search for gaming mouse. I wanna see what you have. Then add the cheapest option in my cart so I can buy it later. And while you're at it, could you also track my order? P o nine nine nine. I've been waiting on that one."
+      ],
+      "replies": [
+        "I found a gaming mouse priced at 99.99 and added the cheapest option to your cart. Also, your order PO999 is out for delivery."
+      ],
+      "error": null,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['track_order']"
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "search_products",
+          "args": {
+            "query": "gaming mouse"
+          }
+        },
+        {
+          "function": "add_to_cart",
+          "args": {
+            "product_id": "PROD1",
+            "quantity": 1
+          }
+        },
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "P0999"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "search_products",
+          "args": {
+            "query": "gaming mouse"
+          }
+        },
+        {
+          "function": "add_to_cart",
+          "args": {
+            "product_id": "PROD1",
+            "quantity": 1
+          }
+        },
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "PO999"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-c8ea9d3e",
+      "scenario_id": "ecommerce_19",
+      "speaker": "66f59c76",
+      "turns": [
+        "Okay. So search for a laptop. Wait. No. No. Actually, I need a tablet. A laptop. A tablet. And add two of them to the cart. Actually, no. No. Just one. Just one. I only have, uh, the budget for one right now."
+      ],
+      "replies": [
+        "I found a tablet called \"tablet Premium\" and added one of it to your cart. Let me know if you need anything else."
+      ],
+      "error": null,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Unexpected tools: ['search_products']"
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "search_products",
+          "args": {
+            "query": "laptop"
+          }
+        },
+        {
+          "function": "search_products",
+          "args": {
+            "query": "tablet"
+          }
+        },
+        {
+          "function": "add_to_cart",
+          "args": {
+            "product_id": "PROD1",
+            "quantity": 1
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "search_products",
+          "args": {
+            "query": "tablet"
+          }
+        },
+        {
+          "function": "add_to_cart",
+          "args": {
+            "product_id": "PROD1",
+            "quantity": 1
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-f4227d5f",
+      "scenario_id": "ecommerce_20",
+      "speaker": "66c4f3cb",
+      "turns": [
+        "So, um, you know, you find one that's under fifty dollars, go ahead and add two, um, to the cart because they make great gifts. But if everything's over fifty, I just forget the coffee maker and track order w w w for me instead."
+      ],
+      "replies": [
+        "I found coffee makers under fifty dollars and added two of them to your cart as gifts. If you want me to track the order with code WWW instead, just let me know."
+      ],
+      "error": null,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Missing tools: ['search_products', 'add_to_cart']"
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [],
+      "current_calls": [
+        {
+          "function": "search_products",
+          "args": {
+            "query": "coffee maker",
+            "max_price": 50.0,
+            "category": "coffee maker"
+          }
+        },
+        {
+          "function": "add_to_cart",
+          "args": {
+            "product_id": "PROD1",
+            "quantity": 2
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-10cdf801",
+      "scenario_id": "ecommerce_21",
+      "speaker": "65e8cf8f",
+      "turns": [
+        "So track order b o b for me first, then I also want to search for a nice watch under two hundred dollars. Once you find something good, uh, go ahead and add it to my cart."
+      ],
+      "replies": [
+        "Your order BOB is out for delivery. I found a nice watch under two hundred dollars called \"watch Premium\" and added one to your cart."
+      ],
+      "error": null,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "BOB"
+          }
+        },
+        {
+          "function": "search_products",
+          "args": {
+            "query": "watch",
+            "max_price": 200.0
+          }
+        },
+        {
+          "function": "add_to_cart",
+          "args": {
+            "product_id": "PROD1",
+            "quantity": 1
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "BOB"
+          }
+        },
+        {
+          "function": "search_products",
+          "args": {
+            "query": "watch",
+            "max_price": 200.0
+          }
+        },
+        {
+          "function": "add_to_cart",
+          "args": {
+            "product_id": "PROD1",
+            "quantity": 1
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-a0b168e7",
+      "scenario_id": "ecommerce_21",
+      "speaker": "69a9cf80",
+      "turns": [
+        "So you track order b o p for me first? Then I also wanna search for nice watch under two hundred dollars. And once you can find something good, go ahead and add it to my cart."
+      ],
+      "replies": [
+        "Your order BOP is out for delivery. I found a nice watch under two hundred dollars called \"nice watch Premium\" and added one to your cart."
+      ],
+      "error": null,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['track_order']"
+      },
+      "current": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['track_order', 'search_products']"
+      },
+      "archived_calls": [
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "BOP"
+          }
+        },
+        {
+          "function": "search_products",
+          "args": {
+            "query": "watch",
+            "max_price": 200.0
+          }
+        },
+        {
+          "function": "add_to_cart",
+          "args": {
+            "product_id": "PROD1",
+            "quantity": 1
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "BOP"
+          }
+        },
+        {
+          "function": "search_products",
+          "args": {
+            "query": "nice watch",
+            "max_price": 200.0
+          }
+        },
+        {
+          "function": "add_to_cart",
+          "args": {
+            "product_id": "PROD1",
+            "quantity": 1
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-49137532",
+      "scenario_id": "ecommerce_23",
+      "speaker": "5f4a4da1",
+      "turns": [
+        "So you like... First, could you track order g g five? Then I'd like to process a refund for it if possible. And, also, while we're at it, add item x one to my cart. So, uh, I can order a replacement."
+      ],
+      "replies": [
+        "The order GG5 is currently out for delivery. I have added item X1 to your cart for a replacement. However, I cannot process refunds directly. You may need to contact the seller or use the platform where you made the purchase to request a refund."
+      ],
+      "error": null,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "gg5"
+          }
+        },
+        {
+          "function": "add_to_cart",
+          "args": {
+            "product_id": "x1",
+            "quantity": 1
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "GG5"
+          }
+        },
+        {
+          "function": "add_to_cart",
+          "args": {
+            "product_id": "X1",
+            "quantity": 1
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-57387598",
+      "scenario_id": "ecommerce_25",
+      "speaker": "65e8cf8f",
+      "turns": [
+        "You know, well, can I return my never mind? Forget the return. Let me focus on what I actually need. Track order CAT for me. Then search for cat food because I'm running low, and add three of whatever you find to my cart."
+      ],
+      "replies": [
+        "Your order with code CAT is out for delivery. I found cat food Premium for you and added three of them to your cart."
+      ],
+      "error": null,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "CAT"
+          }
+        },
+        {
+          "function": "search_products",
+          "args": {
+            "query": "cat food"
+          }
+        },
+        {
+          "function": "add_to_cart",
+          "args": {
+            "product_id": "PROD1",
+            "quantity": 3
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "CAT"
+          }
+        },
+        {
+          "function": "search_products",
+          "args": {
+            "query": "cat food"
+          }
+        },
+        {
+          "function": "add_to_cart",
+          "args": {
+            "product_id": "PROD1",
+            "quantity": 3
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-f1308b01",
+      "scenario_id": "ecommerce_25",
+      "speaker": "69a9cf80",
+      "turns": [
+        "You know, well, my never mind. Uh, forget the return. Let me focus on what I actually need Track order CAT for me. Then search for cat food because I'm running low. And add three of whatever you find to my cart."
+      ],
+      "replies": [
+        "Your order with code CAT is out for delivery. I found cat food Premium for you and added three of them to your cart."
+      ],
+      "error": null,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "CAT"
+          }
+        },
+        {
+          "function": "search_products",
+          "args": {
+            "query": "cat food"
+          }
+        },
+        {
+          "function": "add_to_cart",
+          "args": {
+            "product_id": "PROD1",
+            "quantity": 3
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "CAT"
+          }
+        },
+        {
+          "function": "search_products",
+          "args": {
+            "query": "cat food"
+          }
+        },
+        {
+          "function": "add_to_cart",
+          "args": {
+            "product_id": "PROD1",
+            "quantity": 3
+          }
+        }
+      ]
+    }
+  ]
+}

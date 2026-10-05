@@ -1,0 +1,34 @@
+{
+  "retries_allowed": 1,
+  "retried": [
+    {
+      "attempt": 1,
+      "recording": "ecommerce_10_6998abd731d2ec50d067d5bd"
+    },
+    {
+      "attempt": 1,
+      "recording": "ecommerce_17_5f4a4da1575d605c43bef871"
+    },
+    {
+      "attempt": 1,
+      "recording": "finance_14_5f4a4da1575d605c43bef871"
+    },
+    {
+      "attempt": 1,
+      "recording": "housing_06_5f4a4da1575d605c43bef871"
+    },
+    {
+      "attempt": 1,
+      "recording": "housing_15_5ff07b5ee7a1d23e719e421e"
+    },
+    {
+      "attempt": 1,
+      "recording": "housing_15_61517db6a7589569521b2356"
+    },
+    {
+      "attempt": 1,
+      "recording": "housing_17_69a9cf80f4d7668d5c815038"
+    }
+  ],
+  "still_failed": []
+}

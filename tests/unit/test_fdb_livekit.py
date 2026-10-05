@@ -24,7 +24,9 @@ from agent.fdb_livekit import (
 
 class FdbLiveKitTests(unittest.TestCase):
     def test_config_reports_missing_keys_and_benchmark(self):
-        with patch.dict(os.environ, {}, clear=True):
+        with tempfile.TemporaryDirectory() as folder, patch.dict(
+            os.environ, {"INTERRA_FDB_V3_ROOT": str(Path(folder) / "missing-v3")}, clear=True
+        ):
             config = FdbConfig.from_env()
             missing = config.missing_requirements()
         self.assertIn("LIVEKIT_URL", missing)
@@ -142,7 +144,7 @@ class FdbLiveKitTests(unittest.TestCase):
         model = livekit_llm_model(inference, config)
         inference.LLM.assert_called_once_with(
             model="openai/gpt-4.1-mini",
-            extra_kwargs={"temperature": 0.1, "parallel_tool_calls": False},
+            extra_kwargs={"temperature": 0.0, "parallel_tool_calls": False},
         )
         self.assertIs(model, inference.LLM.return_value)
 

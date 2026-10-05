@@ -43,7 +43,7 @@ def main() -> None:
         if len(recordings) != old_manifest["recordings"]:
             raise SystemExit("Historical recording evidence count mismatch.")
 
-    latest = results / "kaggle-20261001"
+    latest = results / "kaggle-20261004"
     manifest = json.loads((latest / "run-manifest.json").read_text(encoding="utf-8"))
     pass_report = json.loads((latest / "interra_elevenlabs_pass_rate_report.json").read_text(encoding="utf-8"))
     tool_report = json.loads((latest / "interra_elevenlabs_evaluation_report.json").read_text(encoding="utf-8"))
@@ -62,7 +62,11 @@ def main() -> None:
         payload = path.read_bytes()
         if sha256(payload) != expected and evidence_sha256(payload) != expected:
             raise SystemExit(f"Latest run evidence hash mismatch: {name}")
-    partial = list((latest / "per-recording-partial").rglob("result_interra_elevenlabs.json"))
+    with zipfile.ZipFile(latest / "interra-fdb-results.zip") as results_archive:
+        partial = [
+            name for name in results_archive.namelist()
+            if name.startswith("per-recording/") and name.endswith("result_interra_elevenlabs.json")
+        ]
     if len(partial) != manifest["per_recording_result_jsons_retrieved"]:
         raise SystemExit("Retrieved per-recording file count disagrees with the run manifest.")
 
@@ -71,13 +75,15 @@ def main() -> None:
         if len(slides) != 12:
             raise SystemExit(f"User submission policy requires exactly 12 slides; found {len(slides)}.")
         slide_text = "\\n".join(deck.read(name).decode("utf-8") for name in slides)
-        if "43/100" not in slide_text or "90/100" not in slide_text:
+        summary = manifest["result_summary"]
+        if (f"{summary['strict_passes']}/100" not in slide_text
+                or f"{summary['turn_taken']}/100" not in slide_text):
             raise SystemExit("Submission deck does not include the latest strict-pass and turn-take results.")
         for name in slides:
             ElementTree.fromstring(deck.read(name))
     print(f"Evidence verified: latest {manifest['result_summary']['recordings']} recordings, {pass_report['passed']} strict passes; prior baseline {old_pass['passed']}; {len(slides)} slides.")
-    print(f"Per-recording outputs: {len(partial)}/{manifest['per_recording_result_jsons_expected']}; judge enabled: {manifest['organizer_llm_judge_enabled']}; repeats: {manifest['repeat_count']}.")
-    print("Outstanding: quota-restored repeats, organizer LLM judge report, real demo, and registered team details.")
+    print(f"Per-recording outputs: {len(partial)}/{manifest['per_recording_result_jsons_expected']}; judge enabled: {manifest['organizer_llm_judge_enabled']}.")
+    print("Outstanding: single-session repeat runs, clean-machine reproduction check, demo length check, and the submission form.")
 
 
 if __name__ == "__main__":

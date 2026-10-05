@@ -26,8 +26,11 @@ INPUT_ROOT = Path("/kaggle/input/interra-fdb-v3-private-source")
 PROJECT = WORK / "Interra"
 VENV = SCRATCH / "interra-fdb-venv"
 REPORT = WORK / "interra-setup-report.json"
+RESULTS_ARCHIVE = WORK / "interra-fdb-results.zip"
 RUN_FULL_BENCHMARK = False
 EMBEDDED_SOURCE_B64 = ""
+# Non-secret INTERRA_* settings for one experiment run, set by kaggle_package.
+RUN_ENVIRONMENT: dict[str, str] = {}
 
 
 def run(command: list[str], *, cwd: Path | None = None) -> None:
@@ -168,7 +171,41 @@ def require_livekit_inference_agent(project: Path) -> None:
     )
 
 
+def archive_results(project: Path, destination: Path, tool_log: Path | None = None) -> int:
+    """Bundle every per-recording result and run report into one output file.
+
+    Kaggle's output listing returned only 15 of 100 per-recording JSONs from
+    the 2026-10-01 run, so the evidence is shipped as a single archive. Audio
+    is left out. Returns the number of per-recording results archived.
+    """
+    tool_log = tool_log or Path("/tmp/agent_tool_calls.log")
+    data = project / ".runtime" / "Full-Duplex-Bench" / "v3" / "fdb_v3_data_released"
+    reports = project / "artifacts" / "fdb_v3"
+    results = sorted(data.rglob("result_*.json")) if data.is_dir() else []
+    with zipfile.ZipFile(destination, "w", compression=zipfile.ZIP_DEFLATED) as bundle:
+        for path in results:
+            bundle.write(path, Path("per-recording") / path.relative_to(data))
+        if reports.is_dir():
+            for path in sorted(reports.iterdir()):
+                if path.is_file() and path.suffix in {".json", ".jsonl"}:
+                    bundle.write(path, Path("reports") / path.name)
+        if tool_log.is_file():
+            bundle.write(tool_log, Path("reports") / "agent_tool_calls.log")
+    print(f"Archived {len(results)} per-recording results to {destination}", flush=True)
+    return len(results)
+
+
+def apply_run_environment(settings: dict[str, str]) -> None:
+    """Export packaged experiment settings before the benchmark starts."""
+    for name, value in settings.items():
+        if not name.startswith("INTERRA_"):
+            raise ValueError(f"Only INTERRA_* settings can be packaged: {name}")
+        os.environ[name] = value
+        print(f"Run setting {name}={value}", flush=True)
+
+
 def main() -> None:
+    apply_run_environment(RUN_ENVIRONMENT)
     shutil.copytree(source_root(), PROJECT, dirs_exist_ok=True)
     require_livekit_inference_agent(PROJECT)
     missing = read_kaggle_secrets()
@@ -208,7 +245,10 @@ def main() -> None:
         if not missing:
             run([python, "scripts/fdb_v3.py", "check"], cwd=PROJECT)
             if RUN_FULL_BENCHMARK:
-                run([python, "scripts/fdb_v3.py", "all", "--force"], cwd=PROJECT)
+                try:
+                    run([python, "scripts/fdb_v3.py", "all", "--force"], cwd=PROJECT)
+                finally:
+                    archive_results(PROJECT, RESULTS_ARCHIVE)
         else:
             print("Benchmark deferred; add Kaggle Secrets: " + ", ".join(missing), flush=True)
     finally:
@@ -227,6 +267,7 @@ def main() -> None:
         "livekit_ready": not missing,
         "missing_secret_names": missing,
         "full_benchmark_run": RUN_FULL_BENCHMARK,
+        "run_environment": RUN_ENVIRONMENT,
         "next_command": "python scripts/fdb_v3.py all --force",
     }
     REPORT.write_text(json.dumps(report, indent=2), encoding="utf-8")

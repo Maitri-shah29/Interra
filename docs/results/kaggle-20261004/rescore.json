@@ -1,0 +1,4391 @@
+{
+  "mode": "rescore",
+  "archived": {
+    "passed": 70,
+    "total": 100,
+    "pass_rate": 0.7
+  },
+  "current": {
+    "passed": 70,
+    "total": 100,
+    "pass_rate": 0.7
+  },
+  "current_if_recorded": {
+    "passed": 70,
+    "total": 100,
+    "pass_rate": 0.7
+  },
+  "recorder_failures": 0,
+  "recordings": [
+    {
+      "room": "eval-278d4d41",
+      "scenario_id": "ecommerce_01",
+      "speaker": "65e8cf8f",
+      "recorder_ok": true,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current_if_recorded": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "ABC123"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "ABC123"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-995538ae",
+      "scenario_id": "ecommerce_01",
+      "speaker": "69a9cf80",
+      "recorder_ok": true,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['track_order']"
+      },
+      "current": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['track_order']"
+      },
+      "current_if_recorded": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['track_order']"
+      },
+      "archived_calls": [
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "C123"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "C123"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-d8550eaa",
+      "scenario_id": "ecommerce_02",
+      "speaker": "5f4a4da1",
+      "recorder_ok": true,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current_if_recorded": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "search_products",
+          "args": {
+            "query": "wireless headphones",
+            "max_price": 100.0,
+            "category": "headphones"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "search_products",
+          "args": {
+            "query": "wireless headphones",
+            "max_price": 100.0,
+            "category": "headphones"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-1af9c4b4",
+      "scenario_id": "ecommerce_04",
+      "speaker": "6998abd7",
+      "recorder_ok": true,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current_if_recorded": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "XYZ88"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "XYZ88"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-c57aa49e",
+      "scenario_id": "ecommerce_05",
+      "speaker": "695bd157",
+      "recorder_ok": true,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Unexpected tools: ['search_products', 'add_to_cart']"
+      },
+      "current": {
+        "passed": false,
+        "failure_reason": "Unexpected tools: ['search_products', 'add_to_cart']"
+      },
+      "current_if_recorded": {
+        "passed": false,
+        "failure_reason": "Unexpected tools: ['search_products', 'add_to_cart']"
+      },
+      "archived_calls": [
+        {
+          "function": "search_products",
+          "args": {
+            "query": "desk"
+          }
+        },
+        {
+          "function": "search_products",
+          "args": {
+            "query": "desk",
+            "max_price": 300.0
+          }
+        },
+        {
+          "function": "add_to_cart",
+          "args": {
+            "product_id": "PROD1",
+            "quantity": 1
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "search_products",
+          "args": {
+            "query": "desk"
+          }
+        },
+        {
+          "function": "search_products",
+          "args": {
+            "query": "desk",
+            "max_price": 300.0
+          }
+        },
+        {
+          "function": "add_to_cart",
+          "args": {
+            "product_id": "PROD1",
+            "quantity": 1
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-2f1fd98a",
+      "scenario_id": "ecommerce_06",
+      "speaker": "66c4f3cb",
+      "recorder_ok": true,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current_if_recorded": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "add_to_cart",
+          "args": {
+            "product_id": "K2",
+            "quantity": 2
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "add_to_cart",
+          "args": {
+            "product_id": "K2",
+            "quantity": 2
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-8983d6b0",
+      "scenario_id": "ecommerce_07",
+      "speaker": "66f59c76",
+      "recorder_ok": true,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current_if_recorded": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "FAST99"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "FAST99"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-fbdb5903",
+      "scenario_id": "ecommerce_08",
+      "speaker": "5ff07b5e",
+      "recorder_ok": true,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['search_products']"
+      },
+      "current": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['search_products']"
+      },
+      "current_if_recorded": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['search_products']"
+      },
+      "archived_calls": [
+        {
+          "function": "search_products",
+          "args": {
+            "query": "mechanical keyboard",
+            "max_price": 200.0,
+            "category": "mechanical keyboard"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "search_products",
+          "args": {
+            "query": "mechanical keyboard",
+            "max_price": 200.0,
+            "category": "mechanical keyboard"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-3385abc6",
+      "scenario_id": "ecommerce_08",
+      "speaker": "61517db6",
+      "recorder_ok": true,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['search_products']"
+      },
+      "current": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['search_products']"
+      },
+      "current_if_recorded": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['search_products']"
+      },
+      "archived_calls": [
+        {
+          "function": "search_products",
+          "args": {
+            "query": "mechanical keyboard",
+            "max_price": 200.0,
+            "category": "mechanical keyboard"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "search_products",
+          "args": {
+            "query": "mechanical keyboard",
+            "max_price": 200.0,
+            "category": "mechanical keyboard"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-8ea0c8ff",
+      "scenario_id": "ecommerce_09",
+      "speaker": "695bd157",
+      "recorder_ok": true,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current_if_recorded": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "search_products",
+          "args": {
+            "query": "hiking boots"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "search_products",
+          "args": {
+            "query": "hiking boots"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-cf471188",
+      "scenario_id": "ecommerce_11",
+      "speaker": "62a885d5",
+      "recorder_ok": true,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current_if_recorded": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "add_to_cart",
+          "args": {
+            "product_id": "B7",
+            "quantity": 1
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "add_to_cart",
+          "args": {
+            "product_id": "B7",
+            "quantity": 1
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-2f42d8fd",
+      "scenario_id": "ecommerce_12",
+      "speaker": "6998abd7",
+      "recorder_ok": true,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['search_products']"
+      },
+      "current": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['search_products']"
+      },
+      "current_if_recorded": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['search_products']"
+      },
+      "archived_calls": [
+        {
+          "function": "search_products",
+          "args": {
+            "query": "gadgets and tech stuff",
+            "category": "electronics"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "search_products",
+          "args": {
+            "query": "gadgets and tech stuff",
+            "category": "electronics"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-1c7e4132",
+      "scenario_id": "ecommerce_13",
+      "speaker": "5ff07b5e",
+      "recorder_ok": true,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current_if_recorded": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "add_to_cart",
+          "args": {
+            "product_id": "K2",
+            "quantity": 1
+          }
+        },
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "DELIV"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "add_to_cart",
+          "args": {
+            "product_id": "K2",
+            "quantity": 1
+          }
+        },
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "DELIV"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-465d19fa",
+      "scenario_id": "ecommerce_13",
+      "speaker": "61517db6",
+      "recorder_ok": true,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current_if_recorded": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "add_to_cart",
+          "args": {
+            "product_id": "K2",
+            "quantity": 1
+          }
+        },
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "DELIV"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "add_to_cart",
+          "args": {
+            "product_id": "K2",
+            "quantity": 1
+          }
+        },
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "DELIV"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-74790fe9",
+      "scenario_id": "ecommerce_14",
+      "speaker": "5ff07b5e",
+      "recorder_ok": true,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current_if_recorded": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "add_to_cart",
+          "args": {
+            "product_id": "P52",
+            "quantity": 2
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "add_to_cart",
+          "args": {
+            "product_id": "P52",
+            "quantity": 2
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-52c8bcbf",
+      "scenario_id": "ecommerce_14",
+      "speaker": "61517db6",
+      "recorder_ok": true,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current_if_recorded": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "add_to_cart",
+          "args": {
+            "product_id": "P52",
+            "quantity": 2
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "add_to_cart",
+          "args": {
+            "product_id": "P52",
+            "quantity": 2
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-bb329a82",
+      "scenario_id": "ecommerce_15",
+      "speaker": "56780a5a",
+      "recorder_ok": true,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current_if_recorded": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "BOB12"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "BOB12"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-581db83f",
+      "scenario_id": "ecommerce_15",
+      "speaker": "66c4f3cb",
+      "recorder_ok": true,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current_if_recorded": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "BOB12"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "BOB12"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-e052b9d9",
+      "scenario_id": "ecommerce_16",
+      "speaker": "695bd157",
+      "recorder_ok": true,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current_if_recorded": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "search_products",
+          "args": {
+            "query": "coffee maker",
+            "max_price": 50.0
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "search_products",
+          "args": {
+            "query": "coffee maker",
+            "max_price": 50.0
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-7392b105",
+      "scenario_id": "ecommerce_18",
+      "speaker": "62a885d5",
+      "recorder_ok": true,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current_if_recorded": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "search_products",
+          "args": {
+            "query": "gaming mouse"
+          }
+        },
+        {
+          "function": "add_to_cart",
+          "args": {
+            "product_id": "PROD1",
+            "quantity": 1
+          }
+        },
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "PO999"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "search_products",
+          "args": {
+            "query": "gaming mouse"
+          }
+        },
+        {
+          "function": "add_to_cart",
+          "args": {
+            "product_id": "PROD1",
+            "quantity": 1
+          }
+        },
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "PO999"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-e779dfbe",
+      "scenario_id": "ecommerce_19",
+      "speaker": "66f59c76",
+      "recorder_ok": true,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current_if_recorded": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "search_products",
+          "args": {
+            "query": "tablet"
+          }
+        },
+        {
+          "function": "add_to_cart",
+          "args": {
+            "product_id": "PROD1",
+            "quantity": 1
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "search_products",
+          "args": {
+            "query": "tablet"
+          }
+        },
+        {
+          "function": "add_to_cart",
+          "args": {
+            "product_id": "PROD1",
+            "quantity": 1
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-5f14f12f",
+      "scenario_id": "ecommerce_20",
+      "speaker": "66c4f3cb",
+      "recorder_ok": true,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current_if_recorded": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "search_products",
+          "args": {
+            "query": "coffee maker",
+            "max_price": 50.0
+          }
+        },
+        {
+          "function": "add_to_cart",
+          "args": {
+            "product_id": "PROD1",
+            "quantity": 2
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "search_products",
+          "args": {
+            "query": "coffee maker",
+            "max_price": 50.0
+          }
+        },
+        {
+          "function": "add_to_cart",
+          "args": {
+            "product_id": "PROD1",
+            "quantity": 2
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-67180052",
+      "scenario_id": "ecommerce_21",
+      "speaker": "65e8cf8f",
+      "recorder_ok": true,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current_if_recorded": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "BOB"
+          }
+        },
+        {
+          "function": "search_products",
+          "args": {
+            "query": "watch",
+            "max_price": 200.0
+          }
+        },
+        {
+          "function": "add_to_cart",
+          "args": {
+            "product_id": "PROD1",
+            "quantity": 1
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "BOB"
+          }
+        },
+        {
+          "function": "search_products",
+          "args": {
+            "query": "watch",
+            "max_price": 200.0
+          }
+        },
+        {
+          "function": "add_to_cart",
+          "args": {
+            "product_id": "PROD1",
+            "quantity": 1
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-2bbcfdd7",
+      "scenario_id": "ecommerce_21",
+      "speaker": "69a9cf80",
+      "recorder_ok": true,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['track_order', 'search_products']"
+      },
+      "current": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['track_order', 'search_products']"
+      },
+      "current_if_recorded": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['track_order', 'search_products']"
+      },
+      "archived_calls": [
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "BOP"
+          }
+        },
+        {
+          "function": "search_products",
+          "args": {
+            "query": "nice watch",
+            "max_price": 200.0
+          }
+        },
+        {
+          "function": "add_to_cart",
+          "args": {
+            "product_id": "PROD1",
+            "quantity": 1
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "BOP"
+          }
+        },
+        {
+          "function": "search_products",
+          "args": {
+            "query": "nice watch",
+            "max_price": 200.0
+          }
+        },
+        {
+          "function": "add_to_cart",
+          "args": {
+            "product_id": "PROD1",
+            "quantity": 1
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-4a8adc93",
+      "scenario_id": "ecommerce_23",
+      "speaker": "5f4a4da1",
+      "recorder_ok": true,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current_if_recorded": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "GG5"
+          }
+        },
+        {
+          "function": "add_to_cart",
+          "args": {
+            "product_id": "X1",
+            "quantity": 1
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "GG5"
+          }
+        },
+        {
+          "function": "add_to_cart",
+          "args": {
+            "product_id": "X1",
+            "quantity": 1
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-b42455d2",
+      "scenario_id": "ecommerce_25",
+      "speaker": "65e8cf8f",
+      "recorder_ok": true,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current_if_recorded": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "CAT"
+          }
+        },
+        {
+          "function": "search_products",
+          "args": {
+            "query": "cat food"
+          }
+        },
+        {
+          "function": "add_to_cart",
+          "args": {
+            "product_id": "PROD1",
+            "quantity": 3
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "CAT"
+          }
+        },
+        {
+          "function": "search_products",
+          "args": {
+            "query": "cat food"
+          }
+        },
+        {
+          "function": "add_to_cart",
+          "args": {
+            "product_id": "PROD1",
+            "quantity": 3
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-8301bfbe",
+      "scenario_id": "ecommerce_25",
+      "speaker": "69a9cf80",
+      "recorder_ok": true,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current_if_recorded": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "CAT"
+          }
+        },
+        {
+          "function": "search_products",
+          "args": {
+            "query": "cat food"
+          }
+        },
+        {
+          "function": "add_to_cart",
+          "args": {
+            "product_id": "PROD1",
+            "quantity": 3
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "CAT"
+          }
+        },
+        {
+          "function": "search_products",
+          "args": {
+            "query": "cat food"
+          }
+        },
+        {
+          "function": "add_to_cart",
+          "args": {
+            "product_id": "PROD1",
+            "quantity": 3
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-166e1200",
+      "scenario_id": "finance_01",
+      "speaker": "65e8cf8f",
+      "recorder_ok": true,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current_if_recorded": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "get_exchange_rate",
+          "args": {
+            "amount": 500.0,
+            "from_currency": "USD",
+            "to_currency": "EUR"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "get_exchange_rate",
+          "args": {
+            "amount": 500.0,
+            "from_currency": "USD",
+            "to_currency": "EUR"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-24a1a444",
+      "scenario_id": "finance_01",
+      "speaker": "69a9cf80",
+      "recorder_ok": true,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current_if_recorded": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "get_exchange_rate",
+          "args": {
+            "amount": 500.0,
+            "from_currency": "USD",
+            "to_currency": "EUR"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "get_exchange_rate",
+          "args": {
+            "amount": 500.0,
+            "from_currency": "USD",
+            "to_currency": "EUR"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-c0b502ac",
+      "scenario_id": "finance_02",
+      "speaker": "6998abd7",
+      "recorder_ok": true,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current_if_recorded": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "get_card_benefits",
+          "args": {
+            "card_type": "platinum"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "get_card_benefits",
+          "args": {
+            "card_type": "platinum"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-8a3dea07",
+      "scenario_id": "finance_03",
+      "speaker": "5ff07b5e",
+      "recorder_ok": true,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current_if_recorded": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "modify_autopay",
+          "args": {
+            "bill_type": "mortgage",
+            "source_account": "savings"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "modify_autopay",
+          "args": {
+            "bill_type": "mortgage",
+            "source_account": "savings"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-486c6d79",
+      "scenario_id": "finance_03",
+      "speaker": "61517db6",
+      "recorder_ok": true,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current_if_recorded": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "modify_autopay",
+          "args": {
+            "bill_type": "mortgage",
+            "source_account": "savings"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "modify_autopay",
+          "args": {
+            "bill_type": "mortgage",
+            "source_account": "savings"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-6a37a5dc",
+      "scenario_id": "finance_04",
+      "speaker": "62a885d5",
+      "recorder_ok": true,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current_if_recorded": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "get_exchange_rate",
+          "args": {
+            "amount": 1000.0,
+            "from_currency": "USD",
+            "to_currency": "GBP"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "get_exchange_rate",
+          "args": {
+            "amount": 1000.0,
+            "from_currency": "USD",
+            "to_currency": "GBP"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-71133391",
+      "scenario_id": "finance_06",
+      "speaker": "66f59c76",
+      "recorder_ok": true,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current_if_recorded": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "get_card_benefits",
+          "args": {
+            "card_type": "travel"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "get_card_benefits",
+          "args": {
+            "card_type": "travel"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-a6177037",
+      "scenario_id": "finance_07",
+      "speaker": "5ff07b5e",
+      "recorder_ok": true,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current_if_recorded": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "modify_autopay",
+          "args": {
+            "bill_type": "mortgage",
+            "source_account": "savings"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "modify_autopay",
+          "args": {
+            "bill_type": "mortgage",
+            "source_account": "savings"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-3844fa75",
+      "scenario_id": "finance_07",
+      "speaker": "61517db6",
+      "recorder_ok": true,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current_if_recorded": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "modify_autopay",
+          "args": {
+            "bill_type": "mortgage",
+            "source_account": "savings"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "modify_autopay",
+          "args": {
+            "bill_type": "mortgage",
+            "source_account": "savings"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-da0fd778",
+      "scenario_id": "finance_08",
+      "speaker": "65e8cf8f",
+      "recorder_ok": true,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current_if_recorded": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "get_exchange_rate",
+          "args": {
+            "amount": 200.0,
+            "from_currency": "EUR",
+            "to_currency": "USD"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "get_exchange_rate",
+          "args": {
+            "amount": 200.0,
+            "from_currency": "EUR",
+            "to_currency": "USD"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-470bf3cb",
+      "scenario_id": "finance_08",
+      "speaker": "69a9cf80",
+      "recorder_ok": true,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current_if_recorded": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "get_exchange_rate",
+          "args": {
+            "amount": 200.0,
+            "from_currency": "EUR",
+            "to_currency": "USD"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "get_exchange_rate",
+          "args": {
+            "amount": 200.0,
+            "from_currency": "EUR",
+            "to_currency": "USD"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-55ab3c00",
+      "scenario_id": "finance_10",
+      "speaker": "66c4f3cb",
+      "recorder_ok": true,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current_if_recorded": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "get_card_benefits",
+          "args": {
+            "card_type": "travel"
+          }
+        },
+        {
+          "function": "get_exchange_rate",
+          "args": {
+            "amount": 200.0,
+            "from_currency": "GBP",
+            "to_currency": "JPY"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "get_card_benefits",
+          "args": {
+            "card_type": "travel"
+          }
+        },
+        {
+          "function": "get_exchange_rate",
+          "args": {
+            "amount": 200.0,
+            "from_currency": "GBP",
+            "to_currency": "JPY"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-c713183e",
+      "scenario_id": "finance_11",
+      "speaker": "695bd157",
+      "recorder_ok": true,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Missing tools: ['modify_autopay']"
+      },
+      "current": {
+        "passed": false,
+        "failure_reason": "Missing tools: ['modify_autopay']"
+      },
+      "current_if_recorded": {
+        "passed": false,
+        "failure_reason": "Missing tools: ['modify_autopay']"
+      },
+      "archived_calls": [],
+      "current_calls": []
+    },
+    {
+      "room": "eval-55eaa437",
+      "scenario_id": "finance_12",
+      "speaker": "65e8cf8f",
+      "recorder_ok": true,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current_if_recorded": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "get_exchange_rate",
+          "args": {
+            "amount": 150.0,
+            "from_currency": "EUR",
+            "to_currency": "USD"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "get_exchange_rate",
+          "args": {
+            "amount": 150.0,
+            "from_currency": "EUR",
+            "to_currency": "USD"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-ca67ddfa",
+      "scenario_id": "finance_12",
+      "speaker": "69a9cf80",
+      "recorder_ok": true,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Unexpected tools: ['get_exchange_rate']"
+      },
+      "current": {
+        "passed": false,
+        "failure_reason": "Unexpected tools: ['get_exchange_rate']"
+      },
+      "current_if_recorded": {
+        "passed": false,
+        "failure_reason": "Unexpected tools: ['get_exchange_rate']"
+      },
+      "archived_calls": [
+        {
+          "function": "get_exchange_rate",
+          "args": {
+            "amount": 100.0,
+            "from_currency": "EUR",
+            "to_currency": "USD"
+          }
+        },
+        {
+          "function": "get_exchange_rate",
+          "args": {
+            "amount": 150.0,
+            "from_currency": "EUR",
+            "to_currency": "USD"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "get_exchange_rate",
+          "args": {
+            "amount": 100.0,
+            "from_currency": "EUR",
+            "to_currency": "USD"
+          }
+        },
+        {
+          "function": "get_exchange_rate",
+          "args": {
+            "amount": 150.0,
+            "from_currency": "EUR",
+            "to_currency": "USD"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-daa45c35",
+      "scenario_id": "finance_15",
+      "speaker": "66c4f3cb",
+      "recorder_ok": true,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current_if_recorded": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "modify_autopay",
+          "args": {
+            "bill_type": "mortgage",
+            "source_account": "savings"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "modify_autopay",
+          "args": {
+            "bill_type": "mortgage",
+            "source_account": "savings"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-4bb8b432",
+      "scenario_id": "finance_16",
+      "speaker": "62a885d5",
+      "recorder_ok": true,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Missing tools: ['get_exchange_rate']"
+      },
+      "current": {
+        "passed": false,
+        "failure_reason": "Missing tools: ['get_exchange_rate']"
+      },
+      "current_if_recorded": {
+        "passed": false,
+        "failure_reason": "Missing tools: ['get_exchange_rate']"
+      },
+      "archived_calls": [],
+      "current_calls": []
+    },
+    {
+      "room": "eval-774ae237",
+      "scenario_id": "finance_17",
+      "speaker": "6998abd7",
+      "recorder_ok": true,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current_if_recorded": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "get_card_benefits",
+          "args": {
+            "card_type": "gold"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "get_card_benefits",
+          "args": {
+            "card_type": "gold"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-4862c40e",
+      "scenario_id": "finance_18",
+      "speaker": "6998abd7",
+      "recorder_ok": true,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['get_exchange_rate']"
+      },
+      "current": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['get_exchange_rate']"
+      },
+      "current_if_recorded": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['get_exchange_rate']"
+      },
+      "archived_calls": [
+        {
+          "function": "get_exchange_rate",
+          "args": {
+            "amount": 1000.0,
+            "from_currency": "USD",
+            "to_currency": "USD"
+          }
+        },
+        {
+          "function": "modify_autopay",
+          "args": {
+            "bill_type": "credit_card",
+            "source_account": "savings"
+          }
+        },
+        {
+          "function": "get_card_benefits",
+          "args": {
+            "card_type": "premium"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "get_exchange_rate",
+          "args": {
+            "amount": 1000.0,
+            "from_currency": "USD",
+            "to_currency": "USD"
+          }
+        },
+        {
+          "function": "modify_autopay",
+          "args": {
+            "bill_type": "credit_card",
+            "source_account": "savings"
+          }
+        },
+        {
+          "function": "get_card_benefits",
+          "args": {
+            "card_type": "premium"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-75361135",
+      "scenario_id": "finance_19",
+      "speaker": "66f59c76",
+      "recorder_ok": true,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current_if_recorded": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "get_exchange_rate",
+          "args": {
+            "amount": 300.0,
+            "from_currency": "EUR",
+            "to_currency": "GBP"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "get_exchange_rate",
+          "args": {
+            "amount": 300.0,
+            "from_currency": "EUR",
+            "to_currency": "GBP"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-7a300028",
+      "scenario_id": "finance_20",
+      "speaker": "66c4f3cb",
+      "recorder_ok": true,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Missing tools: ['modify_autopay']"
+      },
+      "current": {
+        "passed": false,
+        "failure_reason": "Missing tools: ['modify_autopay']"
+      },
+      "current_if_recorded": {
+        "passed": false,
+        "failure_reason": "Missing tools: ['modify_autopay']"
+      },
+      "archived_calls": [
+        {
+          "function": "get_exchange_rate",
+          "args": {
+            "amount": 1000.0,
+            "from_currency": "USD",
+            "to_currency": "EUR"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "get_exchange_rate",
+          "args": {
+            "amount": 1000.0,
+            "from_currency": "USD",
+            "to_currency": "EUR"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-7e1cb774",
+      "scenario_id": "finance_21",
+      "speaker": "5e3c1fbe",
+      "recorder_ok": true,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current_if_recorded": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "get_card_benefits",
+          "args": {
+            "card_type": "gold"
+          }
+        },
+        {
+          "function": "get_exchange_rate",
+          "args": {
+            "amount": 500.0,
+            "from_currency": "USD",
+            "to_currency": "JPY"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "get_card_benefits",
+          "args": {
+            "card_type": "gold"
+          }
+        },
+        {
+          "function": "get_exchange_rate",
+          "args": {
+            "amount": 500.0,
+            "from_currency": "USD",
+            "to_currency": "JPY"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-5485b404",
+      "scenario_id": "finance_22",
+      "speaker": "5f4a4da1",
+      "recorder_ok": true,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current_if_recorded": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "modify_autopay",
+          "args": {
+            "bill_type": "mortgage",
+            "source_account": "savings"
+          }
+        },
+        {
+          "function": "modify_autopay",
+          "args": {
+            "bill_type": "credit_card",
+            "source_account": "checking"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "modify_autopay",
+          "args": {
+            "bill_type": "mortgage",
+            "source_account": "savings"
+          }
+        },
+        {
+          "function": "modify_autopay",
+          "args": {
+            "bill_type": "credit_card",
+            "source_account": "checking"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-4ecbfc06",
+      "scenario_id": "finance_23",
+      "speaker": "66f59c76",
+      "recorder_ok": true,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current_if_recorded": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "modify_autopay",
+          "args": {
+            "bill_type": "mortgage",
+            "source_account": "savings"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "modify_autopay",
+          "args": {
+            "bill_type": "mortgage",
+            "source_account": "savings"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-12aa8751",
+      "scenario_id": "housing_01",
+      "speaker": "62a885d5",
+      "recorder_ok": true,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current_if_recorded": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "search_apartments",
+          "args": {
+            "city": "Seattle",
+            "bedrooms": 2,
+            "max_price": 2500.0
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "search_apartments",
+          "args": {
+            "city": "Seattle",
+            "bedrooms": 2,
+            "max_price": 2500.0
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-c8c36173",
+      "scenario_id": "housing_02",
+      "speaker": "5f4a4da1",
+      "recorder_ok": true,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current_if_recorded": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "calculate_commute",
+          "args": {
+            "origin_address": "101 Main Street",
+            "destination_address": "downtown office",
+            "mode": "driving"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "calculate_commute",
+          "args": {
+            "origin_address": "101 Main Street",
+            "destination_address": "downtown office",
+            "mode": "driving"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-8dd4f652",
+      "scenario_id": "housing_03",
+      "speaker": "5f4a4da1",
+      "recorder_ok": true,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current_if_recorded": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "update_search_filter",
+          "args": {
+            "filter_name": "max_price",
+            "value": 1800.0
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "update_search_filter",
+          "args": {
+            "filter_name": "max_price",
+            "value": 1800.0
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-fa6fe0c3",
+      "scenario_id": "housing_04",
+      "speaker": "695bd157",
+      "recorder_ok": true,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Missing tools: ['search_apartments']"
+      },
+      "current": {
+        "passed": false,
+        "failure_reason": "Missing tools: ['search_apartments']"
+      },
+      "current_if_recorded": {
+        "passed": false,
+        "failure_reason": "Missing tools: ['search_apartments']"
+      },
+      "archived_calls": [],
+      "current_calls": []
+    },
+    {
+      "room": "eval-3e99eec4",
+      "scenario_id": "housing_05",
+      "speaker": "5ff07b5e",
+      "recorder_ok": true,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current_if_recorded": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "search_apartments",
+          "args": {
+            "city": "Miami",
+            "bedrooms": 1,
+            "max_price": 1500.0,
+            "pets_allowed": true
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "search_apartments",
+          "args": {
+            "city": "Miami",
+            "bedrooms": 1,
+            "max_price": 1500.0,
+            "pets_allowed": true
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-b171afa7",
+      "scenario_id": "housing_05",
+      "speaker": "61517db6",
+      "recorder_ok": true,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current_if_recorded": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "search_apartments",
+          "args": {
+            "city": "Miami",
+            "bedrooms": 1,
+            "max_price": 1500.0,
+            "pets_allowed": true
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "search_apartments",
+          "args": {
+            "city": "Miami",
+            "bedrooms": 1,
+            "max_price": 1500.0,
+            "pets_allowed": true
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-6c1562e0",
+      "scenario_id": "housing_08",
+      "speaker": "66f59c76",
+      "recorder_ok": true,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current_if_recorded": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "update_search_filter",
+          "args": {
+            "filter_name": "pets_allowed",
+            "value": true
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "update_search_filter",
+          "args": {
+            "filter_name": "pets_allowed",
+            "value": true
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-3d9487d8",
+      "scenario_id": "housing_09",
+      "speaker": "695bd157",
+      "recorder_ok": true,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current_if_recorded": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "search_apartments",
+          "args": {
+            "city": "Chicago",
+            "bedrooms": 2,
+            "max_price": 2000.0
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "search_apartments",
+          "args": {
+            "city": "Chicago",
+            "bedrooms": 2,
+            "max_price": 2000.0
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-0baee498",
+      "scenario_id": "housing_10",
+      "speaker": "66f59c76",
+      "recorder_ok": true,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['calculate_commute', 'update_search_filter']"
+      },
+      "current": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['calculate_commute', 'update_search_filter']"
+      },
+      "current_if_recorded": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['calculate_commute', 'update_search_filter']"
+      },
+      "archived_calls": [
+        {
+          "function": "calculate_commute",
+          "args": {
+            "origin_address": "500 Central Ave",
+            "destination_address": "the university",
+            "mode": "transit"
+          }
+        },
+        {
+          "function": "update_search_filter",
+          "args": {
+            "filter_name": "preferred_neighborhood",
+            "value": "Northside"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "calculate_commute",
+          "args": {
+            "origin_address": "500 Central Ave",
+            "destination_address": "the university",
+            "mode": "transit"
+          }
+        },
+        {
+          "function": "update_search_filter",
+          "args": {
+            "filter_name": "preferred_neighborhood",
+            "value": "Northside"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-31fcf764",
+      "scenario_id": "housing_11",
+      "speaker": "62a885d5",
+      "recorder_ok": true,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['search_apartments']"
+      },
+      "current": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['search_apartments']"
+      },
+      "current_if_recorded": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['search_apartments']"
+      },
+      "archived_calls": [
+        {
+          "function": "search_apartments",
+          "args": {
+            "city": "my city",
+            "bedrooms": 2,
+            "max_price": 1600.0
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "search_apartments",
+          "args": {
+            "city": "my city",
+            "bedrooms": 2,
+            "max_price": 1600.0
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-4fba734a",
+      "scenario_id": "housing_13",
+      "speaker": "5f4a4da1",
+      "recorder_ok": true,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['update_search_filter']"
+      },
+      "current": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['update_search_filter']"
+      },
+      "current_if_recorded": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['update_search_filter']"
+      },
+      "archived_calls": [
+        {
+          "function": "update_search_filter",
+          "args": {
+            "filter_name": "max_price",
+            "value": 3000.0
+          }
+        },
+        {
+          "function": "update_search_filter",
+          "args": {
+            "filter_name": "bedrooms",
+            "value": 3.0
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "update_search_filter",
+          "args": {
+            "filter_name": "max_price",
+            "value": 3000.0
+          }
+        },
+        {
+          "function": "update_search_filter",
+          "args": {
+            "filter_name": "bedrooms",
+            "value": 3.0
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-085adb7c",
+      "scenario_id": "housing_14",
+      "speaker": "5ff07b5e",
+      "recorder_ok": true,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current_if_recorded": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "search_apartments",
+          "args": {
+            "city": "Portland",
+            "bedrooms": 1,
+            "max_price": 1800.0,
+            "pets_allowed": true
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "search_apartments",
+          "args": {
+            "city": "Portland",
+            "bedrooms": 1,
+            "max_price": 1800.0,
+            "pets_allowed": true
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-c90dcf08",
+      "scenario_id": "housing_14",
+      "speaker": "61517db6",
+      "recorder_ok": true,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current_if_recorded": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "search_apartments",
+          "args": {
+            "city": "Portland",
+            "bedrooms": 1,
+            "max_price": 1800.0,
+            "pets_allowed": true
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "search_apartments",
+          "args": {
+            "city": "Portland",
+            "bedrooms": 1,
+            "max_price": 1800.0,
+            "pets_allowed": true
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-ce5682a8",
+      "scenario_id": "housing_17",
+      "speaker": "65e8cf8f",
+      "recorder_ok": true,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current_if_recorded": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "calculate_commute",
+          "args": {
+            "origin_address": "my house",
+            "destination_address": "the office",
+            "mode": "driving"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "calculate_commute",
+          "args": {
+            "origin_address": "my house",
+            "destination_address": "the office",
+            "mode": "driving"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-72f2e5e5",
+      "scenario_id": "housing_18",
+      "speaker": "66c4f3cb",
+      "recorder_ok": true,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['search_apartments', 'calculate_commute']"
+      },
+      "current": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['search_apartments', 'calculate_commute']"
+      },
+      "current_if_recorded": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['search_apartments', 'calculate_commute']"
+      },
+      "archived_calls": [
+        {
+          "function": "search_apartments",
+          "args": {
+            "city": "Portland",
+            "bedrooms": 1,
+            "max_price": 800.0
+          }
+        },
+        {
+          "function": "calculate_commute",
+          "args": {
+            "origin_address": "APT1",
+            "destination_address": "the coffee shop on 5th Street",
+            "mode": "biking"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "search_apartments",
+          "args": {
+            "city": "Portland",
+            "bedrooms": 1,
+            "max_price": 800.0
+          }
+        },
+        {
+          "function": "calculate_commute",
+          "args": {
+            "origin_address": "APT1",
+            "destination_address": "the coffee shop on 5th Street",
+            "mode": "biking"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-0cd458d3",
+      "scenario_id": "housing_19",
+      "speaker": "62a885d5",
+      "recorder_ok": true,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current_if_recorded": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "calculate_commute",
+          "args": {
+            "origin_address": "my house",
+            "destination_address": "the gym",
+            "mode": "driving"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "calculate_commute",
+          "args": {
+            "origin_address": "my house",
+            "destination_address": "the gym",
+            "mode": "driving"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-636359f7",
+      "scenario_id": "housing_20",
+      "speaker": "62a885d5",
+      "recorder_ok": true,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Unexpected tools: ['search_apartments']"
+      },
+      "current": {
+        "passed": false,
+        "failure_reason": "Unexpected tools: ['search_apartments']"
+      },
+      "current_if_recorded": {
+        "passed": false,
+        "failure_reason": "Unexpected tools: ['search_apartments']"
+      },
+      "archived_calls": [
+        {
+          "function": "search_apartments",
+          "args": {
+            "city": "Austin",
+            "bedrooms": 1,
+            "max_price": 2000.0
+          }
+        },
+        {
+          "function": "calculate_commute",
+          "args": {
+            "origin_address": "APT1",
+            "destination_address": "my office",
+            "mode": "driving"
+          }
+        },
+        {
+          "function": "update_search_filter",
+          "args": {
+            "filter_name": "max_price",
+            "value": 2500.0
+          }
+        },
+        {
+          "function": "search_apartments",
+          "args": {
+            "city": "Austin",
+            "bedrooms": 1,
+            "max_price": 2500.0
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "search_apartments",
+          "args": {
+            "city": "Austin",
+            "bedrooms": 1,
+            "max_price": 2000.0
+          }
+        },
+        {
+          "function": "calculate_commute",
+          "args": {
+            "origin_address": "APT1",
+            "destination_address": "my office",
+            "mode": "driving"
+          }
+        },
+        {
+          "function": "update_search_filter",
+          "args": {
+            "filter_name": "max_price",
+            "value": 2500.0
+          }
+        },
+        {
+          "function": "search_apartments",
+          "args": {
+            "city": "Austin",
+            "bedrooms": 1,
+            "max_price": 2500.0
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-2baab83c",
+      "scenario_id": "housing_21",
+      "speaker": "66c4f3cb",
+      "recorder_ok": true,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Missing tools: ['search_apartments', 'calculate_commute']"
+      },
+      "current": {
+        "passed": false,
+        "failure_reason": "Missing tools: ['search_apartments', 'calculate_commute']"
+      },
+      "current_if_recorded": {
+        "passed": false,
+        "failure_reason": "Missing tools: ['search_apartments', 'calculate_commute']"
+      },
+      "archived_calls": [],
+      "current_calls": []
+    },
+    {
+      "room": "eval-a6c41ec3",
+      "scenario_id": "housing_22",
+      "speaker": "695bd157",
+      "recorder_ok": true,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current_if_recorded": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "update_search_filter",
+          "args": {
+            "filter_name": "pets_allowed",
+            "value": true
+          }
+        },
+        {
+          "function": "search_apartments",
+          "args": {
+            "city": "Seattle",
+            "bedrooms": 1,
+            "max_price": 999999.0,
+            "pets_allowed": true
+          }
+        },
+        {
+          "function": "calculate_commute",
+          "args": {
+            "origin_address": "APT1",
+            "destination_address": "the stadium",
+            "mode": "transit"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "update_search_filter",
+          "args": {
+            "filter_name": "pets_allowed",
+            "value": true
+          }
+        },
+        {
+          "function": "search_apartments",
+          "args": {
+            "city": "Seattle",
+            "bedrooms": 1,
+            "max_price": 999999.0,
+            "pets_allowed": true
+          }
+        },
+        {
+          "function": "calculate_commute",
+          "args": {
+            "origin_address": "APT1",
+            "destination_address": "the stadium",
+            "mode": "transit"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-eccb6443",
+      "scenario_id": "housing_24",
+      "speaker": "65e8cf8f",
+      "recorder_ok": true,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current_if_recorded": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "update_search_filter",
+          "args": {
+            "filter_name": "max_price",
+            "value": 1500.0
+          }
+        },
+        {
+          "function": "search_apartments",
+          "args": {
+            "city": "Dallas",
+            "bedrooms": 1,
+            "max_price": 1500.0
+          }
+        },
+        {
+          "function": "calculate_commute",
+          "args": {
+            "origin_address": "apartment APT1 in Dallas",
+            "destination_address": "the grocery store",
+            "mode": "walking"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "update_search_filter",
+          "args": {
+            "filter_name": "max_price",
+            "value": 1500.0
+          }
+        },
+        {
+          "function": "search_apartments",
+          "args": {
+            "city": "Dallas",
+            "bedrooms": 1,
+            "max_price": 1500.0
+          }
+        },
+        {
+          "function": "calculate_commute",
+          "args": {
+            "origin_address": "apartment APT1 in Dallas",
+            "destination_address": "the grocery store",
+            "mode": "walking"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-1ec964a0",
+      "scenario_id": "ecommerce_10",
+      "speaker": "6998abd7",
+      "recorder_ok": true,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current_if_recorded": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "123ABC"
+          }
+        },
+        {
+          "function": "search_products",
+          "args": {
+            "query": "winter jackets",
+            "max_price": 150.0
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "123ABC"
+          }
+        },
+        {
+          "function": "search_products",
+          "args": {
+            "query": "winter jackets",
+            "max_price": 150.0
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-68e3452e",
+      "scenario_id": "housing_15",
+      "speaker": "5ff07b5e",
+      "recorder_ok": true,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current_if_recorded": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "search_apartments",
+          "args": {
+            "city": "Atlanta",
+            "bedrooms": 3,
+            "max_price": 999999.0,
+            "pets_allowed": true
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "search_apartments",
+          "args": {
+            "city": "Atlanta",
+            "bedrooms": 3,
+            "max_price": 999999.0,
+            "pets_allowed": true
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-67aa5dc4",
+      "scenario_id": "housing_15",
+      "speaker": "61517db6",
+      "recorder_ok": true,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['search_apartments']"
+      },
+      "current": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['search_apartments']"
+      },
+      "current_if_recorded": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['search_apartments']"
+      },
+      "archived_calls": [
+        {
+          "function": "search_apartments",
+          "args": {
+            "city": "Atlanta",
+            "bedrooms": 3,
+            "max_price": 9999999.0
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "search_apartments",
+          "args": {
+            "city": "Atlanta",
+            "bedrooms": 3,
+            "max_price": 9999999.0
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-48480bae",
+      "scenario_id": "housing_24",
+      "speaker": "69a9cf80",
+      "recorder_ok": true,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current_if_recorded": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "update_search_filter",
+          "args": {
+            "filter_name": "max_price",
+            "value": 1500.0
+          }
+        },
+        {
+          "function": "search_apartments",
+          "args": {
+            "city": "Dallas",
+            "bedrooms": 1,
+            "max_price": 1500.0
+          }
+        },
+        {
+          "function": "calculate_commute",
+          "args": {
+            "origin_address": "Dallas apartment",
+            "destination_address": "the grocery store",
+            "mode": "walking"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "update_search_filter",
+          "args": {
+            "filter_name": "max_price",
+            "value": 1500.0
+          }
+        },
+        {
+          "function": "search_apartments",
+          "args": {
+            "city": "Dallas",
+            "bedrooms": 1,
+            "max_price": 1500.0
+          }
+        },
+        {
+          "function": "calculate_commute",
+          "args": {
+            "origin_address": "Dallas apartment",
+            "destination_address": "the grocery store",
+            "mode": "walking"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-a3132ac7",
+      "scenario_id": "housing_25",
+      "speaker": "66f59c76",
+      "recorder_ok": true,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Unexpected tools: ['update_search_filter']"
+      },
+      "current": {
+        "passed": false,
+        "failure_reason": "Unexpected tools: ['update_search_filter']"
+      },
+      "current_if_recorded": {
+        "passed": false,
+        "failure_reason": "Unexpected tools: ['update_search_filter']"
+      },
+      "archived_calls": [
+        {
+          "function": "update_search_filter",
+          "args": {
+            "filter_name": "pets_allowed",
+            "value": true
+          }
+        },
+        {
+          "function": "update_search_filter",
+          "args": {
+            "filter_name": "max_price",
+            "value": 3000.0
+          }
+        },
+        {
+          "function": "update_search_filter",
+          "args": {
+            "filter_name": "max_price",
+            "value": 3500.0
+          }
+        },
+        {
+          "function": "search_apartments",
+          "args": {
+            "city": "San Francisco",
+            "bedrooms": 0,
+            "max_price": 3500.0,
+            "pets_allowed": true
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "update_search_filter",
+          "args": {
+            "filter_name": "pets_allowed",
+            "value": true
+          }
+        },
+        {
+          "function": "update_search_filter",
+          "args": {
+            "filter_name": "max_price",
+            "value": 3000.0
+          }
+        },
+        {
+          "function": "update_search_filter",
+          "args": {
+            "filter_name": "max_price",
+            "value": 3500.0
+          }
+        },
+        {
+          "function": "search_apartments",
+          "args": {
+            "city": "San Francisco",
+            "bedrooms": 0,
+            "max_price": 3500.0,
+            "pets_allowed": true
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-d660142c",
+      "scenario_id": "travel_01",
+      "speaker": "62a885d5",
+      "recorder_ok": true,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current_if_recorded": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "search_flights",
+          "args": {
+            "destination": "Tokyo",
+            "date": "July 15"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "search_flights",
+          "args": {
+            "destination": "Tokyo",
+            "date": "July 15"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-a9bfcac1",
+      "scenario_id": "travel_02",
+      "speaker": "5e3c1fbe",
+      "recorder_ok": true,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['update_identity_doc']"
+      },
+      "current": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['update_identity_doc']"
+      },
+      "current_if_recorded": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['update_identity_doc']"
+      },
+      "archived_calls": [
+        {
+          "function": "update_identity_doc",
+          "args": {
+            "doc_type": "passport",
+            "doc_number": "P88990011"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "update_identity_doc",
+          "args": {
+            "doc_type": "passport",
+            "doc_number": "P88990011"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-0864e0bf",
+      "scenario_id": "travel_03",
+      "speaker": "5ff07b5e",
+      "recorder_ok": true,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current_if_recorded": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "search_flights",
+          "args": {
+            "destination": "London",
+            "date": "August 20"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "search_flights",
+          "args": {
+            "destination": "London",
+            "date": "August 20"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-b558f91d",
+      "scenario_id": "travel_03",
+      "speaker": "61517db6",
+      "recorder_ok": true,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current_if_recorded": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "search_flights",
+          "args": {
+            "destination": "London",
+            "date": "August 20"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "search_flights",
+          "args": {
+            "destination": "London",
+            "date": "August 20"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-05ccce44",
+      "scenario_id": "travel_07",
+      "speaker": "5ff07b5e",
+      "recorder_ok": true,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current_if_recorded": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "update_identity_doc",
+          "args": {
+            "doc_type": "driver_license",
+            "doc_number": "DL555"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "update_identity_doc",
+          "args": {
+            "doc_type": "driver_license",
+            "doc_number": "DL555"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-5306e19a",
+      "scenario_id": "travel_07",
+      "speaker": "61517db6",
+      "recorder_ok": true,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current_if_recorded": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "update_identity_doc",
+          "args": {
+            "doc_type": "driver_license",
+            "doc_number": "DL555"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "update_identity_doc",
+          "args": {
+            "doc_type": "driver_license",
+            "doc_number": "DL555"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-5054e6e3",
+      "scenario_id": "travel_08",
+      "speaker": "695bd157",
+      "recorder_ok": true,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current_if_recorded": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "search_flights",
+          "args": {
+            "destination": "Seattle",
+            "date": "November 1"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "search_flights",
+          "args": {
+            "destination": "Seattle",
+            "date": "November 1"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-ea33ea35",
+      "scenario_id": "travel_10",
+      "speaker": "5f4a4da1",
+      "recorder_ok": true,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Unexpected tools: ['search_flights']"
+      },
+      "current": {
+        "passed": false,
+        "failure_reason": "Unexpected tools: ['search_flights']"
+      },
+      "current_if_recorded": {
+        "passed": false,
+        "failure_reason": "Unexpected tools: ['search_flights']"
+      },
+      "archived_calls": [
+        {
+          "function": "search_flights",
+          "args": {
+            "destination": "Miami",
+            "date": "October 5"
+          }
+        },
+        {
+          "function": "search_flights",
+          "args": {
+            "destination": "Miami",
+            "date": "October 7"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "search_flights",
+          "args": {
+            "destination": "Miami",
+            "date": "October 5"
+          }
+        },
+        {
+          "function": "search_flights",
+          "args": {
+            "destination": "Miami",
+            "date": "October 7"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-cac36c8d",
+      "scenario_id": "travel_11",
+      "speaker": "66c4f3cb",
+      "recorder_ok": true,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current_if_recorded": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "search_flights",
+          "args": {
+            "destination": "Austin",
+            "date": "February 2"
+          }
+        },
+        {
+          "function": "book_flight",
+          "args": {
+            "passenger_name": "Morgan Smith",
+            "flight_id": "FL123"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "search_flights",
+          "args": {
+            "destination": "Austin",
+            "date": "February 2"
+          }
+        },
+        {
+          "function": "book_flight",
+          "args": {
+            "passenger_name": "Morgan Smith",
+            "flight_id": "FL123"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-f7d7446d",
+      "scenario_id": "travel_14",
+      "speaker": "66c4f3cb",
+      "recorder_ok": true,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['search_flights']"
+      },
+      "current": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['search_flights']"
+      },
+      "current_if_recorded": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['search_flights']"
+      },
+      "archived_calls": [
+        {
+          "function": "search_flights",
+          "args": {
+            "destination": "Sewell",
+            "date": "March 22"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "search_flights",
+          "args": {
+            "destination": "Sewell",
+            "date": "March 22"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-7001b881",
+      "scenario_id": "travel_16",
+      "speaker": "66f59c76",
+      "recorder_ok": true,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['search_flights']"
+      },
+      "current": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['search_flights']"
+      },
+      "current_if_recorded": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['search_flights']"
+      },
+      "archived_calls": [
+        {
+          "function": "search_flights",
+          "args": {
+            "destination": "Vegas",
+            "date": "August 8"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "search_flights",
+          "args": {
+            "destination": "Vegas",
+            "date": "August 8"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-80671f41",
+      "scenario_id": "travel_19",
+      "speaker": "695bd157",
+      "recorder_ok": true,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Unexpected tools: ['search_flights', 'search_flights']"
+      },
+      "current": {
+        "passed": false,
+        "failure_reason": "Unexpected tools: ['search_flights', 'search_flights']"
+      },
+      "current_if_recorded": {
+        "passed": false,
+        "failure_reason": "Unexpected tools: ['search_flights', 'search_flights']"
+      },
+      "archived_calls": [
+        {
+          "function": "search_flights",
+          "args": {
+            "destination": "Milan",
+            "date": "today"
+          }
+        },
+        {
+          "function": "search_flights",
+          "args": {
+            "destination": "Milan",
+            "date": "June 1"
+          }
+        },
+        {
+          "function": "search_flights",
+          "args": {
+            "destination": "Milan",
+            "date": "June 3"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "search_flights",
+          "args": {
+            "destination": "Milan",
+            "date": "today"
+          }
+        },
+        {
+          "function": "search_flights",
+          "args": {
+            "destination": "Milan",
+            "date": "June 1"
+          }
+        },
+        {
+          "function": "search_flights",
+          "args": {
+            "destination": "Milan",
+            "date": "June 3"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-0e0839c8",
+      "scenario_id": "travel_20",
+      "speaker": "62a885d5",
+      "recorder_ok": true,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Missing tools: ['book_flight']"
+      },
+      "current": {
+        "passed": false,
+        "failure_reason": "Missing tools: ['book_flight']"
+      },
+      "current_if_recorded": {
+        "passed": false,
+        "failure_reason": "Missing tools: ['book_flight']"
+      },
+      "archived_calls": [
+        {
+          "function": "search_flights",
+          "args": {
+            "destination": "Toronto",
+            "date": "July 20"
+          }
+        },
+        {
+          "function": "update_identity_doc",
+          "args": {
+            "doc_type": "driver_license",
+            "doc_number": "DL88"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "search_flights",
+          "args": {
+            "destination": "Toronto",
+            "date": "July 20"
+          }
+        },
+        {
+          "function": "update_identity_doc",
+          "args": {
+            "doc_type": "driver_license",
+            "doc_number": "DL88"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-05892f28",
+      "scenario_id": "travel_21",
+      "speaker": "65e8cf8f",
+      "recorder_ok": true,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['search_flights', 'update_identity_doc']"
+      },
+      "current": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['search_flights', 'update_identity_doc']"
+      },
+      "current_if_recorded": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['search_flights', 'update_identity_doc']"
+      },
+      "archived_calls": [
+        {
+          "function": "search_flights",
+          "args": {
+            "destination": "Vegas",
+            "date": "August 8"
+          }
+        },
+        {
+          "function": "book_flight",
+          "args": {
+            "passenger_name": "Quinn Davis",
+            "flight_id": "FL123"
+          }
+        },
+        {
+          "function": "update_identity_doc",
+          "args": {
+            "doc_type": "visa",
+            "doc_number": "V7"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "search_flights",
+          "args": {
+            "destination": "Vegas",
+            "date": "August 8"
+          }
+        },
+        {
+          "function": "book_flight",
+          "args": {
+            "passenger_name": "Quinn Davis",
+            "flight_id": "FL123"
+          }
+        },
+        {
+          "function": "update_identity_doc",
+          "args": {
+            "doc_type": "visa",
+            "doc_number": "V7"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-91e2b87e",
+      "scenario_id": "travel_21",
+      "speaker": "69a9cf80",
+      "recorder_ok": true,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['search_flights']"
+      },
+      "current": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['search_flights']"
+      },
+      "current_if_recorded": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['search_flights']"
+      },
+      "archived_calls": [
+        {
+          "function": "search_flights",
+          "args": {
+            "destination": "Vegas",
+            "date": "August 8"
+          }
+        },
+        {
+          "function": "book_flight",
+          "args": {
+            "passenger_name": "Quinn Davis",
+            "flight_id": "FL123"
+          }
+        },
+        {
+          "function": "update_identity_doc",
+          "args": {
+            "doc_type": "visa",
+            "doc_number": "V77"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "search_flights",
+          "args": {
+            "destination": "Vegas",
+            "date": "August 8"
+          }
+        },
+        {
+          "function": "book_flight",
+          "args": {
+            "passenger_name": "Quinn Davis",
+            "flight_id": "FL123"
+          }
+        },
+        {
+          "function": "update_identity_doc",
+          "args": {
+            "doc_type": "visa",
+            "doc_number": "V77"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-a454dbbb",
+      "scenario_id": "travel_23",
+      "speaker": "65e8cf8f",
+      "recorder_ok": true,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current_if_recorded": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "update_identity_doc",
+          "args": {
+            "doc_type": "passport",
+            "doc_number": "P1122"
+          }
+        },
+        {
+          "function": "update_identity_doc",
+          "args": {
+            "doc_type": "driver_license",
+            "doc_number": "DL9090"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "update_identity_doc",
+          "args": {
+            "doc_type": "passport",
+            "doc_number": "P1122"
+          }
+        },
+        {
+          "function": "update_identity_doc",
+          "args": {
+            "doc_type": "driver_license",
+            "doc_number": "DL9090"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-2122ae74",
+      "scenario_id": "travel_23",
+      "speaker": "69a9cf80",
+      "recorder_ok": true,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current_if_recorded": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "update_identity_doc",
+          "args": {
+            "doc_type": "passport",
+            "doc_number": "P1122"
+          }
+        },
+        {
+          "function": "update_identity_doc",
+          "args": {
+            "doc_type": "driver_license",
+            "doc_number": "DL9090"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "update_identity_doc",
+          "args": {
+            "doc_type": "passport",
+            "doc_number": "P1122"
+          }
+        },
+        {
+          "function": "update_identity_doc",
+          "args": {
+            "doc_type": "driver_license",
+            "doc_number": "DL9090"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-b5cfc2f8",
+      "scenario_id": "travel_24",
+      "speaker": "695bd157",
+      "recorder_ok": true,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Unexpected tools: ['search_apartments']"
+      },
+      "current": {
+        "passed": false,
+        "failure_reason": "Unexpected tools: ['search_apartments']"
+      },
+      "current_if_recorded": {
+        "passed": false,
+        "failure_reason": "Unexpected tools: ['search_apartments']"
+      },
+      "archived_calls": [
+        {
+          "function": "search_flights",
+          "args": {
+            "destination": "Vancouver",
+            "date": "November 5"
+          }
+        },
+        {
+          "function": "book_flight",
+          "args": {
+            "passenger_name": "Skyler",
+            "flight_id": "FL123"
+          }
+        },
+        {
+          "function": "search_apartments",
+          "args": {
+            "city": "Vancouver",
+            "bedrooms": 1,
+            "max_price": 1000.0
+          }
+        },
+        {
+          "function": "update_identity_doc",
+          "args": {
+            "doc_type": "visa",
+            "doc_number": "V44"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "search_flights",
+          "args": {
+            "destination": "Vancouver",
+            "date": "November 5"
+          }
+        },
+        {
+          "function": "book_flight",
+          "args": {
+            "passenger_name": "Skyler",
+            "flight_id": "FL123"
+          }
+        },
+        {
+          "function": "search_apartments",
+          "args": {
+            "city": "Vancouver",
+            "bedrooms": 1,
+            "max_price": 1000.0
+          }
+        },
+        {
+          "function": "update_identity_doc",
+          "args": {
+            "doc_type": "visa",
+            "doc_number": "V44"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-8f7f919e",
+      "scenario_id": "ecommerce_17",
+      "speaker": "5f4a4da1",
+      "recorder_ok": true,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current_if_recorded": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "GG5"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "track_order",
+          "args": {
+            "order_id": "GG5"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-3f502273",
+      "scenario_id": "finance_14",
+      "speaker": "5f4a4da1",
+      "recorder_ok": true,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current_if_recorded": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "get_exchange_rate",
+          "args": {
+            "amount": 50.0,
+            "from_currency": "USD",
+            "to_currency": "EUR"
+          }
+        },
+        {
+          "function": "get_exchange_rate",
+          "args": {
+            "amount": 100.0,
+            "from_currency": "CAD",
+            "to_currency": "USD"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "get_exchange_rate",
+          "args": {
+            "amount": 50.0,
+            "from_currency": "USD",
+            "to_currency": "EUR"
+          }
+        },
+        {
+          "function": "get_exchange_rate",
+          "args": {
+            "amount": 100.0,
+            "from_currency": "CAD",
+            "to_currency": "USD"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-f6af6352",
+      "scenario_id": "housing_06",
+      "speaker": "5f4a4da1",
+      "recorder_ok": true,
+      "archived": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['calculate_commute']"
+      },
+      "current": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['calculate_commute']"
+      },
+      "current_if_recorded": {
+        "passed": false,
+        "failure_reason": "Wrong arguments for: ['calculate_commute']"
+      },
+      "archived_calls": [
+        {
+          "function": "calculate_commute",
+          "args": {
+            "origin_address": "Oak Street",
+            "destination_address": "the gym",
+            "mode": "walking"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "calculate_commute",
+          "args": {
+            "origin_address": "Oak Street",
+            "destination_address": "the gym",
+            "mode": "walking"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-0d858938",
+      "scenario_id": "housing_17",
+      "speaker": "69a9cf80",
+      "recorder_ok": true,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current_if_recorded": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "calculate_commute",
+          "args": {
+            "origin_address": "my house",
+            "destination_address": "the office",
+            "mode": "driving"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "calculate_commute",
+          "args": {
+            "origin_address": "my house",
+            "destination_address": "the office",
+            "mode": "driving"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-caf24258",
+      "scenario_id": "travel_05",
+      "speaker": "6998abd7",
+      "recorder_ok": true,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current_if_recorded": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "search_flights",
+          "args": {
+            "destination": "Chicago",
+            "date": "December 12"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "search_flights",
+          "args": {
+            "destination": "Chicago",
+            "date": "December 12"
+          }
+        }
+      ]
+    },
+    {
+      "room": "eval-d945b463",
+      "scenario_id": "travel_18",
+      "speaker": "66f59c76",
+      "recorder_ok": true,
+      "archived": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "current_if_recorded": {
+        "passed": true,
+        "failure_reason": ""
+      },
+      "archived_calls": [
+        {
+          "function": "search_flights",
+          "args": {
+            "destination": "Dubai",
+            "date": "April 10"
+          }
+        },
+        {
+          "function": "book_flight",
+          "args": {
+            "passenger_name": "Casey Lee",
+            "flight_id": "FL123"
+          }
+        },
+        {
+          "function": "update_identity_doc",
+          "args": {
+            "doc_type": "passport",
+            "doc_number": "E772211"
+          }
+        }
+      ],
+      "current_calls": [
+        {
+          "function": "search_flights",
+          "args": {
+            "destination": "Dubai",
+            "date": "April 10"
+          }
+        },
+        {
+          "function": "book_flight",
+          "args": {
+            "passenger_name": "Casey Lee",
+            "flight_id": "FL123"
+          }
+        },
+        {
+          "function": "update_identity_doc",
+          "args": {
+            "doc_type": "passport",
+            "doc_number": "E772211"
+          }
+        }
+      ]
+    }
+  ]
+}
