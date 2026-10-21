@@ -41,6 +41,8 @@ video:
 INTERRA_FDB_AGENT_NAME=interra-benchmark python -m agent.fdb_livekit dev
 # camera worker, second terminal
 python -m agent.extension_livekit dev
+# home worker, third terminal
+python -m agent.home_livekit dev
 # page
 python -m agent.demo_page
 ```
@@ -50,6 +52,13 @@ Start the camera extension in a separate terminal. It is not the benchmark agent
 ```bash
 python -m agent.extension_livekit start
 ```
+
+The SmartThings home extension runs on `/home`. A one-minute take: "Set the
+living room AC to 22 and turn off the lights. No wait, make it 24." Then
+"Unlock the front door", "Yes". Then press "Add a new device" and say "Set the
+air purifier to high", then "Undo that". If LiveKit is unavailable, "Play
+walkthrough" runs the same script through the real controller with no room;
+label it as a scripted walkthrough if it appears in the video.
 
 Replay the booking correction without a camera or a LiveKit room:
 

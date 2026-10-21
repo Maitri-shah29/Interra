@@ -291,14 +291,57 @@ scored 4 October 2026 run on one screen:
 python -m agent.demo_page
 ```
 
-Open `http://127.0.0.1:8780/`. The pages are separate: Overview, Voice and
-Camera (a live session with captions from the agent's LiveKit transcription and
+Open `http://127.0.0.1:8780/`. The pages are separate: Overview, Voice,
+Camera and Home (a live session with captions from the agent's LiveKit transcription and
 the gate's latest decision, including a call held during the quiet window
 before it runs or is dropped), Replay (the recorded housing_11 run played from
 its own trace, with the pinned evaluator's result for it, which was not a
 pass), Logs (every session in the local trace, filterable, with `.jsonl`
 download) and Results. Replay and Results need no LiveKit room. The pages live
 in `src/agent/web/`; `--port` and `--host` change where the server listens.
+
+## SmartThings home extension
+
+The Samsung extension is a voice session for a SmartThings-style home
+(`src/agent/smart_home.py`, worker `src/agent/home_livekit.py`). Each device is
+described the way SmartThings describes devices: capabilities, each with
+attributes that can be read and commands that change state. Interra generates
+its tools from those descriptions when the session starts, marking each one
+read-only or state-changing and routine or risky, so there are no hand-written
+tools per device. The capability names follow SmartThings' public capability
+model; the eight devices are simulated, and nothing talks to a real
+SmartThings account.
+
+Every state change goes through the commit gate, plus four home rules:
+
+- the latest value wins: a newer value for the same device and capability
+  replaces one still waiting at the gate, so "22… no, 24" never sends 22;
+- a value the device already has is not sent again;
+- risky commands (unlocking a door, starting the oven) wait for a spoken yes;
+- "undo that" reverses the last reversible change within two minutes.
+
+During a call, the Home page's "Add a new device" button sends a device the
+agent has never seen, an air purifier whose capability definitions are also
+new, over LiveKit RPC. The worker validates it, generates its tools and adds
+them to the live session, so the next request can control it.
+
+```bash
+python -m agent.home_livekit dev
+```
+
+Dispatch name: `interra-home`. Open `http://127.0.0.1:8780/home` and press
+Start. "Play walkthrough" on the same page runs the scripted demo through the
+real home controller with no LiveKit room; the person's lines are scripted, and
+every device change comes from the controller. The same walkthrough without a
+browser:
+
+```bash
+python -m agent.home_demo
+```
+
+That writes `artifacts/home-demo/replay.html` and prints the final device
+states: the AC at 24 (22 was dropped), the lights off, the door unlocked after
+the yes, and the purifier's change undone.
 
 ## Tests
 

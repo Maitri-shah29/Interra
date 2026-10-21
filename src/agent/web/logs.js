@@ -68,7 +68,7 @@ function sessionItem(session) {
   if (session.room === view.room) link.setAttribute("aria-current", "true");
   const icon = h("span", "sess-icon");
   icon.dataset.mode = session.recorded ? "recorded" : session.mode;
-  icon.append(svgIcon(session.recorded ? "file" : session.mode === "camera" ? "camera" : session.mode === "voice" ? "audio" : "cpu"));
+  icon.append(svgIcon(session.recorded ? "file" : { camera: "camera", voice: "audio", home: "home" }[session.mode] || "cpu"));
   if (session.live) icon.append(h("i", "live-dot"));
   const main = h("span", "sess-main");
   main.append(h("b", null, sessionLabel(session)));
@@ -112,7 +112,7 @@ function updateHeader() {
     return;
   }
   el.title.textContent = view.recorded ? "housing_11 · scored run" : view.room;
-  el.kind.textContent = view.recorded ? "Recorded run · 4 October 2026" : session && session.mode === "camera" ? "Camera session" : session && session.mode === "voice" ? "Voice session" : "Session";
+  el.kind.textContent = view.recorded ? "Recorded run · 4 October 2026" : ({ camera: "Camera session", voice: "Voice session", home: "Home session" }[session && session.mode] || "Session");
   const live = Boolean(session && session.live);
   el.liveBadge.hidden = !live;
   el.liveBadge.dataset.on = String(live);

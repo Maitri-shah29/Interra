@@ -1,0 +1,70 @@
+/* Home page: device tiles under a smaller visualizer. */
+
+.session[data-mode="home"] .orb-zone { flex: 0 0 160px; min-height: 0; }
+.session[data-mode="home"] .stage-main { justify-content: flex-start; }
+
+.home { width: 100%; display: flex; flex-direction: column; gap: 10px; margin-top: 4px; }
+.home-head { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 12px; }
+.home-head h2 { margin: 0; display: inline-flex; align-items: center; gap: 8px; font-size: 15.5px; font-weight: 600; }
+.home-head h2 .ic { color: var(--text-3); }
+.home-meta { font-size: 13px; color: var(--text-3); }
+
+.device-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; }
+
+.device {
+  position: relative;
+  display: flex; flex-direction: column; gap: 4px;
+  min-width: 0;
+  padding: 11px 12px 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--panel-2);
+  transition: border-color 0.3s, background 0.3s;
+}
+.device[data-active="true"] { border-color: color-mix(in srgb, var(--cool) 45%, transparent); background: color-mix(in srgb, var(--cool) 6%, var(--panel-2)); }
+.device-top { display: flex; align-items: center; gap: 8px; color: var(--text-3); font-size: 12.5px; }
+.device-icon { width: 18px; height: 18px; color: var(--text-3); transition: color 0.3s; }
+.device[data-active="true"] .device-icon { color: var(--cool); }
+.device-room { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.device-name { margin: 2px 0 0; font-size: 14.5px; font-weight: 600; line-height: 1.25; }
+.device-primary { margin: 0; font-size: 20px; font-weight: 300; letter-spacing: -0.01em; font-variant-numeric: tabular-nums; }
+.device-attrs { margin: 0; display: grid; gap: 1px; font-size: 12.5px; color: var(--text-3); }
+.device-attrs div { display: flex; justify-content: space-between; gap: 8px; }
+.device-attrs dt, .device-attrs dd { margin: 0; }
+.device-attrs dd { color: var(--text-2); font-variant-numeric: tabular-nums; }
+.device .changed, .device .changed dd { color: var(--cool); }
+
+.device-note {
+  margin: 4px 0 0;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 12px; line-height: 1.4;
+  color: var(--text-2);
+  background: var(--panel-3);
+}
+.device-note.show { animation: rise 0.35s var(--ease); }
+.device-note[data-kind="holding"], .device-note[data-kind="confirm"] { color: var(--holding); background: color-mix(in srgb, var(--holding) 12%, transparent); }
+.device-note[data-kind="dropped"] { color: var(--dropped); background: color-mix(in srgb, var(--dropped) 12%, transparent); }
+.device-note[data-kind="done"], .device-note[data-kind="new"] { color: var(--cool); background: color-mix(in srgb, var(--cool) 12%, transparent); }
+.device[data-note="holding"], .device[data-note="confirm"] { border-color: color-mix(in srgb, var(--holding) 55%, transparent); }
+.device[data-note="dropped"] { border-color: color-mix(in srgb, var(--dropped) 55%, transparent); }
+
+.device.flash { animation: device-flash 1.1s var(--ease); }
+.device.arrive { animation: device-arrive 0.7s var(--ease); }
+@keyframes device-flash { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--cool) 60%, transparent); } 100% { box-shadow: 0 0 0 10px transparent; } }
+@keyframes device-arrive { from { opacity: 0; transform: translateY(8px) scale(0.97); } to { opacity: 1; transform: none; } }
+
+.device-json { font-size: 13px; color: var(--text-3); }
+.device-json summary { cursor: pointer; width: fit-content; }
+.device-json pre {
+  margin: 8px 0 0;
+  max-height: 220px; overflow: auto;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--panel-2);
+  font: 12px/1.5 var(--font-mono);
+  color: var(--text-2);
+}
+
+.script-steps { margin: 0; padding-left: 20px; display: grid; gap: 4px; font-size: 14.5px; line-height: 1.45; color: var(--text); }

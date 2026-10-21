@@ -341,15 +341,18 @@ export class Conversation {
     const held = Boolean(waiting && waiting.length);
     const chipKey = held ? waiting.shift() : "call:" + ++this.sequence;
     if (waiting && !waiting.length) this.pending.delete(key);
+    const droppedNote = record.reason === "replaced by a newer value"
+      ? "A newer value for the same device replaced it before it ran."
+      : "You kept speaking, so it was not logged.";
     const notes = {
-      dropped: "You kept speaking, so it was not logged.",
+      dropped: droppedNote,
       reused: "Identical call in this room; the first result was reused.",
       executed: [callDuration(record.call), resultSummary(record.result)].filter(Boolean).join(" · "),
       failed: resultSummary(record.result),
     };
     this.transcript.chip(chipKey, meta.chip, meta.title, (record.call && record.call.function) || "tool", { icon: meta.icon, time: record.time });
     const focusNotes = {
-      dropped: "You kept speaking, so it was not logged.",
+      dropped: droppedNote,
       reused: "Identical call; the first result was reused.",
       executed: notes.executed,
       failed: notes.failed,

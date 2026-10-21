@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+{{head}}
+<title>Interra — home session</title>
+<meta name="description" content="Talk to a SmartThings-style home, correct yourself, and watch the devices change only to the value you meant.">
+<link rel="stylesheet" href="/static/session.css">
+<link rel="stylesheet" href="/static/house.css">
+</head>
+<body data-page="house">
+{{sprite}}
+{{header}}
+
+<main class="session" data-mode="home">
+  <section class="stage glass" aria-label="Live session">
+    <div class="stage-main">
+      <div class="orb-zone">
+        <div class="orb-wrap" id="orb-wrap" data-user="quiet">
+          <div class="orb-shadow"></div>
+          <div class="orb-rings" aria-hidden="true"><i></i><i></i><i></i></div>
+          <div class="orb-fallback" aria-hidden="true"></div>
+          <canvas id="orb" aria-hidden="true"></canvas>
+          <div class="orb-pulse" id="orb-pulse" aria-hidden="true"></div>
+        </div>
+      </div>
+
+      <div class="viz-picker" id="viz-picker" role="group" aria-label="Visualizer style"></div>
+      <div class="bars" id="bars" data-tone="idle" aria-hidden="true"></div>
+      <p class="hint" id="status">Press Start. Use headphones so the agent does not hear itself.</p>
+
+      <section class="home" aria-label="Devices">
+        <header class="home-head">
+          <h2><svg class="ic sm"><use href="#i-home"/></svg>Home</h2>
+          <span class="home-meta" id="home-meta">Simulated devices · SmartThings capability model</span>
+          <span class="spacer"></span>
+          <button class="btn sm ghost" id="walkthrough" type="button" title="Plays the scripted demo through the real home controller, without a LiveKit room">
+            <svg class="ic sm"><use href="#i-play"/></svg><span id="walkthrough-label">Play walkthrough</span>
+          </button>
+          <button class="btn sm" id="add-device" type="button" disabled title="Start a session first">
+            <svg class="ic sm"><use href="#i-plus"/></svg><span id="add-device-label">Add a new device</span>
+          </button>
+        </header>
+        <div class="device-grid" id="devices" aria-live="polite"></div>
+        <details class="device-json" id="device-json">
+          <summary>Device description the agent receives</summary>
+          <pre id="device-json-text"></pre>
+        </details>
+      </section>
+    </div>
+
+    <nav class="dock glass" aria-label="Call controls">
+      <button class="dock-btn" id="mic" type="button" aria-pressed="false" disabled title="Mute microphone">
+        <svg class="ic on-icon"><use href="#i-mic"/></svg>
+        <svg class="ic off-icon"><use href="#i-mic-off"/></svg>
+        <canvas class="mic-wave" id="mic-wave" width="148" height="52" aria-hidden="true"></canvas>
+      </button>
+      <button class="call-btn" id="start" type="button" data-state="idle">
+        <svg class="ic phone"><use href="#i-phone"/></svg>
+        <svg class="ic spin"><use href="#i-loader"/></svg>
+        <span id="start-label">Start</span>
+        <span class="elapsed" id="elapsed" hidden>00:00</span>
+      </button>
+      <button class="dock-btn" id="speaker" type="button" aria-pressed="false" title="Allow agent audio" hidden>
+        <svg class="ic on-icon"><use href="#i-volume"/></svg>
+        <svg class="ic off-icon"><use href="#i-volume-x"/></svg>
+      </button>
+    </nav>
+    <div id="agent-audio" hidden></div>
+  </section>
+
+  <div class="side">
+  <section class="gate-panel glass" id="now" data-kind="Waiting" aria-label="Commit gate" aria-live="polite">
+    <header class="gate-bar">
+      <span class="gate-title">Commit gate</span>
+    </header>
+    <ol class="steps" id="pipeline" aria-label="Where this turn is">
+      <li data-step="heard"><span class="step-n">1</span><span class="step-name">Heard</span></li>
+      <li data-step="hold"><span class="step-n">2</span><span class="step-name">Holding</span></li>
+      <li data-step="decide"><span class="step-n">3</span><span class="step-name" id="tool-step">Decision</span></li>
+      <li data-step="said"><span class="step-n">4</span><span class="step-name">Said</span></li>
+    </ol>
+    <div class="gate-focus">
+      <div class="focus-head">
+        <span class="gate-icon" id="now-icon" hidden></span>
+        <b id="now-kind">Waiting for a request</b>
+        <span class="spacer"></span>
+        <time class="gate-time" id="now-time"></time>
+      </div>
+      <div class="focus-body muted" id="now-text">A device change waits here until you have been quiet.</div>
+      <div class="quiet" id="quiet" data-state="holding">
+        <span id="quiet-label">Quiet window</span>
+        <div class="quiet-track"><i id="quiet-bar"></i></div>
+        <span id="quiet-value">0.0 / 0.6 s</span>
+      </div>
+    </div>
+    <div class="gate-log" id="gate-log" hidden>
+      <span class="gate-log-title">Decisions</span>
+      <ol id="gate-history"></ol>
+    </div>
+  </section>
+
+  <section class="panel transcript glass" aria-label="Transcript">
+    <header class="panel-head">
+      <h2><svg class="ic sm"><use href="#i-message"/></svg>Transcript</h2>
+      <span class="badge" id="tx-badge" data-on="false" hidden><i></i><span id="tx-badge-text"></span></span>
+    </header>
+    <figure class="script-card">
+      <figcaption class="eyebrow"><svg class="ic xs"><use href="#i-message"/></svg>Try these</figcaption>
+      <ol class="script-steps">
+        <li>“Set the living room AC to 22 and turn off the lights. No wait, make it 24.”</li>
+        <li>“Unlock the front door.” Then “Yes.”</li>
+        <li>Press <b>Add a new device</b>, then “Set the air purifier to high.”</li>
+        <li>“Undo that.”</li>
+      </ol>
+    </figure>
+    <div class="panel-body">
+      <div class="tx-scroll" id="tx-scroll">
+        <ol class="tx-list" id="tx"></ol>
+      </div>
+      <div class="empty" id="tx-empty">
+        <span class="empty-icon"><svg class="ic lg"><use href="#i-message"/></svg></span>
+        <p><b>Live transcription</b>What you and the agent say appears here.</p>
+      </div>
+      <button class="jump" id="tx-jump" type="button"><svg class="ic xs"><use href="#i-arrow-down"/></svg>Latest</button>
+    </div>
+  </section>
+  </div>
+</main>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script type="module" src="/static/shell.js"></script>
+<script type="module" src="/static/live.js"></script>
+<script type="module" src="/static/house.js"></script>
+</body>
+</html>

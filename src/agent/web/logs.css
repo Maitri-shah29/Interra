@@ -34,6 +34,7 @@
 .sess-icon { position: relative; display: grid; place-items: center; width: 34px; height: 34px; border-radius: 11px; border: 1px solid var(--line); background: var(--panel-2); color: var(--text-2); }
 .sess-icon[data-mode="voice"] { color: var(--warm); border-color: color-mix(in srgb, var(--warm) 30%, transparent); background: color-mix(in srgb, var(--warm) 9%, transparent); }
 .sess-icon[data-mode="camera"] { color: var(--cool); border-color: color-mix(in srgb, var(--cool) 30%, transparent); background: color-mix(in srgb, var(--cool) 9%, transparent); }
+.sess-icon[data-mode="home"] { color: var(--cool); border-color: color-mix(in srgb, var(--cool) 30%, transparent); background: color-mix(in srgb, var(--cool) 9%, transparent); }
 .sess-icon[data-mode="recorded"] { color: var(--reused); border-color: color-mix(in srgb, var(--reused) 30%, transparent); background: color-mix(in srgb, var(--reused) 9%, transparent); }
 .sess-icon .live-dot { position: absolute; top: -3px; right: -3px; width: 10px; height: 10px; border-radius: 50%; background: var(--executed); border: 2px solid var(--panel-solid); animation: ping 2s ease-out infinite; }
 .sess-main { min-width: 0; display: flex; flex-direction: column; gap: 2px; }

@@ -1,3 +1,33 @@
+# SmartThings home extension — 2026-10-21
+
+- New Samsung extension: a voice session for a SmartThings-style home.
+  `agent.smart_home` holds the capability model (SmartThings capability names,
+  simulated devices), the tool generator and `HomeController`; `agent.home_livekit`
+  is the LiveKit worker (`interra-home`); `/home` is its judge page.
+- Tools are generated from device descriptions: one per capability command, plus
+  `list_devices`, `get_device_status`, `confirm_action`, `cancel_action` and
+  `undo_last_change`. Each is marked read-only or state-changing, routine or
+  risky. 18 tools for the eight starting devices.
+- Coordination: commit gate on every change; latest value wins per device and
+  capability; values already set are not sent; unlocking and starting the oven
+  need a spoken yes (expires after 60 s); undo reverses the last reversible
+  change within 120 s. Records reuse the gate kinds, so the gate panel shows
+  home commands, and add `home_devices`, `home_device_added`,
+  `home_command_skipped` and `confirmation_*`.
+- A device the agent has never seen, with capability definitions it has never
+  seen, can be added during a call over LiveKit RPC (`interra.add_device`); the
+  worker validates it and calls `update_tools`. Descriptions are checked
+  against a JSON Schema; tool-name clashes, unknown attributes and out-of-range
+  states are rejected.
+- `python -m agent.home_demo` and the page's "Play walkthrough" run the scripted
+  demo through the real controller with no LiveKit room.
+- Tests: `tests.unit.test_smart_home` (12), `tests.unit.test_home_livekit` (5) and
+  three new `test_demo_page` tests. 277 tests pass on Python 3.11.
+- Verified: the worker registers with LiveKit as `interra-home`; the Home page
+  renders and plays the walkthrough in a browser. Not verified: a live voice call
+  with the home worker, including the RPC device add and `update_tools` in a
+  running session.
+
 # Judge pages restyled after LiveKit Agents UI — 2026-10-20
 
 - Near-black surfaces, a hairline square grid and one cyan accent (`#1fd5f9`)
