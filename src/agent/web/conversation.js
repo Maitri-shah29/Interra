@@ -114,6 +114,15 @@ const OUTCOMES = {
 
 const SOURCES = { LLM: "language model", TTS: "voice", STT: "speech recognition" };
 
+// Why a held call did not run, in the person's terms.
+function droppedReason(reason) {
+  const text = String(reason || "");
+  if (text.includes("changed or cancelled")) return "Your later words changed or cancelled it, so it was not logged.";
+  if (text.includes("newer value")) return "A newer value for the same device replaced it before it ran.";
+  if (text.startsWith("re-check") || text.includes("no re-check")) return "It could not be re-checked, so it did not run; the agent plans again from your words.";
+  return "You said more before it ran, so it was not logged.";
+}
+
 /** What a worker error means for the person, or null when it fixes itself. */
 export function workerProblem(record) {
   const text = String(record.error || "");
@@ -281,6 +290,12 @@ export class Conversation {
       case "tool_call_pending":
         this.startPending(record);
         break;
+      case "tool_call_rechecked":
+        this.setGate("Holding", {
+          call: record.call, time: record.time,
+          note: "You said more: “" + (record.later || "") + "”. " + (record.run ? "It still stands." : "It no longer stands."),
+        });
+        break;
       case "tool_call_dropped":
         this.resolvePending(record, "dropped");
         break;
@@ -329,7 +344,7 @@ export class Conversation {
     this.setQuietSeconds(seconds);
     this.setGate("Holding", {
       call: record.call, changed: this.changedFrom(record.call), time: record.time,
-      note: "Runs after " + fmtNumber(seconds) + " s of quiet; keep talking and it is dropped.",
+      note: "Runs after " + fmtNumber(seconds) + " s of quiet. If you say more, it is re-checked against everything you said.",
     });
   }
 
@@ -341,15 +356,16 @@ export class Conversation {
     const held = Boolean(waiting && waiting.length);
     const chipKey = held ? waiting.shift() : "call:" + ++this.sequence;
     if (waiting && !waiting.length) this.pending.delete(key);
+    const droppedNote = droppedReason(record.reason);
     const notes = {
-      dropped: "You kept speaking, so it was not logged.",
+      dropped: droppedNote,
       reused: "Identical call in this room; the first result was reused.",
       executed: [callDuration(record.call), resultSummary(record.result)].filter(Boolean).join(" · "),
       failed: resultSummary(record.result),
     };
     this.transcript.chip(chipKey, meta.chip, meta.title, (record.call && record.call.function) || "tool", { icon: meta.icon, time: record.time });
     const focusNotes = {
-      dropped: "You kept speaking, so it was not logged.",
+      dropped: droppedNote,
       reused: "Identical call; the first result was reused.",
       executed: notes.executed,
       failed: notes.failed,
