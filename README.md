@@ -4,10 +4,13 @@ Interra is a voice agent that stays in the conversation while it works. A person
 can hesitate, interrupt, or correct themselves in the middle of a sentence. The
 agent answers out loud and runs tool calls outside the event loop. The deployed
 LiveKit agent uses SDK turn interruption and tool calling. Before a tool is
-logged, a commit gate waits out a short quiet window and drops the call if the
-person keeps speaking or a newer transcript arrives. A dropped call is not
-written to the benchmark tool log. An identical call in the same room still
-runs once. The prompt asks the model to ground completion claims in tool results.
+logged, a commit gate holds the call until the person has been quiet for a short
+window. If they said more meanwhile, the model re-checks the call against their
+complete words: a continuation that only adds requests ("track order CAT, then
+search for cat food") leaves it standing, and a correction or cancellation
+drops it. A dropped call is not written to the benchmark tool log. An identical
+call in the same room still runs once. The prompt asks the model to ground
+completion claims in tool results.
 
 Most assistants listen, then think, then speak. That falls apart when the
 destination changes while a route is still being looked up, or when a booking
@@ -264,7 +267,7 @@ the next spoken turn. Only the linked participant's camera is accepted;
 disconnect discards its pending frame, and older images are removed from model
 history. It does not register the 12 benchmark tools. A visible code is looked
 up in Interra's own demo catalog (`E1`, `E2`, `E3`). A follow-up visit is
-scheduled only after the same commit gate stays quiet, and a correction drops
+scheduled only after the same commit gate releases it, and a correction drops
 the booking before it is stored. Asking what was scheduled reads that session's
 list. This correction can be replayed without a camera:
 
@@ -312,7 +315,9 @@ tools per device. The capability names follow SmartThings' public capability
 model; the eight devices are simulated, and nothing talks to a real
 SmartThings account.
 
-Every state change goes through the commit gate, plus four home rules:
+Every state change goes through the commit gate: it is held until the person
+has been quiet, and if they said more meanwhile, the same model re-checks it
+against their complete words. Four home rules sit on top:
 
 - the latest value wins: a newer value for the same device and capability
   replaces one still waiting at the gate, so "22… no, 24" never sends 22;
@@ -331,8 +336,9 @@ python -m agent.home_livekit dev
 
 Dispatch name: `interra-home`. Open `http://127.0.0.1:8780/home` and press
 Start. "Play walkthrough" on the same page runs the scripted demo through the
-real home controller with no LiveKit room; the person's lines are scripted, and
-every device change comes from the controller. The same walkthrough without a
+real home controller with no LiveKit room; the person's lines and the
+re-check's answer are scripted, and every device change comes from the
+controller. The same walkthrough without a
 browser:
 
 ```bash

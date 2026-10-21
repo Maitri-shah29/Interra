@@ -8,8 +8,9 @@
   `list_devices`, `get_device_status`, `confirm_action`, `cancel_action` and
   `undo_last_change`. Each is marked read-only or state-changing, routine or
   risky. 18 tools for the eight starting devices.
-- Coordination: commit gate on every change; latest value wins per device and
-  capability; values already set are not sent; unlocking and starting the oven
+- Coordination: commit gate on every change, using #7's hold and re-check (the
+  worker passes `llm_recheck`; a newer value that arrives during a re-check
+  still wins); latest value wins per device and capability; values already set are not sent; unlocking and starting the oven
   need a spoken yes (expires after 60 s); undo reverses the last reversible
   change within 120 s. Records reuse the gate kinds, so the gate panel shows
   home commands, and add `home_devices`, `home_device_added`,
@@ -20,13 +21,76 @@
   against a JSON Schema; tool-name clashes, unknown attributes and out-of-range
   states are rejected.
 - `python -m agent.home_demo` and the page's "Play walkthrough" run the scripted
-  demo through the real controller with no LiveKit room.
-- Tests: `tests.unit.test_smart_home` (12), `tests.unit.test_home_livekit` (5) and
-  three new `test_demo_page` tests. 277 tests pass on Python 3.11.
+  demo through the real controller with no LiveKit room. The person's lines and
+  the re-check's answer are scripted there; the device changes are real.
+- Tests: `tests.unit.test_smart_home` (15), `tests.unit.test_home_livekit` (5) and
+  three new `test_demo_page` tests, including a correction dropped by the
+  re-check, an add-on kept, no re-check configured, and a cough that runs.
 - Verified: the worker registers with LiveKit as `interra-home`; the Home page
   renders and plays the walkthrough in a browser. Not verified: a live voice call
   with the home worker, including the RPC device add and `update_tools` in a
   running session.
+# Commit gate holds and re-checks instead of dropping — 2026-10-21
+
+Evidence: the 2026-10-20 Kaggle run (48/100 strict, 22 silent after LiveKit
+Inference credit ran out). On the 30 recordings finished before the first 429,
+every one answered, strict pass fell from 24 (2026-10-04) to 18 and wrong tools
+rose from 1 to 7. The trace has 21 `tool_call_dropped` events, all "user
+continued", and each traced continuation added to the request, e.g.
+`ecommerce_25` "Track order CAT for me." then "Then search for cat food";
+`ecommerce_23` track_order(GG5) then "Then I'd like to process a refund…";
+`ecommerce_15` the call was dropped when speech resumed and the agent asked for
+the order code again.
+
+Cause: `CommitGate` returned "superseded" the moment speech resumed. LiveKit
+Agents 1.8.3 commits the output of a tool that finished on an interrupted turn,
+so "The person kept speaking, so this call was not executed" entered the chat
+history and the re-planned turn reported the request as failed instead of
+running it.
+
+- `agent.commit`: the gate holds a call while the person speaks and releases it
+  after the quiet window with the words heard before and while it was held
+  (`HeldWords`). Speech with no new words runs the call. New words trigger an
+  injected re-check (`recheck_call`) bounded to 8 s; its answer must be
+  `{"run": true|false}` (`parse_recheck`). A failed, invalid or timed-out
+  re-check does not run the call. The "superseded" result now asks the model
+  to act on the complete words and call the tool again if still wanted.
+- `agent.fdb_livekit.llm_recheck`: the re-check asks the session's model with
+  no tools, through its own instance (`recheck_llm_model`): LiveKit merges a
+  model's persistent `extra_kwargs` into every request, and
+  `parallel_tool_calls` without tools is rejected. `ToolExecutor` traces `tool_call_rechecked` (earlier and later
+  words, decision, reason) before `tool_call` or `tool_call_dropped`. If the
+  re-planned turn already ran the identical call, the held call reuses its
+  result (`tool_call_deduplicated`) and nothing runs twice. One prompt line
+  says a "superseded" result did not run and is not a failure.
+- The camera extension's bookings (`GatedAction`) use the same hold and
+  re-check; `extension_demo` scripts the re-check answer offline. The judge
+  trace and replay pages label `tool_call_rechecked`.
+- LiveKit detail that shaped the design: cancelling a reply's tool task waits
+  for running tools instead of cancelling them, and the next reply starts once
+  the interrupted reply's generation ends, so a held call does not block the
+  re-planned turn but must resolve itself.
+- Tests: `HeldCallRecheckTests` (7: add-on continuation runs, held call and its
+  re-planned twin run once, correction drops, re-plan result reused,
+  speech without words runs, failed re-checks never run, cancellation
+  propagates), `RecheckAnswerTests` (2: answer schema, LiveKit adapter), a
+  device-catalog booking that survives added words, and the re-check model
+  sends no tool-only parameters. The old drop-on-speech tests now assert the
+  hold. 268 tests pass on Python 3.11 (Docker), 1 skipped;
+  `scripts/check_submission.py` passes. The ecommerce_25 sequence returns
+  "superseded" with no tool call on `origin/main` and runs track_order here.
+- Live re-check on LiveKit Inference `openai/gpt-4.1-mini` with words from the
+  failed recordings: 7 of 7 answered correctly (keep: ecommerce_25, 23, 13, 15,
+  21; drop: the ecommerce_19 laptop-to-tablet and a two-to-one quantity
+  correction). An eighth case got the quota 429 (credit still exhausted). The
+  first request took 5.3 s on a cold connection and later ones about 1 s.
+- Limitations: not yet measured on a full FDB-v3 run (top up Inference credit
+  first). A re-check costs one short LLM call only when a held call heard new
+  words. If the model wrongly keeps a corrected call, both versions run. A held
+  call that runs after the re-planned reply was spoken is logged but not
+  mentioned in that reply.
+- Next: rerun the 100 recordings with enough credit and compare against the
+  2026-10-04 run on the same recordings.
 
 # Judge pages restyled after LiveKit Agents UI — 2026-10-20
 

@@ -19,6 +19,7 @@ from agent.fdb_livekit import (
     load_benchmark_module,
     ollama_llm_kwargs,
     prewarm,
+    recheck_llm_model,
 )
 
 
@@ -148,6 +149,15 @@ class FdbLiveKitTests(unittest.TestCase):
             model="openai/gpt-4.1-mini",
             extra_kwargs={"temperature": 0.0, "parallel_tool_calls": False},
         )
+        self.assertIs(model, inference.LLM.return_value)
+
+    def test_recheck_model_sends_no_tool_only_parameters(self):
+        # The re-check sends no tools, and LiveKit merges persistent extra_kwargs into
+        # every request; parallel_tool_calls without tools is rejected by OpenAI-style APIs.
+        inference = Mock()
+        config = FdbConfig(fdb_v3_root=Path("."))
+        model = recheck_llm_model(inference, config)
+        inference.LLM.assert_called_once_with(model="openai/gpt-4.1-mini", extra_kwargs={"temperature": 0.0})
         self.assertIs(model, inference.LLM.return_value)
 
 

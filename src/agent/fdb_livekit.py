@@ -21,7 +21,18 @@ from pathlib import Path
 from types import ModuleType
 from typing import Any
 
-from agent.commit import SUPERSEDED, CommitGate
+from agent.commit import (
+    RECHECK_INSTRUCTIONS,
+    RECHECK_TIMEOUT_SECONDS,
+    SUPERSEDED,
+    CommitGate,
+    HeldWords,
+    Recheck,
+    Verdict,
+    parse_recheck,
+    recheck_call,
+    recheck_request,
+)
 from livekit.plugins import silero
 from livekit.agents.types import APIConnectOptions
 
@@ -174,6 +185,11 @@ class ToolExecutor:
     logging the tool again: a re-generated reply must not duplicate a side
     effect, and the backend is deterministic, so the answer is unchanged.
     Nothing is shared across rooms.
+
+    With a gate, a call waits until the person has finished. If they said more
+    while it waited, ``recheck`` decides from their complete words whether the
+    call still stands; a call the re-planned turn already ran is shared, not
+    repeated.
     """
 
     def __init__(
@@ -183,11 +199,15 @@ class ToolExecutor:
         trace: TraceWriter,
         telemetry_path: Path | None | str = "default",
         gate: CommitGate | None = None,
+        recheck: Recheck | None = None,
+        recheck_timeout: float = RECHECK_TIMEOUT_SECONDS,
     ):
         self.registry = registry
         self.room_name = room_name
         self.trace = trace
         self.gate = gate
+        self.recheck = recheck
+        self.recheck_timeout = recheck_timeout
         # The benchmark scores this file. Offline replays pass None to skip it.
         self.telemetry_path: Path | None = (
             Path(tempfile.gettempdir()) / "agent_tool_calls.log"
@@ -197,8 +217,9 @@ class ToolExecutor:
         self._completed: dict[str, asyncio.Future[str]] = {}
 
     async def call(self, name: str, **arguments: Any) -> str:
+        key = _call_key(name, arguments)
         if self.gate is not None:
-            epoch = self.gate.epoch
+            mark = self.gate.mark()
             # Recorded before the wait, so a viewer sees the call held at the
             # gate before it learns whether the call ran or was dropped.
             self.trace.append(
@@ -207,27 +228,22 @@ class ToolExecutor:
                 call={"function": name, "args": arguments},
                 quiet_seconds=self.gate.quiet_seconds,
             )
-            if not await self.gate.allow(epoch):
+            words = await self.gate.hold(mark)
+            if words.changed and not (verdict := await self._recheck(name, arguments, words)).run:
+                # The re-planned turn may already have run this exact call.
+                if (shared := await self._shared_result(key)) is not None:
+                    self._trace_reused(name, arguments)
+                    return shared
                 self.trace.append(
-                    "tool_call_dropped",
-                    room=self.room_name,
-                    call={"function": name, "args": arguments},
-                    reason="user continued",
+                    "tool_call_dropped", room=self.room_name,
+                    call={"function": name, "args": arguments}, reason=verdict.reason,
                 )
                 return SUPERSEDED
-        key = _call_key(name, arguments)
         while (previous := self._completed.get(key)) is not None:
-            try:
-                result = await asyncio.shield(previous)
-            except asyncio.CancelledError:
-                task = asyncio.current_task()
-                if previous.cancelled() and not (task and task.cancelling()):
-                    continue  # the first attempt was abandoned; run it ourselves
-                raise
-            self.trace.append(
-                "tool_call_deduplicated", room=self.room_name,
-                call={"function": name, "args": arguments},
-            )
+            result = await self._await_previous(previous)
+            if result is None:
+                continue  # the first attempt was abandoned; run it ourselves
+            self._trace_reused(name, arguments)
             return result
         future: asyncio.Future[str] = asyncio.get_running_loop().create_future()
         self._completed[key] = future
@@ -241,6 +257,36 @@ class ToolExecutor:
             raise
         future.set_result(result)
         return result
+
+    async def _recheck(self, name: str, arguments: dict[str, Any], words: HeldWords) -> Verdict:
+        """Re-check a held call against the person's complete words; trace the decision."""
+        verdict = await recheck_call(self.recheck, name, arguments, words, timeout=self.recheck_timeout)
+        self.trace.append(
+            "tool_call_rechecked", room=self.room_name, call={"function": name, "args": arguments},
+            earlier=" ".join(words.earlier), later=" ".join(words.later),
+            run=verdict.run, reason=verdict.reason,
+        )
+        return verdict
+
+    async def _await_previous(self, previous: asyncio.Future[str]) -> str | None:
+        """The result of an identical earlier call, or ``None`` if that attempt was abandoned."""
+        try:
+            return await asyncio.shield(previous)
+        except asyncio.CancelledError:
+            task = asyncio.current_task()
+            if previous.cancelled() and not (task and task.cancelling()):
+                return None
+            raise
+
+    async def _shared_result(self, key: str) -> str | None:
+        previous = self._completed.get(key)
+        return None if previous is None else await self._await_previous(previous)
+
+    def _trace_reused(self, name: str, arguments: dict[str, Any]) -> None:
+        self.trace.append(
+            "tool_call_deduplicated", room=self.room_name,
+            call={"function": name, "args": arguments},
+        )
 
     async def _execute(self, name: str, arguments: dict[str, Any]) -> str:
         started = time.time()
@@ -339,6 +385,47 @@ def livekit_llm_model(inference: Any, config: FdbConfig) -> Any:
         model=config.llm_model,
         extra_kwargs={"temperature": config.llm_temperature, "parallel_tool_calls": False},
     )
+
+
+def recheck_llm_model(inference: Any, config: FdbConfig) -> Any:
+    """The session's model, configured for a tool-free re-check.
+
+    ``parallel_tool_calls`` is only valid when tools are sent, and LiveKit
+    merges a model's persistent ``extra_kwargs`` into every request, so the
+    re-check gets its own instance without it.
+    """
+    if config.llm_provider == "ollama":
+        from livekit.plugins import openai
+
+        kwargs = ollama_llm_kwargs(config)
+        kwargs.pop("parallel_tool_calls")
+        return openai.LLM(**kwargs)
+    return inference.LLM(model=config.llm_model, extra_kwargs={"temperature": config.llm_temperature})
+
+
+def llm_recheck(model: Any, llm_module: Any) -> Recheck:
+    """Ask the session's own model whether a held call still stands after the person said more.
+
+    One short completion with no tools; the answer is validated by
+    ``parse_recheck``, and ``recheck_call`` bounds the time and treats any
+    failure as "do not run".
+    """
+
+    async def decide(name: str, arguments: dict[str, Any], words: HeldWords) -> bool:
+        chat_ctx = llm_module.ChatContext()
+        chat_ctx.add_message(role="system", content=RECHECK_INSTRUCTIONS)
+        chat_ctx.add_message(role="user", content=recheck_request(name, arguments, words))
+        parts: list[str] = []
+        async with model.chat(
+            chat_ctx=chat_ctx, conn_options=APIConnectOptions(max_retry=1, retry_interval=0.5, timeout=5.0),
+        ) as stream:
+            async for chunk in stream:
+                delta = getattr(chunk, "delta", None)
+                if delta is not None and delta.content:
+                    parts.append(delta.content)
+        return parse_recheck("".join(parts))
+
+    return decide
 
 
 def _as_float(value: Any) -> float:
@@ -773,6 +860,9 @@ When to act:
   returned by earlier tools. Do not stop after the first step of a multi-step
   request. Call each tool once per distinct need; never repeat a call that
   already succeeded with the same values.
+- A tool result with status "superseded" did not run because the user said
+  more first. Act on their complete words: call the tool again, with any
+  corrected values, if they still want it. Never report it as a failure.
 - Only call tools for actions the user asked for. Do not add extra steps.
 
 Argument values:
@@ -1247,11 +1337,6 @@ async def entrypoint(ctx: Any) -> None:
         async def on_user_turn_completed(self, turn_ctx: Any, new_message: Any) -> None:
             apply_turn_hold(hold, new_message, StopResponse)
 
-    registry = benchmark.MockAPIRegistry(latency_profile=config.latency_profile)
-    gate = CommitGate(config.commit_quiet_seconds)
-    executor = ToolExecutor(registry, ctx.room.name, trace, gate=gate)
-    tools = llm.find_function_tools(create_benchmark_tools(executor, function_tool))
-
     speech_stt, speech_tts = livekit_speech_models(inference, config)
     if config.llm_provider == "livekit":
         model = livekit_llm_model(inference, config)
@@ -1261,6 +1346,14 @@ async def entrypoint(ctx: Any) -> None:
         model = openai.LLM(**ollama_llm_kwargs(config))
     else:
         raise ValueError(f"Unsupported FDB LLM provider: {config.llm_provider}")
+
+    registry = benchmark.MockAPIRegistry(latency_profile=config.latency_profile)
+    gate = CommitGate(config.commit_quiet_seconds)
+    executor = ToolExecutor(
+        registry, ctx.room.name, trace, gate=gate,
+        recheck=llm_recheck(recheck_llm_model(inference, config), llm),
+    )
+    tools = llm.find_function_tools(create_benchmark_tools(executor, function_tool))
     session = AgentSession(
         vad=ctx.proc.userdata["vad"],
         stt=speech_stt,
@@ -1283,7 +1376,7 @@ async def entrypoint(ctx: Any) -> None:
     @session.on("user_input_transcribed")
     def on_transcript(event: Any) -> None:
         if event.is_final:
-            gate.note_transcript()
+            gate.note_transcript(event.transcript)
         trace.append(
             "transcript",
             room=ctx.room.name,

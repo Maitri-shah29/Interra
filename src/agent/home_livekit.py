@@ -2,8 +2,10 @@
 
 The person talks to their home. Every device is described the SmartThings
 way, and each description becomes the agent's tools (see ``agent.smart_home``).
-State changes go through the commit gate, so a value the person corrects
-never reaches the device, and a risky command waits for a spoken yes.
+State changes go through the commit gate: a command is held until the person
+has been quiet, and if they said more meanwhile, the same model re-checks it
+against their complete words, so a value the person corrects never reaches
+the device. A risky command waits for a spoken yes.
 
 The judge page can add a device the agent has never seen during the call,
 over LiveKit RPC; its tools are added to the live session at once.
@@ -26,7 +28,9 @@ from agent.fdb_livekit import (
     UnfinishedTurnHold,
     apply_turn_hold,
     livekit_speech_models,
+    llm_recheck,
     load_local_env,
+    recheck_llm_model,
     run_session_lifecycle,
     trace_conversation_item,
     trace_session_error,
@@ -46,7 +50,9 @@ SmartThings descriptions.
   person replaced.
 - One request may change several devices: call one tool per device.
 - Use device names exactly as the tools list them.
-- A result with status "superseded" did not happen. Never say it did.
+- A result with status "superseded" did not run because the person said more
+  first. Act on their complete words: call again, with any corrected value, if
+  they still want it. Never say it happened and never report it as a failure.
 - Say a change happened only when a tool result says "done". "already" means
   it was already that way; say so.
 - "needs_confirmation": ask one short yes or no question that names the action
@@ -114,7 +120,10 @@ async def entrypoint(ctx: Any) -> None:
     config = FdbConfig.from_env()
     trace = TraceWriter(config.trace_dir)
     gate = CommitGate(config.commit_quiet_seconds)
-    controller = HomeController(SmartHome(), gate, trace, ctx.room.name)
+    controller = HomeController(
+        SmartHome(), gate, trace, ctx.room.name,
+        recheck=llm_recheck(recheck_llm_model(inference, config), llm),
+    )
     session: Any = None
 
     def release_held_turn(text: str) -> None:
@@ -156,7 +165,7 @@ async def entrypoint(ctx: Any) -> None:
     @session.on("user_input_transcribed")
     def on_transcript(event: Any) -> None:
         if event.is_final:
-            gate.note_transcript()
+            gate.note_transcript(event.transcript)
         trace.append("transcript", room=ctx.room.name, transcript=event.transcript, is_final=event.is_final)
 
     @session.on("agent_state_changed")

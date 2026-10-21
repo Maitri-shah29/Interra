@@ -68,20 +68,63 @@ class SmartHomeTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(snapshot["kind"], "home_devices")
         self.assertEqual(next(d for d in snapshot["devices"] if d["id"] == "living-room-ac")["state"]["coolingSetpoint"], 24)
 
-    async def test_a_correction_drops_the_stale_value_before_it_reaches_the_device(self):
+    def with_recheck(self, answer):
+        asked = []
+
+        async def decide(name, arguments, words):
+            asked.append((name, dict(arguments), words))
+            return answer
+
+        self.controller = HomeController(self.home, self.gate, self.trace, "home-room", clock=self.clock, recheck=decide)
+        return asked
+
+    async def say_more_while_held(self, name, arguments, later):
+        self.gate.note_transcript("Set the living room AC to 22")
         self.gate.set_speaking(True)
-        stale = asyncio.create_task(self.controller.call("set_temperature", {"device": "Living room AC", "setpoint": 22}))
+        task = asyncio.create_task(self.controller.call(name, arguments))
         await asyncio.sleep(0)
-        self.gate.note_transcript()  # "…no wait, 24"
-        self.assertEqual((await stale)["status"], "superseded")
-        self.assertEqual(self.ac()["coolingSetpoint"], 26)
+        self.gate.note_transcript(later)
         self.gate.set_speaking(False)
+        self.clock.now += 1.0
+        return await asyncio.wait_for(task, timeout=2)
+
+    async def test_a_correction_drops_the_stale_value_before_it_reaches_the_device(self):
+        asked = self.with_recheck(False)
+        stale = await self.say_more_while_held("set_temperature", {"device": "Living room AC", "setpoint": 22}, "No wait, make it 24.")
+        self.assertEqual(stale["status"], "superseded")
+        self.assertEqual(self.ac()["coolingSetpoint"], 26)
+        self.assertEqual(asked[0][2].later, ("No wait, make it 24.",))
         fresh = await self.run_quiet("set_temperature", device="Living room AC", setpoint=24)
         self.assertEqual(fresh["status"], "done")
         executed = [e["call"]["args"]["setpoint"] for e in self.trace.events if e["kind"] == "tool_call"]
         self.assertEqual(executed, [24])
-        dropped = [e for e in self.trace.events if e["kind"] == "tool_call_dropped"]
-        self.assertEqual(dropped[0]["reason"], "user continued")
+        rechecked = next(e for e in self.trace.events if e["kind"] == "tool_call_rechecked")
+        self.assertFalse(rechecked["run"])
+        dropped = next(e for e in self.trace.events if e["kind"] == "tool_call_dropped")
+        self.assertEqual(dropped["reason"], "the person changed or cancelled this request")
+
+    async def test_words_that_only_add_a_request_keep_the_command(self):
+        self.with_recheck(True)
+        result = await self.say_more_while_held(
+            "set_temperature", {"device": "Living room AC", "setpoint": 22}, "And turn off the lights too.")
+        self.assertEqual(result["status"], "done")
+        self.assertEqual(self.ac()["coolingSetpoint"], 22)
+
+    async def test_without_a_recheck_a_command_heard_over_does_not_run(self):
+        result = await self.say_more_while_held(
+            "set_temperature", {"device": "Living room AC", "setpoint": 22}, "No wait, make it 24.")
+        self.assertEqual(result["status"], "superseded")
+        self.assertEqual(self.ac()["coolingSetpoint"], 26)
+        dropped = next(e for e in self.trace.events if e["kind"] == "tool_call_dropped")
+        self.assertIn("no re-check", dropped["reason"])
+
+    async def test_a_cough_does_not_drop_a_command(self):
+        self.gate.set_speaking(True)
+        task = asyncio.create_task(self.controller.call("turn_off", {"device": "Bedroom lamp"}))
+        await asyncio.sleep(0)
+        self.gate.set_speaking(False)  # speech with no words
+        self.clock.now += 1.0
+        self.assertEqual((await asyncio.wait_for(task, timeout=2))["status"], "done")
 
     async def test_a_newer_value_replaces_one_still_waiting(self):
         first = asyncio.create_task(self.controller.call("set_temperature", {"device": "Living room AC", "setpoint": 22}))

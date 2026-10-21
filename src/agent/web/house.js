@@ -41,7 +41,7 @@ const el = {
 const home = { initial: [], room: "", devices: new Map(), tiles: new Map(), unseen: null, agent: null, adding: false, playing: false };
 // How long each walkthrough record stays on screen before the next one.
 const WALK_PAUSE = {
-  transcript: 1700, tool_call_pending: 1000, tool_call_dropped: 1600, confirmation_requested: 1900,
+  transcript: 1700, tool_call_pending: 1000, tool_call_rechecked: 1400, tool_call_dropped: 1600, confirmation_requested: 1900,
   confirmation_given: 900, home_device_added: 2400, home_devices: 350, tool_call: 900,
 };
 
@@ -140,6 +140,14 @@ function render(devices) {
   updateAddButton();
 }
 
+function droppedWhy(reason) {
+  const text = String(reason || "");
+  if (text.includes("newer value")) return "a newer value replaced it";
+  if (text.includes("changed or cancelled")) return "you changed it";
+  if (text.startsWith("re-check") || text.includes("no re-check")) return "could not be re-checked";
+  return "you said more";
+}
+
 function setNote(device, kind, text, seconds = 0) {
   const tile = device && home.tiles.get(device.id);
   if (!tile) return;
@@ -198,7 +206,10 @@ function onRecord(record) {
       setNote(device, "holding", "Holding " + asked(record.call) + " until you are quiet");
       break;
     case "tool_call_dropped":
-      setNote(device, "dropped", asked(record.call) + " dropped · " + (record.reason === "replaced by a newer value" ? "a newer value replaced it" : "you kept talking"), 6);
+      setNote(device, "dropped", asked(record.call) + " dropped · " + droppedWhy(record.reason), 6);
+      break;
+    case "tool_call_rechecked":
+      setNote(device, "holding", "You said more · " + (record.run ? "still stands" : "no longer stands"));
       break;
     case "tool_call":
       if (record.call && record.call.function === "undo_last_change") setNote(device, "done", "Undone", 4);

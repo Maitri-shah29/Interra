@@ -13,8 +13,9 @@ to a real SmartThings account.
 Every command that changes state goes through the coordination rules the
 benchmark agent proves:
 
-* the commit gate holds it until the person has been quiet, and drops it if
-  they keep speaking;
+* the commit gate holds it until the person has been quiet; if they said more
+  meanwhile, the model re-checks it against their complete words and it is
+  dropped only if they corrected or cancelled it;
 * the latest value wins: a newer value for the same device and capability
   replaces one still waiting at the gate;
 * a value that is already set is not sent again;
@@ -34,7 +35,7 @@ from typing import Any
 from jsonschema import Draft202012Validator
 from jsonschema.exceptions import ValidationError
 
-from agent.commit import CommitGate
+from agent.commit import RECHECK_TIMEOUT_SECONDS, CommitGate, HeldWords, Recheck, Verdict, recheck_call
 
 READ_ONLY = "READ_ONLY"
 STATE_MODIFYING = "STATE_MODIFYING"
@@ -430,7 +431,11 @@ _FIXED_TOOLS = {"list_devices", "get_device_status", "confirm_action", "cancel_a
 
 
 def _superseded(reason: str) -> dict[str, Any]:
-    return {"status": "superseded", "message": reason + " This call was not executed; do not say it happened."}
+    return {
+        "status": "superseded",
+        "message": reason + " It was not carried out. Act on the person's latest words and call again if "
+                   "they still want it; do not say it happened.",
+    }
 
 
 class HomeController:
@@ -442,9 +447,12 @@ class HomeController:
     """
 
     def __init__(self, home: SmartHome, gate: CommitGate, trace: Any, room: str,
-                 clock: Any = time.monotonic) -> None:
+                 clock: Any = time.monotonic, *, recheck: Recheck | None = None,
+                 recheck_timeout: float = RECHECK_TIMEOUT_SECONDS) -> None:
         self.home = home
         self.gate = gate
+        self.recheck = recheck
+        self.recheck_timeout = recheck_timeout
         self.trace = trace
         self.room = room
         self._clock = clock
@@ -534,10 +542,14 @@ class HomeController:
         key = (device.id, tool.capability or tool.name)
         token = next(self._tokens)
         self._waiting[key] = token
-        epoch = self.gate.epoch
+        mark = self.gate.mark()
         self.trace.append("tool_call_pending", room=self.room, call=call, quiet_seconds=self.gate.quiet_seconds)
+        verdict: Verdict | None = None
         try:
-            allowed = await self.gate.allow(epoch)
+            words = await self.gate.hold(mark)
+            # A newer value can still arrive while the re-check runs; it wins.
+            if words.changed and self._waiting.get(key) == token:
+                verdict = await self._recheck(tool.name, arguments, words)
         finally:
             latest = self._waiting.get(key) == token
             if latest:
@@ -545,10 +557,19 @@ class HomeController:
         if not latest:
             self.trace.append("tool_call_dropped", room=self.room, call=call, reason="replaced by a newer value")
             return _superseded("A newer value for this device replaced it.")
-        if not allowed:
-            self.trace.append("tool_call_dropped", room=self.room, call=call, reason="user continued")
-            return _superseded("The person kept speaking.")
+        if verdict is not None and not verdict.run:
+            self.trace.append("tool_call_dropped", room=self.room, call=call, reason=verdict.reason)
+            return _superseded("The person said more and " + verdict.reason + ".")
         return self._apply(device, tool, arguments, targets)
+
+    async def _recheck(self, name: str, arguments: dict[str, Any], words: HeldWords) -> Verdict:
+        """Re-check a held command against the person's complete words; trace the decision."""
+        verdict = await recheck_call(self.recheck, name, arguments, words, timeout=self.recheck_timeout)
+        self.trace.append(
+            "tool_call_rechecked", room=self.room, call={"function": name, "args": arguments},
+            earlier=" ".join(words.earlier), later=" ".join(words.later), run=verdict.run, reason=verdict.reason,
+        )
+        return verdict
 
     def _apply(self, device: Device, tool: ToolDef, arguments: dict[str, Any], targets: dict[str, Any]) -> dict[str, Any]:
         before = {key: device.state.get(key) for key in targets}
@@ -589,11 +610,12 @@ class HomeController:
         if device is None or any(device.state.get(key) != value for key, value in change.after.items()):
             return {"status": "nothing", "message": "That device has changed since; nothing was undone."}
         call = {"function": "undo_last_change", "args": {"device": device.label, "reverses": change.tool}}
-        epoch = self.gate.epoch
+        mark = self.gate.mark()
         self.trace.append("tool_call_pending", room=self.room, call=call, quiet_seconds=self.gate.quiet_seconds)
-        if not await self.gate.allow(epoch):
-            self.trace.append("tool_call_dropped", room=self.room, call=call, reason="user continued")
-            return _superseded("The person kept speaking.")
+        words = await self.gate.hold(mark)
+        if words.changed and not (verdict := await self._recheck("undo_last_change", call["args"], words)).run:
+            self.trace.append("tool_call_dropped", room=self.room, call=call, reason=verdict.reason)
+            return _superseded("The person said more and " + verdict.reason + ".")
         device.state.update(change.before)
         self.history.remove(change)
         result = {"status": "done", "device": device.label, "state": copy.deepcopy(device.state), "undid": change.tool}
