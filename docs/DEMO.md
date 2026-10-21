@@ -36,6 +36,10 @@ trace in a second tab. Without workers, `/replay` plays the scored 4 October
 2026 run from its recorded trace; label it as a replay if it appears in the
 video:
 
+The voice worker's name turns its commit gate on (`INTERRA_FDB_COMMIT_GATE` is
+`auto`); without the name, as under the official runner, it runs without the
+gate.
+
 ```bash
 # voice worker
 INTERRA_FDB_AGENT_NAME=interra-benchmark python -m agent.fdb_livekit dev

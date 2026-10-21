@@ -77,6 +77,7 @@ class FdbConfig:
     endpointing_max_delay: float = 1.2
     unfinished_turn_hold_seconds: float = 1.0
     commit_quiet_seconds: float = 0.6
+    commit_gate: str = "auto"
 
     def __post_init__(self) -> None:
         if self.session_cooldown_seconds < 0:
@@ -87,6 +88,8 @@ class FdbConfig:
             raise ValueError("unfinished_turn_hold_seconds must be non-negative")
         if self.commit_quiet_seconds < 0:
             raise ValueError("commit_quiet_seconds must be non-negative")
+        if self.commit_gate not in {"auto", "on", "off"}:
+            raise ValueError("commit_gate must be auto, on or off")
 
     @classmethod
     def from_env(cls) -> "FdbConfig":
@@ -124,7 +127,21 @@ class FdbConfig:
             commit_quiet_seconds=float(
                 os.environ.get("INTERRA_FDB_COMMIT_QUIET_SECONDS", "0.6")
             ),
+            commit_gate=os.environ.get("INTERRA_FDB_COMMIT_GATE", "auto").strip().lower(),
         )
+
+    def gate_enabled(self, dispatch_name: str) -> bool:
+        """Whether the benchmark agent holds its tool calls at the commit gate.
+
+        ``auto`` leaves the gate off when the official runner auto-dispatches
+        the worker (no dispatch name), so a benchmark re-run uses the tool flow
+        measured on 4 October 2026, which predates the gate. It turns the gate
+        on when the worker runs under a name for the judge page. ``on`` and
+        ``off`` force either.
+        """
+        if self.commit_gate == "auto":
+            return bool(dispatch_name)
+        return self.commit_gate == "on"
 
     def missing_requirements(self) -> list[str]:
         missing = [
@@ -1348,10 +1365,11 @@ async def entrypoint(ctx: Any) -> None:
         raise ValueError(f"Unsupported FDB LLM provider: {config.llm_provider}")
 
     registry = benchmark.MockAPIRegistry(latency_profile=config.latency_profile)
-    gate = CommitGate(config.commit_quiet_seconds)
+    gate_on = config.gate_enabled(benchmark_dispatch_name())
+    gate = CommitGate(config.commit_quiet_seconds) if gate_on else None
     executor = ToolExecutor(
         registry, ctx.room.name, trace, gate=gate,
-        recheck=llm_recheck(recheck_llm_model(inference, config), llm),
+        recheck=llm_recheck(recheck_llm_model(inference, config), llm) if gate_on else None,
     )
     tools = llm.find_function_tools(create_benchmark_tools(executor, function_tool))
     session = AgentSession(
@@ -1369,13 +1387,14 @@ async def entrypoint(ctx: Any) -> None:
         trace.append("user_state", room=ctx.room.name, state=str(event.new_state))
         if str(event.new_state) == "speaking":
             hold.on_user_speaking()
-            gate.set_speaking(True)
-        elif str(event.new_state) in {"listening", "away"}:
+            if gate is not None:
+                gate.set_speaking(True)
+        elif str(event.new_state) in {"listening", "away"} and gate is not None:
             gate.set_speaking(False)
 
     @session.on("user_input_transcribed")
     def on_transcript(event: Any) -> None:
-        if event.is_final:
+        if event.is_final and gate is not None:
             gate.note_transcript(event.transcript)
         trace.append(
             "transcript",
@@ -1396,13 +1415,14 @@ async def entrypoint(ctx: Any) -> None:
     def on_error(event: Any) -> None:
         trace_session_error(trace, ctx.room.name, event)
 
-    trace.append("session_started", room=ctx.room.name)
+    trace.append("session_started", room=ctx.room.name, commit_gate=gate_on)
     print(
         "Interra FDB speech:"
         f" stt={config.stt_model} llm={config.llm_provider}:{config.llm_model} tts={config.tts_model}"
         f" temperature={config.llm_temperature}"
         f" endpointing={config.endpointing_min_delay}-{config.endpointing_max_delay}s"
         f" unfinished_hold={config.unfinished_turn_hold_seconds}s"
+        f" commit_gate={'on' if gate_on else 'off'}"
         f" commit_quiet={config.commit_quiet_seconds}s",
         flush=True,
     )

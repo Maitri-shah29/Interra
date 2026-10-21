@@ -77,7 +77,11 @@ semantic turn detector picks between them), `INTERRA_FDB_UNFINISHED_TURN_HOLD_SE
 has been quiet this long. If new words arrived while it was held, the same LLM
 re-checks it against the complete words within 8 s: it runs unless they corrected
 or cancelled it. A failed re-check does not run the call and asks the model to
-plan again. A dropped call is not logged), `INTERRA_FDB_AGENT_NAME` (empty; the official runner auto-dispatches
+plan again. A dropped call is not logged), `INTERRA_FDB_COMMIT_GATE` (`auto`; the
+benchmark agent uses the commit gate only when it runs under a dispatch name,
+as for the judge page. The official runner auto-dispatches it without a name,
+so a re-run uses the tool flow the 4 October 2026 run measured, which predates
+the gate. `on` or `off` forces either), `INTERRA_FDB_AGENT_NAME` (empty; the official runner auto-dispatches
 this worker. The judge page sets it to `interra-benchmark` so the voice worker
 does not also enter the camera room) and `INTERRA_FDB_RECORDER_RETRIES` (1; re-runs recordings whose
 official recorder crashed before writing a result).
