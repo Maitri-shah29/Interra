@@ -8,7 +8,7 @@ from __future__ import annotations
 import json
 from typing import Any, Callable
 
-from agent.commit import SUPERSEDED, CommitGate
+from agent.commit import RECHECK_TIMEOUT_SECONDS, SUPERSEDED, CommitGate, Recheck, recheck_call
 
 
 CATALOG: dict[str, dict[str, str]] = {
@@ -62,29 +62,43 @@ class DeviceDesk:
 
 
 class GatedAction:
-    """Run a session action only after the commit gate stays quiet."""
+    """Run a session action once the person has finished and the action still stands.
 
-    def __init__(self, gate: CommitGate, trace: Any, room_name: str) -> None:
+    The call is held through the commit gate. If the person said more while it
+    was held, ``recheck`` decides from their complete words; without one, the
+    action does not run.
+    """
+
+    def __init__(
+        self, gate: CommitGate, trace: Any, room_name: str, *,
+        recheck: Recheck | None = None, recheck_timeout: float = RECHECK_TIMEOUT_SECONDS,
+    ) -> None:
         self.gate = gate
         self.trace = trace
         self.room_name = room_name
+        self.recheck = recheck
+        self.recheck_timeout = recheck_timeout
 
     async def run(self, name: str, arguments: dict[str, Any], action: Callable[[], dict[str, Any]]) -> str:
-        epoch = self.gate.epoch
+        mark = self.gate.mark()
+        call = {"function": name, "args": arguments}
         self.trace.append(
             "tool_call_pending",
             room=self.room_name,
-            call={"function": name, "args": arguments},
+            call=call,
             quiet_seconds=self.gate.quiet_seconds,
         )
-        if not await self.gate.allow(epoch):
+        words = await self.gate.hold(mark)
+        if words.changed:
+            verdict = await recheck_call(self.recheck, name, arguments, words, timeout=self.recheck_timeout)
             self.trace.append(
-                "tool_call_dropped",
-                room=self.room_name,
-                call={"function": name, "args": arguments},
-                reason="user continued",
+                "tool_call_rechecked", room=self.room_name, call=call,
+                earlier=" ".join(words.earlier), later=" ".join(words.later),
+                run=verdict.run, reason=verdict.reason,
             )
-            return SUPERSEDED
+            if not verdict.run:
+                self.trace.append("tool_call_dropped", room=self.room_name, call=call, reason=verdict.reason)
+                return SUPERSEDED
         result = action()
         self.trace.append(
             "tool_call",

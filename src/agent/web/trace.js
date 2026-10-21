@@ -145,6 +145,10 @@ const KINDS = {
     cat: "gate", icon: "timer", label: "Holding", call: true,
     sub: (r) => "Runs after " + fmtNumber(r.quiet_seconds ?? 0.6) + " s of quiet",
   },
+  tool_call_rechecked: {
+    cat: "gate", icon: "ear", label: "Re-checked", call: true,
+    sub: (r) => (r.run ? "Still stands" : "Does not run") + " · heard “" + (r.later || "") + "”",
+  },
   tool_call_dropped: { cat: "gate", icon: "ban", label: "Dropped", call: true, sub: (r) => "Not logged · " + (r.reason || "user continued") },
   tool_call_deduplicated: { cat: "gate", icon: "history", label: "Reused", call: true, sub: () => "Identical call in this room · not run again" },
   tool_call: {

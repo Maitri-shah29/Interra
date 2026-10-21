@@ -18,7 +18,9 @@ from agent.fdb_livekit import (
     TraceWriter,
     livekit_llm_model,
     livekit_speech_models,
+    llm_recheck,
     load_local_env,
+    recheck_llm_model,
     trace_conversation_item,
     trace_session_error,
 )
@@ -153,7 +155,10 @@ async def entrypoint(ctx: Any) -> None:
     trace = TraceWriter(config.trace_dir)
     gate = CommitGate(config.commit_quiet_seconds)
     desk = DeviceDesk()
-    actions = GatedAction(gate, trace, ctx.room.name)
+    model = livekit_llm_model(inference, config)
+    actions = GatedAction(
+        gate, trace, ctx.room.name, recheck=llm_recheck(recheck_llm_model(inference, config), llm),
+    )
     ctx.add_shutdown_callback(frames.close)
     await ctx.connect()
     participant = await ctx.wait_for_participant()
@@ -256,7 +261,7 @@ async def entrypoint(ctx: Any) -> None:
     session = AgentSession(
         vad=silero.VAD.load(),
         stt=speech_stt,
-        llm=livekit_llm_model(inference, config),
+        llm=model,
         tts=speech_tts,
     )
 
@@ -268,7 +273,7 @@ async def entrypoint(ctx: Any) -> None:
     @session.on("user_input_transcribed")
     def on_transcript(event: Any) -> None:
         if event.is_final:
-            gate.note_transcript()
+            gate.note_transcript(event.transcript)
         trace.append(
             "transcript",
             room=ctx.room.name,

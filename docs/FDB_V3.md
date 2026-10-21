@@ -73,9 +73,11 @@ Turn and argument handling can be tuned without code changes:
 and `INTERRA_FDB_ENDPOINTING_MAX_DELAY` (0.7 and 1.2 s; LiveKit's hosted
 semantic turn detector picks between them), `INTERRA_FDB_UNFINISHED_TURN_HOLD_SECONDS`
 (1.0 s; 0 disables holding turns that end mid-sentence),
-`INTERRA_FDB_COMMIT_QUIET_SECONDS` (0.6 s; a tool call waits out this quiet
-window and is dropped, not logged, if speech resumes or a newer transcript
-arrives), `INTERRA_FDB_AGENT_NAME` (empty; the official runner auto-dispatches
+`INTERRA_FDB_COMMIT_QUIET_SECONDS` (0.6 s; a tool call is held until the person
+has been quiet this long. If new words arrived while it was held, the same LLM
+re-checks it against the complete words within 8 s: it runs unless they corrected
+or cancelled it. A failed re-check does not run the call and asks the model to
+plan again. A dropped call is not logged), `INTERRA_FDB_AGENT_NAME` (empty; the official runner auto-dispatches
 this worker. The judge page sets it to `interra-benchmark` so the voice worker
 does not also enter the camera room) and `INTERRA_FDB_RECORDER_RETRIES` (1; re-runs recordings whose
 official recorder crashed before writing a result).

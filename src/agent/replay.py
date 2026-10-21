@@ -71,6 +71,7 @@ def render_replay(rows):
 
 PAGE_LABELS = {
     "tool_call": "Executed",
+    "tool_call_rechecked": "Re-checked",
     "tool_call_dropped": "Dropped",
     "tool_call_deduplicated": "Reused",
     "transcript": "Heard",
