@@ -94,6 +94,29 @@ class FdbLiveKitTests(unittest.TestCase):
             self.assertEqual(process.userdata["vad"], "vad")
             self.assertIn("benchmark", process.userdata)
 
+    def test_benchmark_runs_without_the_gate_unless_the_judge_page_names_it(self):
+        with patch.dict(os.environ, {}, clear=True):
+            config = FdbConfig.from_env()
+        self.assertEqual(config.commit_gate, "auto")
+        # The official runner auto-dispatches an unnamed worker: the measured 4 October tool flow.
+        self.assertFalse(config.gate_enabled(""))
+        # The judge page dispatches the named worker: the demo shows the gate.
+        self.assertTrue(config.gate_enabled("interra-benchmark"))
+        for value, named, unnamed in (("on", True, True), ("off", False, False), (" ON ", True, True)):
+            with patch.dict(os.environ, {"INTERRA_FDB_COMMIT_GATE": value}, clear=True):
+                forced = FdbConfig.from_env()
+            self.assertEqual((forced.gate_enabled("interra-benchmark"), forced.gate_enabled("")), (named, unnamed), value)
+        with self.assertRaises(ValueError):
+            FdbConfig(fdb_v3_root=Path("."), commit_gate="sometimes")
+
+    def test_entrypoint_builds_the_gate_and_its_recheck_only_when_enabled(self):
+        source = inspect.getsource(entrypoint)
+        self.assertIn("gate_on = config.gate_enabled(benchmark_dispatch_name())", source)
+        self.assertIn("CommitGate(config.commit_quiet_seconds) if gate_on else None", source)
+        self.assertIn("if gate_on else None", source)
+        self.assertIn("if gate is not None:", source)
+        self.assertIn('trace.append("session_started", room=ctx.room.name, commit_gate=gate_on)', source)
+
     def test_session_stays_open_after_benchmark_wav_disconnects(self):
         source = inspect.getsource(entrypoint)
         self.assertIn("close_on_disconnect=False", source)

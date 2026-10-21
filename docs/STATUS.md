@@ -1,3 +1,20 @@
+# Benchmark agent runs without the gate under the official runner — 2026-10-22
+
+- New `INTERRA_FDB_COMMIT_GATE` (`auto` by default, `on`, `off`) for the
+  benchmark agent. In `auto` the gate and its re-check are on only when the
+  worker runs under a dispatch name, as the judge page starts it
+  (`INTERRA_FDB_AGENT_NAME=interra-benchmark`). The official runner
+  auto-dispatches an unnamed worker, so an organizer re-run uses the tool flow
+  measured on 4 October 2026 (turn hold and one run per identical call, no
+  gate). The camera and home sessions always use the gate.
+- Why: the 70/100 run predates the gate; the first drop-on-speech gate lowered
+  strict passes on a partial 20 October run, and the hold-and-recheck gate (#7)
+  has not been measured on a full run. No Kaggle run is planned before Round 2.
+- The worker prints `commit_gate=on|off` and traces it on `session_started`.
+- Still unmeasured with the gate off: the 17 October argument fixes and the
+  prompt changes since 4 October.
+- Tests: two new `test_fdb_livekit` tests. 270 tests pass on Python 3.11.
+
 # Commit gate holds and re-checks instead of dropping — 2026-10-21
 
 Evidence: the 2026-10-20 Kaggle run (48/100 strict, 22 silent after LiveKit

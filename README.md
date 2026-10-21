@@ -12,6 +12,13 @@ drops it. A dropped call is not written to the benchmark tool log. An identical
 call in the same room still runs once. The prompt asks the model to ground
 completion claims in tool results.
 
+The scored 70/100 run (4 October 2026) predates the commit gate, and the gate
+has not been measured on a full run. So the benchmark agent runs without it
+when the official runner dispatches it, and with it when the judge page starts
+it under the name `interra-benchmark` for the demo
+(`INTERRA_FDB_COMMIT_GATE`: `auto` by default, or `on`/`off`). The camera and
+home sessions always use the gate.
+
 Most assistants listen, then think, then speak. That falls apart when the
 destination changes while a route is still being looked up, or when a booking
 is corrected before the first change has been committed. Interra is built for
