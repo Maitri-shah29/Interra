@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+{{head}}
+<title>Interra — settings</title>
+<meta name="description" content="Change the environment the page and both LiveKit workers start with. Password protected.">
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="/static/settings.css">
+</head>
+<body data-page="settings">
+{{sprite}}
+{{header}}
+
+<main class="page settings-page">
+  <header class="page-head">
+    <div>
+      <span class="eyebrow"><svg class="ic xs"><use href="#i-shield"/></svg>Admin</span>
+      <h1>Settings</h1>
+      <p>Values saved here override the deployment's environment. Saving restarts the page and both workers, so any live session ends.</p>
+    </div>
+  </header>
+
+  <section class="card glass gate" id="off" hidden>
+    <h3><svg class="ic sm"><use href="#i-ban"/></svg>Settings are off</h3>
+    <p>Set <code>INTERRA_ADMIN_PASSWORD</code> (8 characters or more) in the deployment, then redeploy.</p>
+  </section>
+
+  <form class="card glass gate" id="login" hidden>
+    <h3><svg class="ic sm"><use href="#i-login"/></svg>Sign in</h3>
+    <label class="field">
+      <span>Admin password</span>
+      <input id="password" type="password" autocomplete="current-password" required>
+    </label>
+    <p class="form-error" id="login-error" role="alert"></p>
+    <button class="btn primary" type="submit"><svg class="ic sm"><use href="#i-login"/></svg>Sign in</button>
+  </form>
+
+  <section class="card glass editor" id="editor" hidden>
+    <div class="editor-head">
+      <p class="meta" id="file-meta"></p>
+      <span class="spacer"></span>
+      <button class="btn ghost sm" id="logout" type="button"><svg class="ic sm"><use href="#i-logout"/></svg>Sign out</button>
+    </div>
+    <p class="notice" id="notice" role="status" hidden></p>
+    <div class="table-wrap">
+      <table class="vars">
+        <thead><tr><th>Variable</th><th>Current</th><th>New value</th><th><span class="sr-only">Reset</span></th></tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+    <div class="add-row">
+      <input id="new-name" class="mono" placeholder="NEW_VARIABLE" autocomplete="off" spellcheck="false" aria-label="New variable name">
+      <input id="new-value" placeholder="value" autocomplete="off" spellcheck="false" aria-label="New variable value">
+      <button class="btn sm" id="add" type="button">Add</button>
+    </div>
+    <div class="editor-foot">
+      <span class="meta" id="change-count">No changes</span>
+      <span class="spacer"></span>
+      <button class="btn primary" id="save" type="button" disabled><svg class="ic sm"><use href="#i-rotate"/></svg>Save and restart</button>
+    </div>
+  </section>
+</main>
+
+{{footer}}
+<script type="module" src="/static/shell.js"></script>
+<script type="module" src="/static/settings.js"></script>
+</body>
+</html>

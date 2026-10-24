@@ -52,6 +52,26 @@ def load_local_env() -> None:
     load_dotenv(Path(__file__).resolve().parents[2] / ".env", override=False)
 
 
+def agent_server_options(**defaults: Any) -> dict[str, Any]:
+    """AgentServer settings the environment may change.
+
+    LiveKit gives every worker the health port 8081, so two workers in one
+    container need ``INTERRA_AGENT_HTTP_PORT`` to differ. Idle processes and
+    the load threshold are here so a small host can be tuned without a rebuild.
+    """
+    options = dict(defaults)
+    port = os.environ.get("INTERRA_AGENT_HTTP_PORT", "").strip()
+    if port:
+        options["port"] = int(port)
+    idle = os.environ.get("INTERRA_AGENT_IDLE_PROCESSES", "").strip()
+    if idle:
+        options["num_idle_processes"] = int(idle)
+    threshold = os.environ.get("INTERRA_AGENT_LOAD_THRESHOLD", "").strip()
+    if threshold:
+        options["load_threshold"] = float(threshold)
+    return options
+
+
 def _model_fallbacks(name: str, default: str) -> tuple[str, ...]:
     configured = os.environ.get(name, default)
     return tuple(model.strip() for model in configured.split(",") if model.strip())
@@ -1470,7 +1490,11 @@ def main() -> None:
     from livekit import agents
     from livekit.agents import AgentServer
 
-    server = AgentServer(setup_fnc=prewarm, num_idle_processes=1, initialize_process_timeout=60.0)
+    server = AgentServer(
+        setup_fnc=prewarm,
+        initialize_process_timeout=60.0,
+        **agent_server_options(num_idle_processes=1),
+    )
     register_benchmark_session(server)
     agents.cli.run_app(server)
 

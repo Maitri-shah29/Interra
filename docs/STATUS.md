@@ -1,3 +1,31 @@
+# Hosted deployment and dashboard settings — 2026-10-24
+
+- `python -m agent.serve` runs the judge page and both LiveKit workers in one
+  container, because the page tails the trace the workers write. Each child
+  runs in its own process group and is started again with back-off if it exits,
+  so a bad setting cannot take the page down. SIGHUP restarts all of them with
+  the saved settings, and SIGTERM stops them (SIGKILL after 10 s).
+- `/settings`, protected by `INTERRA_ADMIN_PASSWORD`, edits overrides stored in
+  `artifacts/settings/overrides.json` and restarts the processes. Secrets are
+  shown masked. Names that control access or start-up are refused. JSON only,
+  same origin only. Sessions are HMAC-signed cookies (HttpOnly, SameSite=Strict).
+  An optional `INTERRA_SITE_PASSWORD` puts every page and `/api/token` behind HTTP basic auth.
+- Found while running it: both workers bind LiveKit's health port 8081, so the
+  second crashed. `agent_server_options()` reads `INTERRA_AGENT_HTTP_PORT`,
+  `INTERRA_AGENT_IDLE_PROCESSES` and `INTERRA_AGENT_LOAD_THRESHOLD`; the
+  supervisor gives the voice worker 8081 and the camera worker 8082 with one idle process.
+- `Dockerfile.deploy` (editable install, the two FDB-v3 mock files from the
+  pinned commit, tini) and `railway.json`. `Dockerfile` is unchanged. Steps are in `docs/DEPLOY.md`.
+- Tests: `tests/unit/test_settings.py`, `tests/unit/test_serve.py` (real
+  subprocesses: restart applies settings and old pids are gone, a crashing child
+  restarts while the others keep running, a child that ignores SIGTERM is
+  killed, an unreadable settings file falls back), and `SettingsServerTests` in
+  `test_demo_page.py`. 303 tests pass (1 skipped) on Python 3.11.
+- Checked by hand with the real supervisor: save → restart → `/api/config`
+  shows the new value; both health ports bound; no process left after SIGTERM.
+  No Railway deploy has been run yet.
+- Limits: a restart ends live sessions. One replica only. Values on the volume are plain text.
+
 # Benchmark agent runs without the gate under the official runner — 2026-10-22
 
 - New `INTERRA_FDB_COMMIT_GATE` (`auto` by default, `on`, `off`) for the

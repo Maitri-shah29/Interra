@@ -16,6 +16,7 @@ from agent.fdb_livekit import (
     CommitGate,
     FdbConfig,
     TraceWriter,
+    agent_server_options,
     livekit_llm_model,
     livekit_speech_models,
     llm_recheck,
@@ -313,7 +314,7 @@ def main() -> None:
     from livekit import agents
     from livekit.agents import AgentServer
 
-    server = AgentServer()
+    server = AgentServer(**agent_server_options())
     server.rtc_session(agent_name="interra-camera-troubleshooter")(entrypoint)
     agents.cli.run_app(server)
 
