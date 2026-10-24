@@ -9,6 +9,9 @@ LiveKit Cloud and keep VAD models in memory.
 `Dockerfile.deploy` builds the hosted image. `Dockerfile` remains the
 submission image and still starts only the voice worker.
 
+**AWS EC2:** see [DEPLOY_AWS.md](DEPLOY_AWS.md), which covers one instance with
+automatic HTTPS, set up from the AWS CLI. Railway (below) works too, if you can open an account there.
+
 ## Railway
 
 1. **New project → Deploy from GitHub repo**, pick this repository and branch.

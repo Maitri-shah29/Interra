@@ -1,0 +1,41 @@
+# One EC2 host: the Interra container (page + both workers, see agent.serve)
+# behind Caddy, which gets a Let's Encrypt certificate for SITE_ADDRESS.
+# Browsers only allow the microphone and camera over HTTPS.
+#
+#   cd deploy/aws && docker compose up -d --build
+#
+# .env (next to this file) holds SITE_ADDRESS; interra.env holds the app's
+# variables. Neither is committed.
+services:
+  interra:
+    build:
+      context: ../..
+      dockerfile: Dockerfile.deploy
+    env_file: interra.env
+    environment:
+      PORT: "8780"
+    volumes:
+      - interra-artifacts:/app/artifacts
+    restart: unless-stopped
+    # agent.serve gives each child 10 s to stop before killing it.
+    stop_grace_period: 30s
+
+  caddy:
+    image: caddy:2.10
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      SITE_ADDRESS: ${SITE_ADDRESS:?set SITE_ADDRESS in deploy/aws/.env}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    depends_on:
+      - interra
+    restart: unless-stopped
+
+volumes:
+  interra-artifacts:
+  caddy-data:
+  caddy-config:

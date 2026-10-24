@@ -14,3 +14,6 @@ dist/
 output/
 .runtime/
 ~$*
+
+# AWS deploy secrets
+deploy/aws/interra.env

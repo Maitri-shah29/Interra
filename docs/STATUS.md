@@ -1,3 +1,19 @@
+# AWS EC2 deployment — 2026-10-24
+
+- Railway is closed to new signups, so `deploy/aws/compose.yaml` runs the
+  `Dockerfile.deploy` image behind Caddy (automatic HTTPS through
+  `<ip>.sslip.io`) on one EC2 instance. `docs/DEPLOY_AWS.md` covers it from
+  installing the AWS CLI to tearing everything down.
+- Verified locally: `Dockerfile.deploy` builds (1.51 GB). In a container with a
+  fresh named volume, the page, `/settings`, the recorded replay and the
+  pinned FDB-v3 mock files work, and the volume is writable as uid 10001. A
+  save restarts all three processes with the new value, the workers bind 8081
+  and 8082, and `docker stop` exits 0 in 12.6 s. LiveKit was pointed at a dead
+  address, so no worker registered. Not yet run on EC2.
+- Seen on restart: LiveKit logs `error initializing process` (EOFError) when
+  the restart stops a worker while it is still spawning idle processes. The new
+  generation starts cleanly.
+
 # Hosted deployment and dashboard settings — 2026-10-24
 
 - `python -m agent.serve` runs the judge page and both LiveKit workers in one
