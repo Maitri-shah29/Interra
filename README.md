@@ -1,391 +1,49 @@
 # Interra
 
-Interra is a voice agent that stays in the conversation while it works. A person
-can hesitate, interrupt, or correct themselves in the middle of a sentence. The
-agent answers out loud and runs tool calls outside the event loop. The deployed
-LiveKit agent uses SDK turn interruption and tool calling. Before a tool is
-logged, a commit gate holds the call until the person has been quiet for a short
-window. If they said more meanwhile, the model re-checks the call against their
-complete words: a continuation that only adds requests ("track order CAT, then
-search for cat food") leaves it standing, and a correction or cancellation
-drops it. A dropped call is not written to the benchmark tool log. An identical
-call in the same room still runs once. The prompt asks the model to ground
-completion claims in tool results.
+Interra is a voice agent that keeps working correctly when people pause,
+interrupt or correct themselves mid-sentence. It is our entry for Samsung
+PRISM GenAI Hackathon 2026, Theme 05, built as a LiveKit voice agent and scored
+on [Full-Duplex-Bench v3](docs/FDB_V3.md).
 
-The scored 70/100 run (4 October 2026) predates the commit gate, and the gate
-has not been measured on a full run. So the benchmark agent runs without it
-when the official runner dispatches it, and with it when the judge page starts
-it under the name `interra-benchmark` for the demo
-(`INTERRA_FDB_COMMIT_GATE`: `auto` by default, or `on`/`off`). The camera and
-home sessions always use the gate.
-
-Most assistants listen, then think, then speak. That falls apart when the
-destination changes while a route is still being looked up, or when a booking
-is corrected before the first change has been committed. Interra is built for
-that kind of overlap.
-
-The scored evaluation is Full-Duplex-Bench v3: 100 recorded human
-conversations, 79 scenarios, and 12 mock tools, including fillers, pauses,
-false starts, and self-corrections. Interra runs that benchmark as a LiveKit
-voice agent. A second LiveKit session handles camera-assisted device
-troubleshooting, which is outside those benchmark domains.
-
-Speech and tool calls go through one cascaded LiveKit session:
-
-```text
-recorded or live speech
-        |
-        v
-LiveKit room and Silero VAD
-        |
-        v
-LiveKit Inference: Deepgram Nova-3
-        |
-        v
-LiveKit Inference: GPT-4.1 mini
-        |
-        +----> 12 official FDB-v3 mock tools
-        |
-        v
-LiveKit Inference: Cartesia Sonic-3
-```
-
-Tool execution runs outside the event loop. Each call is stored with its room
-identifier and timestamps. Results come from the official mock backend, not
-from model memory. Ollama Qwen 3 8B is an optional local fallback
-(`INTERRA_FDB_LLM_PROVIDER=ollama`).
-
-The earlier queue runtime remains in the repository as coordination research.
-Its retained entry point is `interra_submission:ParticipantAgent`; its evidence
-does not substitute for an FDB-v3 run.
-
-## Presentation and demo
+**Result:** 70/100 strict passes and 100/100 turn-takes on all 100 released
+FDB-v3 recordings, scored by the pinned official evaluator on 4 October 2026
+([details](#results)).
 
 - Presentation: [8-slide submission deck](docs/Interra_Theme05_submission.pptx)
 - Demo video: [Interra demo](https://cursor.com/artifacts/v/art-65efdeb4-9b6f-4416-839a-875b82833f5a)
-- Local trace replay, from a recorded `livekit-agent.jsonl`:
-
-```bash
-python -m agent.replay artifacts/fdb_v3/livekit-agent.jsonl -o artifacts/fdb_v3/replay.html
-```
-
-The recording is three to five minutes: one benchmark interruption or
-self-correction, then the camera troubleshooting session.
-
-## Repository
-
-| Path | Contents |
-| --- | --- |
-| `src/agent/fdb_livekit.py` | FDB-v3 LiveKit agent |
-| `src/agent/extension_livekit.py` | Camera troubleshooting session |
-| `src/agent/` | Coordination runtime, tools, and multimodal code |
-| `scripts/fdb_v3.py` | Benchmark checkout, run, and evaluation |
-| `requirements.txt` | Python dependencies for the FDB profile |
-| `pyproject.toml` | Package metadata; LiveKit Agents 1.8.3 and RTC 1.1.18 pinned |
-| `Dockerfile` | Python 3.11 voice-worker image with `ffmpeg` |
-| `tests/` | Deterministic runtime and agent tests |
-| `.env.fdb.example` | Environment variable names, with empty secrets |
-| `docs/FDB_V3.md` | Benchmark pin, models, and scoring contract |
-| `docs/AI_DISCLOSURE_DRAFT.md` | AI usage disclosure |
-| `docs/Interra_Theme05_submission.pptx` | Audited 8-slide submission deck |
-| `docs/results/kaggle-20261004/` | Latest reports, logs, traces, per-recording results, and run manifest |
-| `vendor/samsung_theme05/` | Superseded queue kit |
-
-## Models
-
-| Stage | Model |
-| --- | --- |
-| Voice activity | Silero VAD |
-| Speech recognition | LiveKit Inference `deepgram/nova-3` |
-| Tool calling | LiveKit Inference `openai/gpt-4.1-mini` |
-| Speech synthesis | LiveKit Inference `cartesia/sonic-3`, voice `9626c31c-bec5-4cca-baa8-f8ba9e84c8bc` |
-| Optional local LLM | Ollama `qwen3:8b` |
-
-Benchmark pin: `DanielLin94144/Full-Duplex-Bench` commit
-`3e799c45a045256f47d5f1c9cda90157e2d2ec9e`, directory `v3/`.
-
-Report filenames use the provider id `interra_elevenlabs` because the pinned
-runner requires that name. The speech models in the table above are the ones
-this agent loads.
-
-## Reproducible setup
-
-Use Python 3.11 or 3.12, Git, and `ffmpeg` on `PATH`. The agent calls LiveKit
-Cloud for speech and the default language model, so those calls do not need a
-local GPU. The official 100-recording scorer uses the benchmark ASR stack and
-is meant to run on a CUDA machine.
-
-From a fresh checkout, fill `.env` using `.env.fdb.example`, then run:
-
-```bash
-python scripts/reproduce.py
-```
-
-This command reads `.env`, creates `.venv-fdb`, installs dependencies, downloads
-the pinned benchmark and released recordings, starts the agent, runs a speech
-gate and all recordings, and evaluates the results. Before the install it writes
-`artifacts/fdb_v3/runs/<timestamp>/run_info.txt` with the git commit, the FDB-v3
-pin, the model names, and the seed. After install it writes `pip-freeze.txt` in
-that same folder. Secret values are not written. Existing shell values take
-precedence. Add `--use-llm` and an `OPENAI_API_KEY` for the optional local judge.
-`--seed 0` is the default Python hash seed; hosted models are not deterministic.
-Git and ffmpeg must already be installed, and LiveKit inference quota must be
-available. The best measured run did not record a sampling seed.
-
-The following manual steps are useful when running or debugging each stage.
-
-Create a virtual environment and install the pinned dependencies, then this
-package:
-
-```bash
-python -m venv .venv
-.venv/bin/python -m pip install --upgrade pip
-.venv/bin/python -m pip install -r requirements.txt
-.venv/bin/python -m pip install -e . --no-deps
-```
-
-On Windows PowerShell, use `.venv\Scripts\python.exe` in place of
-`.venv/bin/python`.
-
-Activate that environment before the manual `python` commands below:
-`source .venv/bin/activate` in Bash, or `.venv\Scripts\Activate.ps1` in PowerShell.
-
-Copy the environment template and set the three LiveKit values. `.env` is
-gitignored.
-
-```bash
-cp .env.fdb.example .env
-```
-
-```powershell
-Copy-Item .env.fdb.example .env
-```
-
-Required variables:
-
-```text
-LIVEKIT_URL
-LIVEKIT_API_KEY
-LIVEKIT_API_SECRET
-```
-
-The configured speech models use provider failover: Nova-3 falls back to
-AssemblyAI Universal-3.5, and Cartesia Sonic-3 falls back to Deepgram Aura-2.
-The worker waits three seconds after cleaning up a room before accepting the
-next one, so completed provider connections have time to release. Override the
-fallback IDs or gap with `INTERRA_FDB_STT_FALLBACK_MODELS`,
-`INTERRA_FDB_TTS_FALLBACK_MODELS`, or
-`INTERRA_FDB_SESSION_COOLDOWN_SECONDS`. The language model remains
-`openai/gpt-4.1-mini`, the best measured configuration in the archived report;
-set `INTERRA_FDB_LLM_MODEL` to compare another LiveKit Inference model.
-
-Load them into the shell before any benchmark command.
-
-```bash
-set -a
-source .env
-set +a
-```
-
-```powershell
-Get-Content .env | Where-Object { $_ -and -not $_.StartsWith('#') } | ForEach-Object {
-  $name, $value = $_.Split('=', 2)
-  Set-Item -Path "Env:$name" -Value $value
-}
-```
-
-`OPENAI_API_KEY` is used only with `--use-llm` for a local semantic judge. The
-organizers score the run with their own judge.
-
-Check out the pinned benchmark. Add `--download-data` to fetch the released
-audio through the published Google Drive id. Both land under `.runtime/`,
-which is not part of this repository.
-
-```bash
-python scripts/fdb_v3.py bootstrap --download-data
-python scripts/fdb_v3.py check
-```
-
-Set `INTERRA_FDB_V3_ROOT` and `INTERRA_FDB_DATA_ROOT` when the checkout or the
-audio lives somewhere else. The defaults are in `.env.fdb.example`.
-
-## Run the benchmark
-
-One command starts the LiveKit agent, runs one recording as a speech gate,
-runs the released set, and writes the tool and strict pass-rate reports:
-
-```bash
-python scripts/fdb_v3.py all --force
-```
-
-LiveKit credit: every recording uses LiveKit Inference for speech-to-text, the
-LLM and text-to-speech, under the LiveKit project named by `LIVEKIT_*`. On
-2026-10-04 a free-tier project ran out of Inference credit after 71 of 100
-recordings (HTTP 429 `inference_quota_exceeded`), so use a project with enough
-credit for a full run. The runner retries a recording whose official recorder
-crashes, and restarts the agent if no result appears for
-`INTERRA_FDB_STALL_SECONDS` (default 600).
-
-Separate steps:
-
-```bash
-python scripts/fdb_v3.py agent
-python scripts/fdb_v3.py benchmark --force
-python scripts/fdb_v3.py evaluate
-```
-
-Optional local semantic report (needs `OPENAI_API_KEY`; the organizers run the
-benchmark's pinned LLM judge themselves, so this is only a self-check):
-
-```bash
-python scripts/fdb_v3.py evaluate --use-llm
-```
-
-Reports are written to `artifacts/fdb_v3/`. The agent also appends the official
-tool telemetry the benchmark reads from `/tmp/agent_tool_calls.log` on Linux.
-On Windows that file is under the temp directory.
-
-Docker builds the hosted voice worker, with the pinned LiveKit SDK and ffmpeg.
-After bootstrapping the official checkout, start it with the checkout and trace
-directory mounted (Bash example):
-
-```bash
-docker build -t interra .
-docker run --rm --env-file .env \
-  -e INTERRA_FDB_V3_ROOT=/bench/v3 \
-  -e INTERRA_FDB_TRACE_DIR=/traces \
-  -v "$PWD/.runtime/Full-Duplex-Bench:/bench:ro" \
-  -v "$PWD/artifacts/fdb_v3:/traces" interra
-```
-
-The default command is `python -m agent.fdb_livekit start`. Run the official
-CUDA scorer separately with the benchmark commands above. The worker image
-does not include the scorer's GPU stack or benchmark data. On 2026-10-05 both
-`Dockerfile` and `Dockerfile.local` built from a clean checkout (Docker 29.6).
-The worker image runs as the non-root `interra` user with Python 3.11, ffmpeg,
-LiveKit Agents 1.8.3 and LiveKit RTC 1.1.18, and all unit tests pass inside it
-(`docker run --rm interra sh -c 'python -m unittest discover -s tests'`).
-
-## Camera extension
-
-Device troubleshooting is a second LiveKit session. It subscribes to the
-participant camera, keeps the latest frame, and attaches that frame once to
-the next spoken turn. Only the linked participant's camera is accepted;
-disconnect discards its pending frame, and older images are removed from model
-history. It does not register the 12 benchmark tools. A visible code is looked
-up in Interra's own demo catalog (`E1`, `E2`, `E3`). A follow-up visit is
-scheduled only after the same commit gate releases it, and a correction drops
-the booking before it is stored. Asking what was scheduled reads that session's
-list. This correction can be replayed without a camera:
-
-```bash
-python -m agent.extension_demo
-```
-
-That writes `artifacts/extension-demo/replay.html`, with the Friday visit
-dropped and the Saturday visit stored. The live camera worker is still
-`python -m agent.extension_livekit start`.
-
-```bash
-python -m agent.extension_livekit start
-```
-
-The same `LIVEKIT_URL`, `LIVEKIT_API_KEY`, and `LIVEKIT_API_SECRET` variables
-are required. In the LiveKit project, dispatch this worker with the agent
-name `interra-camera-troubleshooter`.
-
-The judge page puts the live voice correction, the camera correction, and the
-scored 4 October 2026 run on one screen:
-
-```bash
-python -m agent.demo_page
-```
-
-Open `http://127.0.0.1:8780/`. The pages are separate: Overview, Voice,
-Camera and Home (a live session with captions from the agent's LiveKit transcription and
-the gate's latest decision, including a call held during the quiet window
-before it runs or is dropped), Replay (the recorded housing_11 run played from
-its own trace, with the pinned evaluator's result for it, which was not a
-pass), Logs (every session in the local trace, filterable, with `.jsonl`
-download) and Results. Replay and Results need no LiveKit room. The pages live
-in `src/agent/web/`; `--port` and `--host` change where the server listens.
-
-## SmartThings home extension
-
-The Samsung extension is a voice session for a SmartThings-style home
-(`src/agent/smart_home.py`, worker `src/agent/home_livekit.py`). Each device is
-described the way SmartThings describes devices: capabilities, each with
-attributes that can be read and commands that change state. Interra generates
-its tools from those descriptions when the session starts, marking each one
-read-only or state-changing and routine or risky, so there are no hand-written
-tools per device. The capability names follow SmartThings' public capability
-model; the eight devices are simulated, and nothing talks to a real
-SmartThings account.
-
-Every state change goes through the commit gate: it is held until the person
-has been quiet, and if they said more meanwhile, the same model re-checks it
-against their complete words. Four home rules sit on top:
-
-- the latest value wins: a newer value for the same device and capability
-  replaces one still waiting at the gate, so "22… no, 24" never sends 22;
-- a value the device already has is not sent again;
-- risky commands (unlocking a door, starting the oven) wait for a spoken yes;
-- "undo that" reverses the last reversible change within two minutes.
-
-During a call, the Home page's "Add a new device" button sends a device the
-agent has never seen, an air purifier whose capability definitions are also
-new, over LiveKit RPC. The worker validates it, generates its tools and adds
-them to the live session, so the next request can control it.
-
-```bash
-python -m agent.home_livekit dev
-```
-
-Dispatch name: `interra-home`. Open `http://127.0.0.1:8780/home` and press
-Start. "Play walkthrough" on the same page runs the scripted demo through the
-real home controller with no LiveKit room; the person's lines and the
-re-check's answer are scripted, and every device change comes from the
-controller. The same walkthrough without a
-browser:
-
-```bash
-python -m agent.home_demo
-```
-
-That writes `artifacts/home-demo/replay.html` and prints the final device
-states: the AC at 24 (22 was dropped), the lights off, the door unlocked after
-the yes, and the purifier's change undone.
-
-## Tests
-
-```bash
-python -m unittest discover -s tests -v
-```
-
-These tests check orchestration, cancellation, and the agent configuration.
-They do not replace the official 100-recording reports.
-
-Verify both the historical baseline archive, latest run hashes, score comparison,
-and 8-slide deck with `python scripts/check_submission.py`. An incomplete review archive can be made
-with `python scripts/package_review.py --allow-missing-demo`; supply `--demo`
-with the actual video for a complete archive.
-
-## Measured result
-
-Latest official run (2026-10-04): LiveKit Inference Deepgram Nova-3, GPT-4.1 mini
-(temperature 0), and Cartesia Sonic-3 on all 100 FDB-v3 recordings, scored by the
-pinned official evaluator: **70/100 strict passes** and 100/100 turn-takes.
-
-- [Run summary and verification commands](docs/results/kaggle-20261004/summary.md)
-- [Strict pass report](docs/results/kaggle-20261004/interra_elevenlabs_pass_rate_report.json)
-- [Tool and latency report](docs/results/kaggle-20261004/interra_elevenlabs_evaluation_report.json)
-- [Run configuration and evidence hashes](docs/results/kaggle-20261004/run-manifest.json)
-- [Per-recording results, traces and logs](docs/results/kaggle-20261004/)
-- [2026-10-01 run](docs/results/kaggle-20261001/) and
-  [previous completed run archive](docs/results/best-run-evidence.zip)
-
-The pinned evaluator report filenames use `interra_elevenlabs` as the provider
-id; this run used LiveKit Inference models.
+- Evidence: [run summary, reports, traces and per-recording results](docs/results/kaggle-20261004/)
+
+## What it does
+
+Most voice agents listen, think, then act. That breaks when the person keeps
+talking: a pause looks like the end of a request, a correction arrives after a
+tool call was planned, and a regenerated reply repeats an action. Interra puts
+a coordination layer between what the model wants to do and what actually
+runs:
+
+- **Unfinished-turn hold.** A turn that ends on "and", "then" or "I'm looking
+  for" is held and merged with the next words instead of being answered.
+- **Commit gate.** A tool call is held until the person has been quiet for
+  0.6 s. If they said more meanwhile, the model re-checks the call against
+  their complete words: an add-on ("track order CAT, then search for cat
+  food") keeps it, and a correction or cancellation drops it before it runs or
+  is logged.
+- **One run per identical call.** A repeated call in the same conversation
+  returns the first result instead of acting twice.
+- **Speech normalizers.** Spoken values become what the backend expects:
+  "p five two" becomes `P52`, "the twentieth of May" becomes `May 20`.
+
+The 70/100 run predates the commit gate, and the gate has not been measured on
+a full run. So the benchmark agent runs without it when the official runner
+dispatches it, and with it when it runs under the name `interra-benchmark` for
+the judge page (`INTERRA_FDB_COMMIT_GATE`, see [Configuration](#configuration)).
+The camera and SmartThings home extensions always use the gate.
+
+## Results
+
+Official evaluator, pinned benchmark commit, all 100 recordings. The 2026-10-04
+run used LiveKit Inference Deepgram Nova-3, GPT-4.1 mini (temperature 0) and
+Cartesia Sonic-3.
 
 | Metric | 2026-10-04 | 2026-10-01 | Previous main baseline |
 | --- | ---: | ---: | ---: |
@@ -401,18 +59,257 @@ id; this run used LiveKit Inference models.
 | Average response latency, excluding interruptions | 4.452 seconds | 4.175 seconds | 4.545 seconds |
 | Early interruptions among turn-taken recordings | 3/100 | 11/90 | 6/58 |
 
-The LiveKit project ran out of Inference credits partway through the 2026-10-04
-run; the 29 recordings from the first quota error onward were re-recorded with
-the same code and the official evaluator scored all 100. The organizer LLM
-judge was disabled, so no normalized organizer score is claimed. See
-[status and run history](docs/STATUS.md) and
-[completion record](docs/10_DEFINITION_OF_DONE.md).
+Read these numbers with their limits:
+
+- Arguments are scored by exact match; the organizer LLM judge was off, so no
+  normalized organizer score is claimed.
+- The LiveKit project ran out of Inference credit mid-run. The 29 recordings
+  from the first quota error onward were re-recorded with the same code, cut
+  by start time, not by score.
+- It is one run, and hosted models are not fully deterministic.
+
+Evidence for the 2026-10-04 run: [summary and verification
+commands](docs/results/kaggle-20261004/summary.md), [strict pass
+report](docs/results/kaggle-20261004/interra_elevenlabs_pass_rate_report.json),
+[tool and latency report](docs/results/kaggle-20261004/interra_elevenlabs_evaluation_report.json)
+and [configuration and hashes](docs/results/kaggle-20261004/run-manifest.json).
+Earlier runs: [2026-10-01](docs/results/kaggle-20261001/) and the [main
+baseline archive](docs/results/best-run-evidence.zip). Report filenames use the
+provider id `interra_elevenlabs` because the pinned runner requires that name.
+
+## How it works
+
+```text
+speech in
+ └─► Silero VAD ─► Deepgram Nova-3 (speech to text)
+      └─► unfinished-turn hold
+           └─► GPT-4.1 mini plans tool calls
+                ├─► commit gate: hold until quiet, re-check if the person said more
+                │    └─► 12 official FDB-v3 mock tools ─► results back to the model
+                └─► Cartesia Sonic-3 (text to speech) ─► speech out
+```
+
+| Stage | Model or component |
+| --- | --- |
+| Voice activity | Silero VAD |
+| Speech recognition | LiveKit Inference `deepgram/nova-3`, falls back to AssemblyAI Universal-3.5 |
+| Tool calling | LiveKit Inference `openai/gpt-4.1-mini`; Ollama `qwen3:8b` optional |
+| Speech synthesis | LiveKit Inference `cartesia/sonic-3`, voice `9626c31c-bec5-4cca-baa8-f8ba9e84c8bc`, falls back to Deepgram Aura-2 |
+| Tools | The benchmark's own `MockAPIRegistry`, run in worker threads |
+
+Each LiveKit job owns one conversation, and nothing is shared between rooms.
+Every tool call is logged with its room and timestamps, results come from the
+official mock backend, and each session is cleaned up and drained before the
+worker takes the next room.
+
+## Quick start
+
+You need Python 3.11, Git, `ffmpeg` on `PATH`, and a LiveKit Cloud project with
+enough Inference credit for 100 recordings. Speech and the default model run
+on LiveKit Inference, so the agent needs no GPU. The official scorer runs its
+own speech recognition and is meant for a CUDA machine.
+
+1. Copy the environment template and fill in the three LiveKit values:
+
+   ```bash
+   cp .env.fdb.example .env
+   ```
+
+   ```text
+   LIVEKIT_URL
+   LIVEKIT_API_KEY
+   LIVEKIT_API_SECRET
+   ```
+
+2. Run everything with one command:
+
+   ```bash
+   python scripts/reproduce.py
+   ```
+
+   This creates `.venv-fdb`, installs the pinned dependencies, downloads the
+   pinned benchmark and its released recordings, starts the agent, checks one
+   recording, runs all 100, and writes the reports to `artifacts/fdb_v3/`.
+   It records the commit, benchmark pin, models and seed in
+   `artifacts/fdb_v3/runs/<timestamp>/run_info.txt`, never secret values.
+   Values already set in the shell win over `.env`.
+
+### Step by step
+
+```bash
+python -m venv .venv
+.venv/bin/python -m pip install -r requirements.txt
+.venv/bin/python -m pip install -e . --no-deps
+
+python scripts/fdb_v3.py bootstrap --download-data   # pinned checkout and audio, under .runtime/
+python scripts/fdb_v3.py check                       # settings, checkout, data, ffmpeg
+python scripts/fdb_v3.py all --force                 # agent, one-recording check, full run, reports
+```
+
+On Windows, use `.venv\Scripts\python.exe` instead of `.venv/bin/python`. The
+official runner reads tool calls from `/tmp/agent_tool_calls.log`, so run
+scored benchmarks on Linux or WSL.
+
+The stages can also run separately: `fdb_v3.py agent`, `fdb_v3.py benchmark
+--force` and `fdb_v3.py evaluate`. `fdb_v3.py evaluate --use-llm` adds an
+optional LLM-judged report and needs `OPENAI_API_KEY`; the organizers run the
+pinned judge themselves.
+
+If a run stops because Inference credit runs out, keep what finished and
+re-record only the rest. The run's folder needs its `livekit-agent.jsonl` and
+`interra-fdb-results.zip`:
+
+```bash
+python -m agent.fdb_offline outage-seed --run <run folder> --output fdb-seed
+INTERRA_FDB_SEED_RESULTS=fdb-seed python scripts/fdb_v3.py all
+```
+
+## Judge pages and demo
+
+The judge pages show a live voice session, a live camera session and the scored
+run on one site. Start each worker in its own terminal, then the pages:
+
+```bash
+INTERRA_FDB_AGENT_NAME=interra-benchmark python -m agent.fdb_livekit dev   # voice, with the gate
+python -m agent.extension_livekit dev                                      # camera
+python -m agent.home_livekit dev                                           # SmartThings home
+python -m agent.demo_page                                                  # http://127.0.0.1:8780/
+```
+
+| Page | Shows |
+| --- | --- |
+| Overview | The idea, the measured figures, links to the sessions |
+| Voice, Camera | A live session: captions, the gate's latest decision, a switchable visualizer |
+| Home | A live home session with device tiles, "Add a new device", and a walkthrough that needs no LiveKit |
+| Replay | The scored housing_11 recording, played from its own trace with the evaluator's result |
+| Logs | Every session in the local trace, filterable, with `.jsonl` download |
+| Results | The figures and the comparison table above |
+| Settings | Every setting the code reads, editable when `INTERRA_ADMIN_PASSWORD` is set |
+
+Replay and Results work without LiveKit. Two replays need no room or camera:
+
+```bash
+python -m agent.extension_demo                                             # camera booking: Friday dropped, Saturday kept
+python -m agent.home_demo                                                  # home: 22 dropped, 24 set, door after a yes
+python -m agent.replay artifacts/fdb_v3/livekit-agent.jsonl -o artifacts/fdb_v3/replay.html
+```
+
+`python -m agent.serve` runs the pages and both workers in one process tree,
+restarting any that exit; see [deployment](docs/DEPLOY.md) and
+[AWS EC2](docs/DEPLOY_AWS.md) for hosting it.
+
+## Camera extension
+
+The extension is camera-assisted device troubleshooting, outside the benchmark
+domains, in its own LiveKit session (`interra-camera-troubleshooter`). It keeps
+only the latest frame from the linked participant's camera and attaches it to
+the next spoken turn; older images leave the model's history. It looks up a
+visible code in Interra's own demo catalog (`E1`, `E2`, `E3`, not a
+manufacturer manual), offers one safe check, and books a technician visit
+through the commit gate, so "Friday… no, Saturday" stores Saturday only.
+
+## SmartThings home extension
+
+A voice session for a SmartThings-style home (`interra-home`). Each device is
+described the way SmartThings describes devices: capabilities, with attributes
+that can be read and commands that change state. Interra generates its tools
+from those descriptions, marking each one read-only or state-changing and
+routine or risky, so there are no hand-written tools per device. The capability
+names follow SmartThings' public model; the eight devices are simulated, and
+nothing talks to a real SmartThings account.
+
+On top of the commit gate:
+
+- the latest value wins: "22… no, 24" never sends 22;
+- a value a device already has is not sent again;
+- unlocking a door or starting the oven waits for a spoken yes;
+- "undo that" reverses the last reversible change.
+
+During a call, the Home page's "Add a new device" sends an air purifier the
+agent has never seen, with capability definitions it has never seen, over
+LiveKit RPC. The worker validates it and adds its tools to the live session.
+"Play walkthrough" runs the scripted demo through the real controller with no
+LiveKit room; the person's lines and the re-check's answer are scripted there.
+
+## Configuration
+
+Settings are environment variables, read from the shell or `.env`
+([template](.env.fdb.example)).
+
+| Variable | Default | Effect |
+| --- | --- | --- |
+| `LIVEKIT_URL`, `LIVEKIT_API_KEY`, `LIVEKIT_API_SECRET` | none | Required |
+| `INTERRA_FDB_COMMIT_GATE` | `auto` | `auto`: gate on only when the worker has a dispatch name; `on` or `off` forces it |
+| `INTERRA_FDB_COMMIT_QUIET_SECONDS` | `0.6` | Quiet time before a held call runs |
+| `INTERRA_FDB_AGENT_NAME` | empty | Dispatch name; empty lets the official runner auto-dispatch the worker |
+| `INTERRA_FDB_UNFINISHED_TURN_HOLD_SECONDS` | `1.0` | Silence after which a held half-sentence is answered; `0` turns the hold off |
+| `INTERRA_FDB_ENDPOINTING_MIN_DELAY`, `_MAX_DELAY` | `0.7`, `1.2` | Turn-end delays the semantic turn detector chooses between |
+| `INTERRA_FDB_LLM_PROVIDER`, `INTERRA_FDB_LLM_MODEL` | `livekit`, `openai/gpt-4.1-mini` | Model route; `ollama` uses `INTERRA_OLLAMA_MODEL` |
+| `INTERRA_FDB_LLM_TEMPERATURE` | `0` | Sampling temperature |
+| `INTERRA_FDB_STT_FALLBACK_MODELS`, `INTERRA_FDB_TTS_FALLBACK_MODELS` | see template | Speech failover models |
+| `INTERRA_FDB_SESSION_COOLDOWN_SECONDS` | `3` | Pause after each room so provider connections close |
+| `INTERRA_FDB_V3_ROOT`, `INTERRA_FDB_DATA_ROOT` | under `.runtime/` | Benchmark checkout and audio |
+| `INTERRA_FDB_TRACE_DIR` | `artifacts/fdb_v3` | Where workers write `livekit-agent.jsonl` |
+| `INTERRA_FDB_RECORDER_RETRIES` | `1` | Re-runs of recordings whose official recorder crashed |
+| `INTERRA_FDB_STALL_SECONDS` | `600` | Restart the agent when no result appears for this long |
+
+## Docker
+
+`Dockerfile` builds the voice worker (Python 3.11, `ffmpeg`, LiveKit Agents
+1.8.3 and RTC 1.1.18, non-root). It does not include the benchmark data or the
+scorer's GPU stack. After `fdb_v3.py bootstrap`:
+
+```bash
+docker build -t interra .
+docker run --rm --env-file .env \
+  -e INTERRA_FDB_V3_ROOT=/bench/v3 -e INTERRA_FDB_TRACE_DIR=/traces \
+  -v "$PWD/.runtime/Full-Duplex-Bench:/bench:ro" \
+  -v "$PWD/artifacts/fdb_v3:/traces" interra
+```
+
+`Dockerfile.deploy` builds the hosted image with the pages and both workers.
+
+## Tests and checks
+
+```bash
+python -m unittest discover -s tests -v      # runtime, agent, pages and scripts
+python scripts/check_submission.py           # evidence hashes, scores and the 8-slide deck
+```
+
+The tests cover coordination, cancellation, the agent's configuration, the
+pages and the scripts. They do not replace the official 100-recording reports.
+
+## Repository
+
+| Path | Contents |
+| --- | --- |
+| `src/agent/fdb_livekit.py` | Benchmark voice agent |
+| `src/agent/commit.py` | Commit gate and re-check |
+| `src/agent/extension_livekit.py`, `device_catalog.py` | Camera extension |
+| `src/agent/smart_home.py`, `home_livekit.py`, `home_demo.py` | SmartThings home extension |
+| `src/agent/demo_page.py`, `web/`, `serve.py`, `settings.py` | Judge pages, hosting and settings |
+| `src/agent/fdb_offline.py` | Offline rescoring, transcript replay and outage reseeding |
+| `src/agent/runtime.py` and neighbours | Research runtime (see below) |
+| `scripts/` | Benchmark runner, reproduction, Kaggle packaging, submission checks |
+| `tests/` | Unit, scenario and adversarial tests |
+| `docs/` | Benchmark contract, status, deployment, demo guide, AI disclosure |
+| `docs/results/` | Official reports, traces and run manifests |
+| `vendor/samsung_theme05/` | The original queue-based Theme 05 kit |
+
+## Research runtime
+
+Before the benchmark changed to FDB-v3, Interra was built for Samsung's
+original queue-based kit. That runtime (`src/agent/runtime.py`) has versioned
+slot state, stale-result rejection, an at-most-once write ledger and validated
+audio and image input, all tested on a virtual clock. Its entry point is
+`interra_submission:ParticipantAgent`. It is kept as engineering work and
+regression coverage; its evidence does not substitute for an FDB-v3 run.
 
 ## Documentation
 
-- [Slide deck](docs/Interra_Theme05_submission.pptx)
-- [Official reports](docs/results/)
-- [FDB-v3 contract](docs/FDB_V3.md)
+- [FDB-v3 contract and benchmark pin](docs/FDB_V3.md)
 - [Status and run history](docs/STATUS.md)
-- [Demo sequence](docs/DEMO.md)
+- [Demo guide](docs/DEMO.md)
+- [Deployment](docs/DEPLOY.md) and [AWS EC2](docs/DEPLOY_AWS.md)
+- [Architecture](docs/ARCHITECTURE.md)
 - [AI usage disclosure](docs/AI_DISCLOSURE_DRAFT.md)

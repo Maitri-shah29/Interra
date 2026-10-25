@@ -7,7 +7,9 @@ reads the worker trace for any session on this machine; the scored run from
 
 The pages live in ``agent/web`` and share partials from ``agent/web/partials``.
 This module renders them, mints LiveKit tokens, streams the worker trace for
-one room, lists the sessions in it, and serves the recorded run.
+one room, lists the sessions in it, and serves the recorded run. Settings
+edits the environment the workers start with, behind INTERRA_ADMIN_PASSWORD;
+INTERRA_SITE_PASSWORD, when set, puts every page behind a browser password.
 
 Start the voice worker with INTERRA_FDB_AGENT_NAME=interra-benchmark, the
 camera worker and the home worker (``python -m agent.home_livekit dev``) in
@@ -25,8 +27,10 @@ import functools
 import json
 import os
 import re
+import signal
 import time
 import uuid
+from http.cookies import CookieError, SimpleCookie
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from typing import Any
@@ -39,6 +43,21 @@ from livekit.api import AccessToken, RoomAgentDispatch, RoomConfiguration, Video
 # the request threads that would otherwise import this module first.
 from agent.fdb_livekit import FdbConfig
 from agent.smart_home import AIR_PURIFIER, SmartHome
+from agent.settings import (
+    SITE_PASSWORD,
+    SUPERVISOR_PID,
+    LoginThrottle,
+    admin_password,
+    apply_changes,
+    basic_auth_password,
+    describe,
+    issue_session,
+    load_overrides,
+    same_password,
+    save_overrides,
+    settings_path,
+    valid_session,
+)
 
 ROOT = Path(__file__).resolve().parents[2]
 load_dotenv(ROOT / ".env", override=False)
@@ -57,6 +76,7 @@ PAGES = {
     "/replay": "replay",
     "/logs": "logs",
     "/results": "results",
+    "/settings": "settings",
 }
 PARTIALS = ("head", "sprite", "header", "footer")
 STATIC_TYPES = {
@@ -70,6 +90,10 @@ ROOM_NAME = re.compile(r"^demo-(voice|camera|home)-[a-z0-9]{6,16}$")
 # Any room in the trace can be read back.
 TRACE_ROOM = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_.-]{0,95}$")
 LIVEKIT_NAMES = ("LIVEKIT_URL", "LIVEKIT_API_KEY", "LIVEKIT_API_SECRET")
+SESSION_COOKIE = "interra_admin"
+SESSION_TTL = 12 * 3600
+MAX_BODY = 64 * 1024
+LOGIN_THROTTLE = LoginThrottle()
 
 # The recording shown beside the live take: housing_11, a bedroom and price
 # self-correction from the 4 October 2026 run, with its official strict result.
@@ -317,11 +341,50 @@ def _event(record: dict[str, Any], event_id: int | None = None) -> bytes:
     return head + b"data: " + json.dumps(record, ensure_ascii=False).encode("utf-8") + b"\n\n"
 
 
+def settings_payload() -> dict[str, Any]:
+    """What the settings page shows: each variable, where its value comes from, and
+    whether a save can restart the processes from here."""
+    path = settings_path()
+    payload: dict[str, Any] = {"file": _shown_path(path), "restart_available": supervisor_pid() is not None}
+    try:
+        overrides = load_overrides(path)
+    except ValueError as exc:
+        payload["file_error"] = str(exc)
+        overrides = {}
+    payload["settings"] = describe(os.environ, overrides)
+    return payload
+
+
+def save_settings(changes: Any) -> dict[str, str]:
+    """Apply one edit to the saved overrides. A file that cannot be read is replaced."""
+    path = settings_path()
+    try:
+        current = load_overrides(path)
+    except ValueError:
+        current = {}
+    updated = apply_changes(current, changes)
+    save_overrides(path, updated)
+    return updated
+
+
+def supervisor_pid() -> int | None:
+    """The supervisor that started this page, if it did; never some other parent."""
+    value = os.environ.get(SUPERVISOR_PID, "")
+    if not value.isdigit() or int(value) != os.getppid() or not hasattr(signal, "SIGHUP"):
+        return None
+    return int(value)
+
+
 class Handler(BaseHTTPRequestHandler):
     def do_GET(self) -> None:
         parsed = urlparse(self.path)
         path = parsed.path.rstrip("/") or "/"
         query = parse_qs(parsed.query)
+        if path == "/api/health":
+            self._json({"ok": True})
+            return
+        if not self._site_allowed():
+            return
         if path in PAGES:
             self._send(200, page_html(PAGES[path]).encode("utf-8"), "text/html; charset=utf-8", "no-cache")
         elif path.startswith("/static/"):
@@ -349,8 +412,143 @@ class Handler(BaseHTTPRequestHandler):
                 self._text(500, "the recorded run could not be read: " + str(exc))
         elif path == "/api/events":
             self._events(query)
+        elif path == "/api/admin/status":
+            password = admin_password()
+            self._json({"enabled": password is not None, "signed_in": bool(password and self._signed_in(password))})
+        elif path == "/api/admin/settings":
+            if self._admin_password() is not None:
+                self._json(settings_payload())
         else:
             self._text(404, "not found")
+
+    def do_POST(self) -> None:
+        path = urlparse(self.path).path.rstrip("/")
+        if not self._site_allowed():
+            return
+        if path not in {"/api/admin/login", "/api/admin/logout", "/api/admin/settings"}:
+            self._text(404, "not found")
+            return
+        body = self._json_body()
+        if body is None:
+            return
+        if path == "/api/admin/login":
+            self._login(body)
+        elif path == "/api/admin/logout":
+            self._send_with_cookie(self._session_cookie("", 0), {"signed_in": False})
+        elif self._admin_password() is not None:
+            self._save(body)
+
+    # ----- access -----
+
+    def _site_allowed(self) -> bool:
+        """With INTERRA_SITE_PASSWORD set, every page and API needs it as a browser password."""
+        expected = os.environ.get(SITE_PASSWORD, "")
+        if not expected:
+            return True
+        given = basic_auth_password(self.headers.get("Authorization"))
+        if given is not None and same_password(given, expected):
+            return True
+        body = b"password required"
+        self.send_response(401)
+        self.send_header("WWW-Authenticate", 'Basic realm="Interra", charset="UTF-8"')
+        self.send_header("Content-Type", "text/plain; charset=utf-8")
+        self.send_header("Content-Length", str(len(body)))
+        self.send_header("Cache-Control", "no-store")
+        self.end_headers()
+        self.wfile.write(body)
+        return False
+
+    def _signed_in(self, password: str) -> bool:
+        try:
+            cookie = SimpleCookie(self.headers.get("Cookie") or "")
+        except CookieError:
+            return False
+        morsel = cookie.get(SESSION_COOKIE)
+        return valid_session(morsel.value if morsel else None, password)
+
+    def _admin_password(self) -> str | None:
+        """The admin password when this request is signed in; otherwise answer and return None."""
+        password = admin_password()
+        if password is None:
+            self._text(403, "set INTERRA_ADMIN_PASSWORD (8 characters or more) in the deployment to use settings")
+            return None
+        if not self._signed_in(password):
+            self._text(401, "sign in first")
+            return None
+        return password
+
+    def _session_cookie(self, value: str, max_age: int) -> str:
+        parts = [f"{SESSION_COOKIE}={value}", "Path=/", f"Max-Age={max_age}", "HttpOnly", "SameSite=Strict"]
+        if self.headers.get("X-Forwarded-Proto", "").split(",")[0].strip() == "https":
+            parts.append("Secure")
+        return "; ".join(parts)
+
+    def _json_body(self) -> Any:
+        """The request's JSON, or None after refusing it. Only same-origin JSON is read,
+        which a cross-site form cannot send."""
+        if self.headers.get("Content-Type", "").split(";")[0].strip() != "application/json":
+            self._text(415, "send application/json")
+            return None
+        origin = self.headers.get("Origin")
+        if origin and urlparse(origin).netloc != self.headers.get("Host"):
+            self._text(403, "cross-origin request refused")
+            return None
+        try:
+            length = int(self.headers.get("Content-Length") or 0)
+        except ValueError:
+            length = -1
+        if length < 0 or length > MAX_BODY:
+            self._text(413, "request too large")
+            return None
+        try:
+            return json.loads(self.rfile.read(length) or b"{}")
+        except (json.JSONDecodeError, UnicodeDecodeError):
+            self._text(400, "request is not JSON")
+            return None
+
+    def _login(self, body: Any) -> None:
+        password = admin_password()
+        if password is None:
+            self._text(403, "set INTERRA_ADMIN_PASSWORD (8 characters or more) in the deployment to use settings")
+            return
+        if not LOGIN_THROTTLE.allowed():
+            self._text(429, "too many wrong passwords; try again in a few minutes")
+            return
+        given = body.get("password") if isinstance(body, dict) else None
+        if not isinstance(given, str) or not same_password(given, password):
+            LOGIN_THROTTLE.failed()
+            time.sleep(1.0)
+            self._text(401, "wrong password")
+            return
+        print("settings: signed in", flush=True)
+        self._send_with_cookie(self._session_cookie(issue_session(password, ttl=SESSION_TTL), SESSION_TTL), {"signed_in": True})
+
+    def _save(self, body: Any) -> None:
+        try:
+            updated = save_settings(body)
+        except ValueError as exc:
+            self._text(400, str(exc))
+            return
+        except OSError as exc:
+            self._text(500, "the settings could not be saved: " + str(exc))
+            return
+        pid = supervisor_pid()
+        names = sorted(updated)
+        print("settings: saved " + (", ".join(names) if names else "no overrides"), flush=True)
+        self._json({"saved": True, "restarting": pid is not None, "overrides": names})
+        if pid is not None:
+            # The answer is already sent; the supervisor now restarts this page too.
+            os.kill(pid, signal.SIGHUP)
+
+    def _send_with_cookie(self, cookie: str, payload: dict[str, Any]) -> None:
+        body = json.dumps(payload).encode("utf-8")
+        self.send_response(200)
+        self.send_header("Content-Type", "application/json")
+        self.send_header("Content-Length", str(len(body)))
+        self.send_header("Cache-Control", "no-store")
+        self.send_header("Set-Cookie", cookie)
+        self.end_headers()
+        self.wfile.write(body)
 
     def _send(self, status: int, body: bytes, content_type: str, cache: str) -> None:
         self.send_response(status)
@@ -421,7 +619,7 @@ class Handler(BaseHTTPRequestHandler):
         if request.startswith("GET /api/token"):
             print("GET /api/token")
             return
-        if request.startswith(("GET /api/events", "GET /static/", "GET /api/sessions")):
+        if request.startswith(("GET /api/events", "GET /static/", "GET /api/sessions", "GET /api/health")):
             return
         super().log_message(fmt, *args)
 
@@ -436,6 +634,8 @@ def main() -> None:
     print(f"http://{args.host}:{args.port}/", flush=True)
     if missing:
         print("LiveKit is not configured (" + ", ".join(missing) + "); the recorded replay still works.", flush=True)
+    if admin_password() is None:
+        print("Settings are off; set INTERRA_ADMIN_PASSWORD (8 characters or more) to edit them from the page.", flush=True)
     try:
         server.serve_forever()
     except KeyboardInterrupt:

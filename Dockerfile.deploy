@@ -1,0 +1,41 @@
+# Hosted judge deployment: the page and both LiveKit workers in one container,
+# started by agent.serve. The submission image stays in Dockerfile.
+FROM python:3.11-slim
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    INTERRA_FDB_V3_ROOT=/app/.runtime/Full-Duplex-Bench/v3 \
+    INTERRA_FDB_TRACE_DIR=/app/artifacts/fdb_v3 \
+    INTERRA_SETTINGS_FILE=/app/artifacts/settings/overrides.json
+
+# The voice worker loads the benchmark's mock tools from the pinned FDB-v3
+# commit (scripts/fdb_v3.py); only these two files are needed, not the audio.
+ARG FDB_V3_COMMIT=3e799c45a045256f47d5f1c9cda90157e2d2ec9e
+
+WORKDIR /app
+
+RUN apt-get update && apt-get install -y --no-install-recommends ffmpeg libgomp1 tini \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY pyproject.toml README.md ./
+COPY src ./src
+COPY docs ./docs
+COPY vendor ./vendor
+
+# Editable, so the page finds docs/ and artifacts/ under /app.
+RUN python -m pip install --no-cache-dir -e '.[voice]' \
+    && mkdir -p .runtime/Full-Duplex-Bench/v3 \
+    && for name in mock_apis.py latency_injector.py; do \
+         python -c "import sys, urllib.request; urllib.request.urlretrieve(sys.argv[1], sys.argv[2])" \
+           "https://raw.githubusercontent.com/DanielLin94144/Full-Duplex-Bench/${FDB_V3_COMMIT}/v3/${name}" \
+           ".runtime/Full-Duplex-Bench/v3/${name}"; \
+       done \
+    && useradd --create-home --uid 10001 interra \
+    && mkdir -p /app/artifacts/fdb_v3 /app/artifacts/settings \
+    && chown -R interra:interra /app
+
+USER interra
+
+# tini reaps the workers' job processes and forwards signals to the supervisor.
+ENTRYPOINT ["/usr/bin/tini", "--"]
+CMD ["python", "-m", "agent.serve"]

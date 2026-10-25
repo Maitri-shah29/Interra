@@ -13,3 +13,4 @@ dist
 output
 .runtime
 **/~$*
+deploy/aws/interra.env

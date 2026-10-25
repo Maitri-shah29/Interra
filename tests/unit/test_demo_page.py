@@ -1,5 +1,6 @@
 """The judge pages show the gate decision and do not invent a score."""
 
+import base64
 import http.client
 import json
 import os
@@ -58,7 +59,7 @@ class DemoPageTests(unittest.TestCase):
 
     def test_results_table_matches_the_readme(self):
         readme = (ROOT / "README.md").read_text(encoding="utf-8")
-        table = readme[readme.index("| Metric | 2026-10-04 |"):]
+        table = readme[readme.index("| Metric | 2026-10-04 |"):].split("\n\n", 1)[0]
         rows = [line for line in table.splitlines()[2:] if line.startswith("|")]
         self.assertGreater(len(rows), 8)
         page = page_html("results")
@@ -392,6 +393,155 @@ def _payload(token: str) -> dict:
     body += "=" * (-len(body) % 4)
     return json.loads(base64.urlsafe_b64decode(body))
 
+
+
+class SettingsServerTests(unittest.TestCase):
+    """Settings and the site password on the real handler."""
+
+    def setUp(self):
+        folder = TemporaryDirectory()
+        self.addCleanup(folder.cleanup)
+        self.settings = Path(folder.name) / "overrides.json"
+        environment = patch.dict(os.environ, {
+            "INTERRA_SETTINGS_FILE": str(self.settings),
+            "INTERRA_ADMIN_PASSWORD": "correct horse",
+            "INTERRA_SITE_PASSWORD": "",
+            "LIVEKIT_API_SECRET": "deployed-secret-value-9876",
+            "INTERRA_SUPERVISOR_PID": "",
+        })
+        environment.start()
+        self.addCleanup(environment.stop)
+        for target, value in (("LOGIN_THROTTLE", demo_page.LoginThrottle()),):
+            patcher = patch.object(demo_page, target, value)
+            patcher.start()
+            self.addCleanup(patcher.stop)
+        quiet = patch.object(demo_page.Handler, "log_message", lambda *args: None)
+        quiet.start()
+        self.addCleanup(quiet.stop)
+        self.server = ThreadingHTTPServer(("127.0.0.1", 0), demo_page.Handler)
+        thread = threading.Thread(target=self.server.serve_forever, daemon=True)
+        thread.start()
+        self.addCleanup(thread.join, 5)
+        self.addCleanup(self.server.server_close)
+        self.addCleanup(self.server.shutdown)
+
+    def call(self, method, path, body=None, headers=None):
+        connection = http.client.HTTPConnection("127.0.0.1", self.server.server_address[1], timeout=5)
+        self.addCleanup(connection.close)
+        sent = dict(headers or {})
+        payload = None
+        if body is not None:
+            payload = body if isinstance(body, bytes) else json.dumps(body).encode("utf-8")
+            sent.setdefault("Content-Type", "application/json")
+        connection.request(method, path, body=payload, headers=sent)
+        response = connection.getresponse()
+        return response, response.read().decode("utf-8")
+
+    def sign_in(self):
+        response, _ = self.call("POST", "/api/admin/login", {"password": "correct horse"})
+        self.assertEqual(response.status, 200)
+        cookie = response.getheader("Set-Cookie")
+        self.assertIn("HttpOnly", cookie)
+        self.assertIn("SameSite=Strict", cookie)
+        return {"Cookie": cookie.split(";")[0]}
+
+    def test_settings_page_is_served_and_links_back(self):
+        response, body = self.call("GET", "/settings")
+        self.assertEqual(response.status, 200)
+        self.assertIn('id="login"', body)
+        self.assertIn('/static/settings.js', body)
+
+    def test_settings_need_a_sign_in_and_a_wrong_password_is_refused(self):
+        status = json.loads(self.call("GET", "/api/admin/status")[1])
+        self.assertEqual(status, {"enabled": True, "signed_in": False})
+        self.assertEqual(self.call("GET", "/api/admin/settings")[0].status, 401)
+        self.assertEqual(self.call("POST", "/api/admin/settings", {"set": {"A_B": "1"}})[0].status, 401)
+        with patch.object(demo_page.time, "sleep"):
+            response, _ = self.call("POST", "/api/admin/login", {"password": "wrong password"})
+        self.assertEqual(response.status, 401)
+        self.assertIsNone(response.getheader("Set-Cookie"))
+        self.assertFalse(self.settings.exists())
+
+    def test_settings_are_off_without_an_admin_password(self):
+        with patch.dict(os.environ, {"INTERRA_ADMIN_PASSWORD": ""}):
+            status = json.loads(self.call("GET", "/api/admin/status")[1])
+            response, body = self.call("POST", "/api/admin/login", {"password": ""})
+        self.assertFalse(status["enabled"])
+        self.assertEqual(response.status, 403)
+        self.assertIn("INTERRA_ADMIN_PASSWORD", body)
+
+    def test_repeated_wrong_passwords_are_throttled(self):
+        with patch.object(demo_page, "LOGIN_THROTTLE", demo_page.LoginThrottle(limit=2)), patch.object(demo_page.time, "sleep"):
+            for _ in range(2):
+                self.call("POST", "/api/admin/login", {"password": "nope nope"})
+            response, _ = self.call("POST", "/api/admin/login", {"password": "correct horse"})
+        self.assertEqual(response.status, 429)
+
+    def test_signed_in_save_writes_the_file_and_never_returns_a_secret(self):
+        cookie = self.sign_in()
+        self.assertTrue(json.loads(self.call("GET", "/api/admin/status", headers=cookie)[1])["signed_in"])
+        response, body = self.call("GET", "/api/admin/settings", headers=cookie)
+        self.assertEqual(response.status, 200)
+        self.assertNotIn("deployed-secret-value", body)
+        payload = json.loads(body)
+        self.assertFalse(payload["restart_available"])
+        response, body = self.call("POST", "/api/admin/settings",
+                                   {"set": {"INTERRA_FDB_LLM_MODEL": "openai/gpt-4.1", "NEW_API_KEY": "new-secret-abcdef"}},
+                                   headers=cookie)
+        self.assertEqual(response.status, 200, body)
+        self.assertEqual(json.loads(body), {"saved": True, "restarting": False, "overrides": ["INTERRA_FDB_LLM_MODEL", "NEW_API_KEY"]})
+        self.assertEqual(json.loads(self.settings.read_text())["INTERRA_FDB_LLM_MODEL"], "openai/gpt-4.1")
+        rows = {row["name"]: row for row in json.loads(self.call("GET", "/api/admin/settings", headers=cookie)[1])["settings"]}
+        self.assertEqual((rows["INTERRA_FDB_LLM_MODEL"]["source"], rows["INTERRA_FDB_LLM_MODEL"]["pending"]), ("dashboard", True))
+        self.assertEqual(rows["NEW_API_KEY"]["value"], "••••cdef")
+        response, _ = self.call("POST", "/api/admin/settings", {"unset": ["NEW_API_KEY"]}, headers=cookie)
+        self.assertEqual(response.status, 200)
+        self.assertEqual(json.loads(self.settings.read_text()), {"INTERRA_FDB_LLM_MODEL": "openai/gpt-4.1"})
+
+    def test_save_refuses_protected_names_cross_site_and_non_json(self):
+        cookie = self.sign_in()
+        response, body = self.call("POST", "/api/admin/settings", {"set": {"INTERRA_ADMIN_PASSWORD": "x" * 10}}, headers=cookie)
+        self.assertEqual(response.status, 400)
+        self.assertIn("only be set in the deployment", body)
+        response, _ = self.call("POST", "/api/admin/settings", {"set": {"A_B": "1"}},
+                                headers={**cookie, "Origin": "https://evil.example"})
+        self.assertEqual(response.status, 403)
+        response, _ = self.call("POST", "/api/admin/settings", b"set=1",
+                                headers={**cookie, "Content-Type": "application/x-www-form-urlencoded"})
+        self.assertEqual(response.status, 415)
+        self.assertFalse(self.settings.exists())
+
+    def test_save_under_the_supervisor_asks_it_to_restart(self):
+        cookie = self.sign_in()
+        with patch.object(demo_page, "supervisor_pid", return_value=424242), patch.object(demo_page.os, "kill") as kill:
+            response, body = self.call("POST", "/api/admin/settings", {"set": {"INTERRA_FDB_LLM_MODEL": "m"}}, headers=cookie)
+        self.assertEqual(response.status, 200)
+        self.assertTrue(json.loads(body)["restarting"])
+        kill.assert_called_once_with(424242, demo_page.signal.SIGHUP)
+
+    def test_supervisor_pid_must_be_this_pages_parent(self):
+        with patch.dict(os.environ, {"INTERRA_SUPERVISOR_PID": str(os.getppid())}):
+            self.assertEqual(demo_page.supervisor_pid(), os.getppid())
+        with patch.dict(os.environ, {"INTERRA_SUPERVISOR_PID": str(os.getpid())}):
+            self.assertIsNone(demo_page.supervisor_pid())
+
+    def test_signing_out_clears_the_cookie(self):
+        cookie = self.sign_in()
+        response, _ = self.call("POST", "/api/admin/logout", {}, headers=cookie)
+        self.assertIn("Max-Age=0", response.getheader("Set-Cookie"))
+
+    def test_site_password_guards_everything_but_health(self):
+        with patch.dict(os.environ, {"INTERRA_SITE_PASSWORD": "site pass"}):
+            for path in ("/", "/settings", "/api/token?mode=voice&room=demo-voice-abc123", "/api/config"):
+                response, _ = self.call("GET", path)
+                self.assertEqual(response.status, 401, path)
+                self.assertIn("Basic", response.getheader("WWW-Authenticate"))
+            self.assertEqual(self.call("POST", "/api/admin/login", {"password": "correct horse"})[0].status, 401)
+            self.assertEqual(self.call("GET", "/api/health")[0].status, 200)
+            good = {"Authorization": "Basic " + base64.b64encode(b"judge:site pass").decode("ascii")}
+            self.assertEqual(self.call("GET", "/", headers=good)[0].status, 200)
+            bad = {"Authorization": "Basic " + base64.b64encode(b"judge:wrong").decode("ascii")}
+            self.assertEqual(self.call("GET", "/", headers=bad)[0].status, 401)
 
 if __name__ == "__main__":
     unittest.main()
