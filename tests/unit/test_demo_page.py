@@ -58,7 +58,7 @@ class DemoPageTests(unittest.TestCase):
 
     def test_results_table_matches_the_readme(self):
         readme = (ROOT / "README.md").read_text(encoding="utf-8")
-        table = readme[readme.index("| Metric | 2026-10-04 |"):]
+        table = readme[readme.index("| Metric | 2026-10-04 |"):].split("\n\n", 1)[0]
         rows = [line for line in table.splitlines()[2:] if line.startswith("|")]
         self.assertGreater(len(rows), 8)
         page = page_html("results")
