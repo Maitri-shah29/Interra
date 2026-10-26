@@ -1,6 +1,6 @@
-"""Run the judge page and both LiveKit workers in one container.
+"""Run the judge page and the three LiveKit workers in one container.
 
-The page tails the trace the workers write, so all three must share a disk.
+The page tails the trace the workers write, so all four must share a disk.
 Each start reads the overrides saved from the settings page and lays them over
 the deployment's environment. After a save the page sends SIGHUP and every
 child restarts with the new values. A child that exits on its own is started
@@ -37,13 +37,18 @@ def default_children(port: int, host: str = "0.0.0.0") -> tuple[Child, ...]:
     python = sys.executable
     return (
         Child("page", (python, "-m", "agent.demo_page", "--host", host, "--port", str(port))),
-        # Both workers would otherwise bind LiveKit's health port 8081.
+        # Each worker would otherwise bind LiveKit's health port 8081.
         Child("voice", (python, "-m", "agent.fdb_livekit", "start"), (("INTERRA_AGENT_HTTP_PORT", "8081"),)),
         Child(
             "camera",
             (python, "-m", "agent.extension_livekit", "start"),
             # LiveKit keeps six idle job processes in production; one is enough here.
             (("INTERRA_AGENT_HTTP_PORT", "8082"), ("INTERRA_AGENT_IDLE_PROCESSES", "1")),
+        ),
+        Child(
+            "home",
+            (python, "-m", "agent.home_livekit", "start"),
+            (("INTERRA_AGENT_HTTP_PORT", "8083"), ("INTERRA_AGENT_IDLE_PROCESSES", "1")),
         ),
     )
 
@@ -178,7 +183,7 @@ async def serve(children: Sequence[Child]) -> None:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Run the Interra judge page and both LiveKit workers.")
+    parser = argparse.ArgumentParser(description="Run the Interra judge page and the three LiveKit workers.")
     parser.add_argument("--host", default="0.0.0.0")
     parser.add_argument("--port", type=int, default=int(os.environ.get("PORT") or DEFAULT_PORT))
     args = parser.parse_args()

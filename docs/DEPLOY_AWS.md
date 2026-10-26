@@ -46,7 +46,7 @@ aws ec2 describe-instance-types --filters Name=free-tier-eligible,Values=true \
   --output table
 ```
 
-The page plus both workers need about 1.5–2 GB of memory. Pick the first
+The page plus the three workers need about 2–2.5 GB of memory. Pick the first
 listed type with **4096 MiB or more** (often `c7i-flex.large` or
 `m7i-flex.large`). If the largest listed is `t3.small` (2 GB), use it: step 7
 adds swap.
@@ -139,8 +139,8 @@ docker compose up -d --build         # the first build takes a few minutes
 docker compose logs -f               # Ctrl+C stops following, not the app
 ```
 
-Look for `[serve] page started` and `registered worker` twice, once for
-`interra-benchmark` and once for `interra-camera-troubleshooter`.
+Look for `[serve] page started` and `registered worker` three times: for
+`interra-benchmark`, `interra-camera-troubleshooter` and `interra-home`.
 
 ## 8. Open it
 
@@ -190,7 +190,7 @@ aws ec2 delete-key-pair --key-name interra && rm -f ~/.ssh/interra.pem
 
 - **Page does not load over HTTPS:** run `docker compose logs caddy`. Ports 80
   and 443 must be open (step 4), and `.env` must hold the instance's current address.
-- **The voice or camera worker keeps restarting:** run `docker compose logs interra`.
+- **The voice, camera or home worker keeps restarting:** run `docker compose logs interra`.
   A missing LiveKit variable is the usual cause; fix it in `/settings` or `interra.env`.
 - **`worker is at full capacity`:** raise `INTERRA_AGENT_LOAD_THRESHOLD` in `/settings`.
 - **Build killed or very slow on 2 GB:** check the swap with `free -h`.

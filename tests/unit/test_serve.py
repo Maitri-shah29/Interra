@@ -10,6 +10,7 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 from unittest.mock import patch
 
+from agent import home_livekit
 from agent.fdb_livekit import agent_server_options
 from agent.serve import Child, Supervisor, child_environment, default_children, restart_delay
 from agent.settings import save_overrides
@@ -67,14 +68,34 @@ class ChildEnvironmentTests(unittest.TestCase):
     def test_restart_delay_doubles_up_to_the_cap(self):
         self.assertEqual([restart_delay(n, 1.0, 5.0) for n in (0, 1, 2, 3, 4)], [1.0, 1.0, 2.0, 4.0, 5.0])
 
-    def test_default_children_are_the_page_and_both_workers_on_separate_health_ports(self):
+    def test_default_children_are_the_page_and_three_workers_on_separate_health_ports(self):
         children = default_children(9999)
-        self.assertEqual([child.name for child in children], ["page", "voice", "camera"])
+        self.assertEqual([child.name for child in children], ["page", "voice", "camera", "home"])
         self.assertIn("9999", children[0].command)
         self.assertEqual(children[1].command[-2:], ("agent.fdb_livekit", "start"))
         self.assertEqual(children[2].command[-2:], ("agent.extension_livekit", "start"))
+        self.assertEqual(children[3].command[-2:], ("agent.home_livekit", "start"))
         ports = [dict(child.env).get("INTERRA_AGENT_HTTP_PORT") for child in children[1:]]
-        self.assertEqual(len(set(ports)), 2, ports)
+        self.assertNotIn(None, ports)
+        self.assertEqual(len(set(ports)), 3, ports)
+
+    def test_the_home_worker_takes_its_health_port_from_the_environment(self):
+        captured = {}
+
+        class FakeServer:
+            def __init__(self, **options):
+                captured.update(options)
+
+            def rtc_session(self, entrypoint, agent_name):
+                captured["agent_name"] = agent_name
+
+        with patch.dict(os.environ, {"INTERRA_AGENT_HTTP_PORT": "8083", "INTERRA_AGENT_IDLE_PROCESSES": "1",
+                                     "INTERRA_AGENT_LOAD_THRESHOLD": ""}), \
+                patch("livekit.agents.AgentServer", FakeServer), \
+                patch("livekit.agents.cli.run_app"), \
+                patch.object(home_livekit, "load_local_env"):
+            home_livekit.main()
+        self.assertEqual(captured, {"port": 8083, "num_idle_processes": 1, "agent_name": "interra-home"})
 
     def test_worker_options_come_from_the_environment_only_when_set(self):
         with patch.dict(os.environ, {"INTERRA_AGENT_HTTP_PORT": "", "INTERRA_AGENT_IDLE_PROCESSES": "",

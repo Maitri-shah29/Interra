@@ -1,7 +1,7 @@
 # Deploying the judge pages and workers
 
-The judge page tails the trace file that the two LiveKit workers write, so all
-three processes run in **one container**. `python -m agent.serve` starts them,
+The judge page tails the trace file that the three LiveKit workers (voice,
+camera and home) write, so all four processes run in **one container**. `python -m agent.serve` starts them,
 restarts any that exit, and applies settings saved from the page. Serverless
 hosts such as Vercel cannot run this: the workers hold a long-lived websocket to
 LiveKit Cloud and keep VAD models in memory.
@@ -33,7 +33,7 @@ automatic HTTPS, set up from the AWS CLI. Railway (below) works too, if you can 
    The browser needs HTTPS for the microphone and camera, and the Railway domain provides it.
 5. Open `https://<domain>/settings` and sign in with the admin password.
 
-Size: the page plus both workers use about 1.5–2 GB of memory. No GPU is
+Size: the page plus the three workers use about 2–2.5 GB of memory. No GPU is
 needed, because speech-to-text, the LLM and text-to-speech run on LiveKit Inference.
 Run **one replica**: the trace and the settings file are per container.
 
@@ -42,7 +42,7 @@ Run **one replica**: the trace and the settings file are per container.
 `/settings` lists every variable the code reads, shows each one's source
 (deployment, dashboard, or code default), and lets you change any of them or
 add new ones. Saving writes `artifacts/settings/overrides.json`, and the
-supervisor then restarts the page and both workers with the new values. Live
+supervisor then restarts the page and the workers with the new values. Live
 sessions end, and the voice worker can take up to 10 s to stop.
 
 - Dashboard values override Railway variables. Delete one (trash icon) to fall

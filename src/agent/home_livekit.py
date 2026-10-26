@@ -26,6 +26,7 @@ from agent.fdb_livekit import (
     FdbConfig,
     TraceWriter,
     UnfinishedTurnHold,
+    agent_server_options,
     apply_turn_hold,
     livekit_speech_models,
     llm_recheck,
@@ -209,7 +210,7 @@ def main() -> None:
     from livekit import agents
     from livekit.agents import AgentServer
 
-    server = AgentServer()
+    server = AgentServer(**agent_server_options())
     server.rtc_session(entrypoint, agent_name=HOME_AGENT)
     agents.cli.run_app(server)
 

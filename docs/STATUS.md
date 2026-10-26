@@ -1,3 +1,17 @@
+# Home worker in the hosted container — 2026-10-26
+
+- `agent.serve` now also starts the SmartThings home worker
+  (`agent.home_livekit start`, dispatch name `interra-home`) on health port 8083
+  with one idle process, so `/home` gets an agent when deployed.
+- Fixed: the home worker built its `AgentServer` without
+  `agent_server_options()`, so it ignored `INTERRA_AGENT_HTTP_PORT` and would
+  have bound 8081 next to the voice worker. Regression test:
+  `test_the_home_worker_takes_its_health_port_from_the_environment`.
+- Tests: 327 run on Windows; the 6 failures are the existing POSIX-only
+  supervisor and settings tests (SIGHUP, `killpg`, file mode 0o600).
+- Not yet run on EC2: memory with a third worker is estimated at 2–2.5 GB;
+  the docs now say so. Redeploy with `git pull` and `docker compose up -d --build`.
+
 # AWS EC2 deployment — 2026-10-24
 
 - Railway is closed to new signups, so `deploy/aws/compose.yaml` runs the

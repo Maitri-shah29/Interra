@@ -1,4 +1,4 @@
-# One EC2 host: the Interra container (page + both workers, see agent.serve)
+# One EC2 host: the Interra container (page + voice, camera and home workers, see agent.serve)
 # behind Caddy, which gets a Let's Encrypt certificate for SITE_ADDRESS.
 # Browsers only allow the microphone and camera over HTTPS.
 #
