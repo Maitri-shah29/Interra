@@ -1,6 +1,6 @@
 """Local pages for the judge recording.
 
-Overview, Voice, Camera, Replay, Logs and Results are separate pages. The
+Overview, Voice, Camera, Home, Replay, Logs and Results are separate pages. The
 session pages show the live transcript and the gate's latest decision; Logs
 reads the worker trace for any session on this machine; the scored run from
 4 October 2026 can be replayed from its own trace with original timestamps.
@@ -12,7 +12,8 @@ edits the environment the workers start with, behind INTERRA_ADMIN_PASSWORD;
 INTERRA_SITE_PASSWORD, when set, puts every page behind a browser password.
 
 Start the voice worker with INTERRA_FDB_AGENT_NAME=interra-benchmark, the
-camera worker in a second terminal, then this page:
+camera worker and the home worker (``python -m agent.home_livekit dev``) in
+other terminals, then this page:
 
     python -m agent.demo_page
 """
@@ -20,6 +21,7 @@ camera worker in a second terminal, then this page:
 from __future__ import annotations
 
 import argparse
+import asyncio
 import datetime
 import functools
 import json
@@ -40,6 +42,7 @@ from livekit.api import AccessToken, RoomAgentDispatch, RoomConfiguration, Video
 # Imported here, on the main thread: LiveKit plugins refuse to register from
 # the request threads that would otherwise import this module first.
 from agent.fdb_livekit import FdbConfig
+from agent.smart_home import AIR_PURIFIER, SmartHome
 from agent.settings import (
     SITE_PASSWORD,
     SUPERVISOR_PID,
@@ -62,11 +65,14 @@ load_dotenv(ROOT / ".env", override=False)
 PORT = 8780
 VOICE_AGENT = "interra-benchmark"
 CAMERA_AGENT = "interra-camera-troubleshooter"
+HOME_AGENT = "interra-home"
+AGENTS = {"voice": VOICE_AGENT, "camera": CAMERA_AGENT, "home": HOME_AGENT}
 WEB_ROOT = Path(__file__).resolve().with_name("web")
 PAGES = {
     "/": "index",
     "/voice": "voice",
     "/camera": "camera",
+    "/home": "house",
     "/replay": "replay",
     "/logs": "logs",
     "/results": "results",
@@ -80,7 +86,7 @@ STATIC_TYPES = {
 }
 STATIC_NAME = re.compile(r"^[a-z0-9][a-z0-9-]*\.(css|js|svg)$")
 # Tokens are only minted for rooms this page names.
-ROOM_NAME = re.compile(r"^demo-(voice|camera)-[a-z0-9]{6,16}$")
+ROOM_NAME = re.compile(r"^demo-(voice|camera|home)-[a-z0-9]{6,16}$")
 # Any room in the trace can be read back.
 TRACE_ROOM = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_.-]{0,95}$")
 LIVEKIT_NAMES = ("LIVEKIT_URL", "LIVEKIT_API_KEY", "LIVEKIT_API_SECRET")
@@ -135,14 +141,14 @@ def static_file(name: str) -> tuple[bytes, str] | None:
 
 
 def mint_token(mode: str, room: str) -> str:
-    if mode not in {"voice", "camera"} or not ROOM_NAME.match(room) or not room.startswith("demo-" + mode + "-"):
+    if mode not in AGENTS or not ROOM_NAME.match(room) or not room.startswith("demo-" + mode + "-"):
         raise ValueError("mode and room do not match")
     url = os.environ.get("LIVEKIT_URL", "")
     key = os.environ.get("LIVEKIT_API_KEY", "")
     secret = os.environ.get("LIVEKIT_API_SECRET", "")
     if not (url and key and secret):
         raise RuntimeError("missing LiveKit configuration")
-    agent = VOICE_AGENT if mode == "voice" else CAMERA_AGENT
+    agent = AGENTS[mode]
     grants = VideoGrants(room_join=True, room=room, can_publish=True, can_subscribe=True)
     dispatch = RoomConfiguration(agents=[RoomAgentDispatch(agent_name=agent)])
     return (
@@ -162,6 +168,7 @@ def config_payload() -> dict[str, Any]:
     payload: dict[str, Any] = {
         "voice_agent": VOICE_AGENT,
         "camera_agent": CAMERA_AGENT,
+        "home_agent": HOME_AGENT,
         "livekit_configured": all(os.environ.get(name) for name in LIVEKIT_NAMES),
         "livekit_host": urlparse(url).hostname or "",
         "trace": _shown_path(TRACE_PATH),
@@ -184,6 +191,19 @@ def config_payload() -> dict[str, Any]:
         unfinished_turn_hold_seconds=config.unfinished_turn_hold_seconds,
     )
     return payload
+
+
+def home_payload() -> dict[str, Any]:
+    """The home a new session starts with, and the device the page can add."""
+    return {"devices": SmartHome().views(), "unseen_device": AIR_PURIFIER}
+
+
+def home_walkthrough() -> dict[str, Any]:
+    """The scripted home demo, run through the real controller with no LiveKit room."""
+    from agent.home_demo import walkthrough
+
+    _, events = asyncio.run(walkthrough())
+    return {"events": events}
 
 
 def _read_records(path: Path) -> list[dict[str, Any]]:
@@ -229,6 +249,8 @@ def _session_mode(room: str) -> str:
         return "voice"
     if room.startswith("demo-camera-"):
         return "camera"
+    if room.startswith("demo-home-"):
+        return "home"
     return "benchmark"
 
 
@@ -377,6 +399,10 @@ class Handler(BaseHTTPRequestHandler):
             self._token(query)
         elif path == "/api/config":
             self._json(config_payload())
+        elif path == "/api/home":
+            self._json(home_payload())
+        elif path == "/api/home/walkthrough":
+            self._json(home_walkthrough())
         elif path == "/api/sessions":
             self._json(sessions_payload())
         elif path == "/api/replay":

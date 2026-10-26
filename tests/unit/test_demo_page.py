@@ -17,6 +17,7 @@ from unittest.mock import Mock, patch
 from agent import demo_page
 from agent.demo_page import (
     CAMERA_AGENT,
+    HOME_AGENT,
     PAGES,
     ROOT,
     SCORED_ROOM,
@@ -176,6 +177,22 @@ class DemoPageTests(unittest.TestCase):
         self.assertEqual(camera["roomConfig"]["agents"][0]["agentName"], CAMERA_AGENT)
         self.assertNotIn("secret", json.dumps(voice))
 
+    def test_home_token_dispatches_the_home_worker(self):
+        with patch.dict(os.environ, {"LIVEKIT_URL": "wss://x", "LIVEKIT_API_KEY": "k", "LIVEKIT_API_SECRET": "s"}):
+            home = _payload(mint_token("home", "demo-home-abc123"))
+            with self.assertRaises(ValueError):
+                mint_token("home", "demo-voice-abc123")
+        self.assertEqual(home["roomConfig"]["agents"][0]["agentName"], HOME_AGENT)
+        self.assertEqual(config_payload()["home_agent"], HOME_AGENT)
+
+    def test_home_page_shows_devices_and_offers_an_unseen_one(self):
+        page = page_html("house")
+        self.assertIn('data-mode="home"', page)
+        self.assertIn("Add a new device", page)
+        self.assertIn("Play walkthrough", page)
+        self.assertIn("/static/house.js", page)
+        self.assertEqual(PAGES["/home"], "house")
+
     def test_token_rejects_a_room_that_does_not_match_the_mode(self):
         with patch.dict(os.environ, {"LIVEKIT_URL": "wss://x", "LIVEKIT_API_KEY": "k", "LIVEKIT_API_SECRET": "s"}):
             with self.assertRaises(ValueError):
@@ -290,6 +307,22 @@ class DemoServerTests(unittest.TestCase):
         self.assertEqual(sessions[0]["room"], SCORED_ROOM)
         self.assertTrue(sessions[0]["recorded"])
         self.assertIn("demo-voice-abc123", [session["room"] for session in sessions])
+
+    def test_home_api_starts_the_home_and_runs_the_walkthrough(self):
+        home = json.loads(self.open("/api/home").read())
+        self.assertEqual(len(home["devices"]), 8)
+        self.assertEqual(home["unseen_device"]["id"], "bedroom-air-purifier")
+        self.assertNotIn("bedroom-air-purifier", [device["id"] for device in home["devices"]])
+        events = json.loads(self.open("/api/home/walkthrough").read())["events"]
+        dropped = [e for e in events if e["kind"] == "tool_call_dropped"]
+        self.assertEqual(dropped[0]["call"]["args"]["setpoint"], 22)
+        executed = [e["call"]["args"].get("setpoint") for e in events if e["kind"] == "tool_call"]
+        self.assertNotIn(22, executed)
+        self.assertIn(24, executed)
+        final = [e for e in events if e["kind"] == "home_devices"][-1]["devices"]
+        self.assertEqual(next(d for d in final if d["id"] == "living-room-ac")["state"]["coolingSetpoint"], 24)
+        self.assertEqual(next(d for d in final if d["id"] == "front-door")["state"]["lock"], "unlocked")
+        self.assertIn("home_device_added", [e["kind"] for e in events])
 
     def test_token_without_livekit_settings_is_refused(self):
         with patch.dict(os.environ, {"LIVEKIT_URL": "", "LIVEKIT_API_KEY": "", "LIVEKIT_API_SECRET": ""}):

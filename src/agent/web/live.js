@@ -1,5 +1,5 @@
-// Voice and camera pages: one LiveKit room per session, the worker trace for
-// that room, and the agent's own transcription streams.
+// Voice, camera and home pages: one LiveKit room per session, the worker trace
+// for that room, and the agent's own transcription streams.
 
 import { $, errorText, loadConfig, nowSeconds } from "./shell.js";
 import { Conversation, Meter, getAudioContext } from "./conversation.js";
@@ -14,7 +14,7 @@ const el = {
   agentAudio: $("agent-audio"), txBadge: $("tx-badge"), txBadgeText: $("tx-badge-text"),
 };
 
-const cfg = { voice_agent: "interra-benchmark", camera_agent: "interra-camera-troubleshooter", livekit_host: "" };
+const cfg = { voice_agent: "interra-benchmark", camera_agent: "interra-camera-troubleshooter", home_agent: "interra-home", livekit_host: "" };
 const app = {
   session: 0,
   room: null,
@@ -30,7 +30,17 @@ const app = {
 };
 
 const convo = new Conversation({ mode, onEvent: (event) => storeBrowserEvent(app.roomName, event) });
-const agentName = () => (mode === "camera" ? cfg.camera_agent : cfg.voice_agent);
+const agentName = () => ({ camera: cfg.camera_agent, home: cfg.home_agent }[mode] || cfg.voice_agent);
+const HINTS = {
+  voice: { idle: "Press Start and say the line. Headphones help.", live: "Listening. Say the line, pause, then correct it." },
+  camera: { idle: "Press Start and hold the code up to the webcam.", live: "Listening. Hold E1 in view, then say the line." },
+  home: { idle: "Press Start and talk to your home. Headphones help.", live: "Listening. Ask for a change, then correct it." },
+};
+
+// Other scripts on the page (the home tiles) follow the session through these events.
+function announce(type, detail) {
+  window.dispatchEvent(new CustomEvent("interra:" + type, { detail }));
+}
 
 function setBadge(text, on) {
   // Shown only once captions flow; an idle session has nothing to label.
@@ -124,7 +134,7 @@ async function startCall() {
       attachPreview(room, LK);
     }
     for (const participant of room.remoteParticipants.values()) if (participant.isAgent) agentJoined(participant);
-    convo.hint(mode === "camera" ? "Listening. Hold E1 in view, then say the line." : "Listening. Say the line, pause, then correct it.");
+    convo.hint(HINTS[mode].live);
   } catch (error) {
     if (session !== app.session) return;
     convo.note("start_failed", "Did not start: " + errorText(error), { cat: "error", icon: "alert", label: "Start failed" });
@@ -200,6 +210,7 @@ function agentJoined(participant) {
   if (app.agentIdentity === participant.identity && convo.agentPresent) return;
   app.agentIdentity = participant.identity;
   convo.agentPresent = true;
+  announce("agent", { room: app.room, identity: participant.identity });
   convo.note("agent_joined", "Agent joined · " + participant.identity, { cat: "agent", icon: "bot", label: "Agent joined", data: { identity: participant.identity, name: participant.name, attributes: participant.attributes } });
   const state = participant.attributes && participant.attributes["lk.agent.state"];
   if (state) convo.setAgentState(state, "attribute");
@@ -304,6 +315,7 @@ function openTrace(roomName, session) {
     let record;
     try { record = JSON.parse(message.data); } catch (error) { return; }
     convo.onRecord(record, "worker");
+    announce("record", record);
     if (record.kind === "transcript" || record.kind === "conversation_item") {
       if (convo.txSource === "trace") setBadge("From the worker trace", true);
     }
@@ -331,6 +343,7 @@ async function teardown() {
   setAudioBlocked(false);
   const room = app.room;
   app.room = null;
+  announce("agent", null);
   convo.agentPresent = false;
   convo.agentState = null;
   convo.userSpeaking = false;
@@ -398,6 +411,13 @@ function toggleSpeaker() {
   for (const audio of el.agentAudio.querySelectorAll("audio")) audio.muted = app.speakerMuted;
 }
 
+// A page can play records it made itself (the home walkthrough) through the same view.
+window.addEventListener("interra:inject", (event) => {
+  if (convo.txSource === null) convo.txSource = "trace";
+  convo.onRecord(event.detail, "replay");
+  announce("record", event.detail);
+});
+
 el.start.addEventListener("click", () => startCall());
 el.mic.addEventListener("click", () => toggleMic());
 if (el.cam) el.cam.addEventListener("click", () => toggleCamera());
@@ -408,8 +428,7 @@ window.addEventListener("beforeunload", () => {
 });
 
 setPhase("idle");
-const idleHint = mode === "camera" ? "Press Start and hold the code up to the webcam." : "Press Start and say the line. Headphones help.";
-convo.hint(idleHint);
+convo.hint(HINTS[mode].idle);
 loadConfig().then((config) => {
   Object.assign(cfg, config);
   convo.agentLabel = agentName();

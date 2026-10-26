@@ -163,6 +163,22 @@ const KINDS = {
     msg: (r) => (r.attached ? "Camera frame attached to this turn" : "No camera frame for this turn"),
     sub: (r) => (r.attached && r.width ? r.width + " × " + r.height : ""),
   },
+  home_devices: {
+    cat: "session", icon: "home", label: "Home",
+    msg: (r) => (r.devices || []).length + " devices",
+    sub: (r) => (r.devices || []).map((d) => d.label).join(", "),
+  },
+  home_device_added: {
+    cat: "agent", icon: "home", label: "Device added",
+    msg: (r) => (r.device && r.device.label) || "",
+    sub: (r) => ((r.new_tools || []).length ? "New tools: " + r.new_tools.join(", ") : "No new tools"),
+  },
+  home_device_rejected: { cat: "error", icon: "alert", label: "Device rejected", msg: (r) => r.error || "" },
+  home_command_skipped: { cat: "gate", icon: "check", label: "Already set", call: true, sub: () => "Nothing sent; the device already had that value" },
+  confirmation_requested: { cat: "gate", icon: "shield", label: "Needs a yes", call: true, sub: (r) => "Risky command · " + (r.confirmation_id || "") },
+  confirmation_given: { cat: "gate", icon: "check", label: "Confirmed", msg: (r) => "The person said yes · " + (r.confirmation_id || "") },
+  confirmation_declined: { cat: "gate", icon: "ban", label: "Declined", msg: (r) => "The person said no · " + (r.confirmation_id || "") },
+  confirmation_expired: { cat: "gate", icon: "clock", label: "Expired", msg: (r) => "The yes came too late · " + (r.confirmation_id || "") },
   session_error: {
     cat: "error", icon: "alert", label: "Error",
     msg: (r) => String(r.error || "unknown error"),
